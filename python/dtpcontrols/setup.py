@@ -6,7 +6,7 @@ import uhal
 from ctypes import cdll
 
 def find_conn_file():
-    path = os.environ.get('DUNEDAQ_SHARE_PATH')
+    path = os.environ.get('DTPCONTROLS_SHARE')
     name = 'dtp_connections.xml'
     result = []
 
