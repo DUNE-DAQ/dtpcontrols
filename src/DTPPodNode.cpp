@@ -77,9 +77,7 @@ namespace dunedaq {
       
       for (uint i=0; i!=m_n_links; ++i) {	
 	auto lDataReceptionNode = get_link_processor_node(i).get_data_router_node().get_data_reception_node();
-	lDataReceptionNode.reset_input_word_counter(true);
-	lDataReceptionNode.reset_output_word_counter(true);
-	lDataReceptionNode.error_reset(true);
+	lDataReceptionNode.reset(true);
       }
 
     }

@@ -17,16 +17,6 @@ StreamProcessorArrayNode::StreamProcessorArrayNode(const uhal::Node& node) : uha
 
 StreamProcessorArrayNode::~StreamProcessorArrayNode(){}
 
-void StreamProcessorArrayNode::cap_counters(const bool dispatch) {
-  getNode("csr.ctrl.cap_ctrs").write(0x1);
-  if(dispatch) {getClient().dispatch();}
-}
-
-void StreamProcessorArrayNode::stream_select(const uint32_t pipe, const bool dispatch) {
-  getNode("csr.ctrl.stream_sel").write(pipe);
-  if(dispatch) {getClient().dispatch();}  
-}
-
 const StreamProcessorNode& StreamProcessorArrayNode::get_stream_proc_node(void) const {
   return getNode<StreamProcessorNode>("stream_proc");
 }

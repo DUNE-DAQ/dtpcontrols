@@ -28,11 +28,6 @@ public:
   explicit DPRNode(const uhal::Node& );
   virtual ~DPRNode();
 
-  void set_mux_in(const uint32_t&, const bool);
-  void set_mux_out(const uint32_t&, const bool);
-  void SetMuxInOut(std::string&, const bool);
-  void SetMuxInOut(const uint32_t &mux_in_choice,
-		   const uint32_t &mux_out_choice, const bool dispatch);
 };
 
 } // namespace dtpcontrols

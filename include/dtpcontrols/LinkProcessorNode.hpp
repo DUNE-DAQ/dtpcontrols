@@ -29,8 +29,8 @@ public:
   explicit LinkProcessorNode(const uhal::Node& node);
   ~LinkProcessorNode();
 
-const DataRouterNode& get_data_router_node() const;
-const StreamProcessorArrayNode& get_stream_proc_array_node() const;
+  const DataRouterNode& get_data_router_node() const;
+  const StreamProcessorArrayNode& get_stream_proc_array_node() const;
 
 };
 

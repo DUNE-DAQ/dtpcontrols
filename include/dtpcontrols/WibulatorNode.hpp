@@ -34,15 +34,6 @@ namespace dunedaq {
       explicit WibulatorNode(const uhal::Node& node);
       virtual ~WibulatorNode();
 
-      void set_fire(bool);
-      void set_max_word(const uint32_t&, const bool);
-      void set_buffer_address(bool);
-      void set_buffer_data(const std::vector<uint32_t>&, const bool);
-      void set_chain(bool);  
-      uhal::ValVector<uint32_t> get_buffer_data(const uint32_t&, const bool);
-      uhal::ValWord<uint32_t> get_address_width(const bool);
-      uhal::ValWord<uint32_t> get_max_word(const bool);
-
     };
 
   } // namespace dtpcontrols
