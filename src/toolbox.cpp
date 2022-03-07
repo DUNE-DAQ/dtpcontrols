@@ -15,7 +15,7 @@ namespace dunedaq {
       std::string p("");
 
       std::string connfile("dtp_connections.xml");
-      std::string search_path =std::getenv("DUNEDAQ_SHARE_PATH"); 
+      std::string search_path =std::getenv("DTPCONTROLS_SHARE"); 
       std::istringstream paths(search_path);
       
       std::string path;
