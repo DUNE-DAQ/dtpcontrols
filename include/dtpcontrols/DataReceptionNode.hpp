@@ -26,17 +26,17 @@ public:
   explicit DataReceptionNode(const uhal::Node& );
   virtual ~DataReceptionNode();
 
-  void EnableDataReception(bool);
-  void ResetInputWordCounter(bool);
-  void ResetOutputWordCounter(bool);
-  void ErrorReset(bool);
-  uhal::ValWord<uint32_t> DualPortRamWriteFlag(bool);
-  uhal::ValWord<uint32_t> StickyErrorBit(bool);
-  uhal::ValWord<uint32_t> BackPressureBit(bool);
-  uhal::ValWord<uint32_t> OutOfSync(bool);
-  uhal::ValWord<uint32_t> RxWordCount(bool);
-  uhal::ValWord<uint32_t> SentWordCount(bool);
-  uhal::ValWord<uint32_t> SentPacketCount(bool);
+  void enable_data_reception(bool);
+  void reset_input_word_counter(bool);
+  void reset_output_word_counter(bool);
+  void error_reset(bool);
+  uhal::ValWord<uint32_t> dual_port_ram_write_flag(bool);
+  uhal::ValWord<uint32_t> stick_error_bit(bool);
+  uhal::ValWord<uint32_t> back_pressure_bit(bool);
+  uhal::ValWord<uint32_t> out_of_sync(bool);
+  uhal::ValWord<uint32_t> rx_word_count(bool);
+  uhal::ValWord<uint32_t> send_word_count(bool);
+  uhal::ValWord<uint32_t> sent_packet_count(bool);
 };
 
 } // namespace dtpcontrols

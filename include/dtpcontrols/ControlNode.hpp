@@ -26,9 +26,9 @@ public:
   explicit ControlNode(const uhal::Node& );
   virtual ~ControlNode();
 
-  void Nuke(bool);
-  void SoftReset(bool);
-  void MasterReset(bool);
+  void nuke(bool);
+  void soft_reset(bool);
+  void master_reset(bool);
 };
 
 } // namespace dtpcontrols

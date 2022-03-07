@@ -17,12 +17,12 @@ StreamProcessorArrayNode::StreamProcessorArrayNode(const uhal::Node& node) : uha
 
 StreamProcessorArrayNode::~StreamProcessorArrayNode(){}
 
-void StreamProcessorArrayNode::CapCounters(const bool dispatch) {
+void StreamProcessorArrayNode::cap_counters(const bool dispatch) {
   getNode("csr.ctrl.cap_ctrs").write(0x1);
   if(dispatch) {getClient().dispatch();}
 }
 
-void StreamProcessorArrayNode::StreamSelect(const uint32_t pipe, const bool dispatch) {
+void StreamProcessorArrayNode::stream_select(const uint32_t pipe, const bool dispatch) {
   getNode("csr.ctrl.stream_sel").write(pipe);
   if(dispatch) {getClient().dispatch();}  
 }
