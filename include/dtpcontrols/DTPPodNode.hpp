@@ -39,7 +39,7 @@ namespace dunedaq {
 
       public:
 
-      explicit DTPPodNode(const uhal::Node& node, uint n_links=5);
+      explicit DTPPodNode(const uhal::Node& node);
       virtual ~DTPPodNode();
 
       // get nodes

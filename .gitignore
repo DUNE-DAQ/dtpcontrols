@@ -1,15 +1,13 @@
 
 *.pyc
 
-#joealsubash
-
 #emacs temp files
 
 *~
 *\#
 \.\#*
 
-# joealsubash clang and LSP files
+# clang and LSP files
 
 .cache/*
 build/*

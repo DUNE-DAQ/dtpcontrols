@@ -19,8 +19,8 @@ namespace dunedaq {
     UHAL_REGISTER_DERIVED_NODE(DTPPodNode)
     
 
-    DTPPodNode::DTPPodNode(const uhal::Node& node, uint n_links) :uhal::Node(node),
-      m_n_links(n_links)
+    DTPPodNode::DTPPodNode(const uhal::Node& node) :uhal::Node(node),
+      m_n_links(5)
     {
     }
 
