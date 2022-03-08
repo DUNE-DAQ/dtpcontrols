@@ -52,7 +52,7 @@ namespace dunedaq {
       const OutputSinkNode& get_output_sink_node() const;
 
       // reset everything
-      void reset();
+      void reset() const;
 
       // configure TP generation
       // this is a placeholder - a configuration set will be needed as argument

@@ -69,7 +69,7 @@ namespace dunedaq {
     }
     
 
-    void DTPPodNode::reset() {
+    void DTPPodNode::reset() const {
     
       auto lCtrlNode = get_control_node();
       lCtrlNode.soft_reset(true);
