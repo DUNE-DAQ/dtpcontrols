@@ -1,6 +1,8 @@
-
+//DTP headers
 #include "dtpcontrols/toolbox.hpp"
+#include "dtpcontrols/DTPPodNode.hpp"
 
+// C++ headers
 #include <sstream>
 #include <cstdlib>
 #include <string>
@@ -10,6 +12,7 @@
 namespace dunedaq {
   namespace dtpcontrols {
 
+//-----------------------------------------------------------------------------
     std::string find_connection_file() {
       
       std::string p("");
@@ -32,7 +35,8 @@ namespace dunedaq {
       return p;
       
     }
-    
+//-----------------------------------------------------------------------------
+
   }  // namespace dtpcontrols
 
 } // namespace dunedaq
