@@ -5,5 +5,5 @@
   <connection id="flx-1-p2-hf"  uri="ipbusflx-2.0:///dev/flx:1" address_table="file://addrtab/v133/ultimate/dtpc_pod.xml" />
   <connection id="flx-2-p2-hf"  uri="ipbusflx-2.0:///dev/flx:2" address_table="file://addrtab/v133/ultimate/dtpc_pod.xml" />
   <connection id="flx-3-p2-hf"  uri="ipbusflx-2.0:///dev/flx:3" address_table="file://addrtab/v133/ultimate/dtpc_pod.xml" />
-  <connection id="U-SIMUDP" uri="ipbusudp-2.0://localhost:50001" address_table="file://addrtab/ultimate/dtpc_pod.xml" />
+  <connection id="U-SIMUDP" uri="ipbusudp-2.0://localhost:50001" address_table="file://addrtab/v133/ultimate/dtpc_pod.xml" />
 </connections>
