@@ -19,7 +19,6 @@
 
 // C++ Headers
 
-
 namespace dunedaq {
   namespace dtpcontrols {
     /**
@@ -33,7 +32,6 @@ namespace dunedaq {
       public:
       explicit InfoNode(const uhal::Node& node);
       virtual ~InfoNode();
-
     };
 
   } // namespace dtpcontrols

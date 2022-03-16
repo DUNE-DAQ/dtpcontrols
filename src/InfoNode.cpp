@@ -14,21 +14,19 @@
 #include <string>
 
 namespace dunedaq {
-namespace dtpcontrols {
+  namespace dtpcontrols {
 
-UHAL_REGISTER_DERIVED_NODE(InfoNode)
-
-//-----------------------------------------------------------------------------
-InfoNode::InfoNode(const uhal::Node& node)
-  : uhal::Node(node)
-{}
-//-----------------------------------------------------------------------------
+    UHAL_REGISTER_DERIVED_NODE(InfoNode)
 
 //-----------------------------------------------------------------------------
-InfoNode::~InfoNode() {}
+    InfoNode::InfoNode(const uhal::Node& node)
+    : uhal::Node(node)
+    {}
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
+    InfoNode::~InfoNode() {}
+//-----------------------------------------------------------------------------
 
-} // namespace dtpcontrols
+  } // namespace dtpcontrols
 } // namespace dunedaq
