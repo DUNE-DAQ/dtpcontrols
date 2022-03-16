@@ -28,6 +28,7 @@
 #include <chrono>
 #include <map>
 #include <string>
+#include <uhal/ValMem.hpp>
 
 namespace dunedaq {
   namespace dtpcontrols {
@@ -51,6 +52,8 @@ namespace dunedaq {
       const CentralRouterInterfaceNode& get_crif_node() const;
       const OutputSinkNode& get_output_sink_node() const;
 
+      // read firmware config info
+      std::map<std::string, uint32_t> get_firmware_config_info();
       // reset everything
       void reset();
 
@@ -64,6 +67,7 @@ namespace dunedaq {
     private:
       
       // how many links does this build contain
+      std::map<std::string, uint32_t> m_dtp_fw_info;
       uint32_t m_n_links;
 
     };
