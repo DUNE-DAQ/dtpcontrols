@@ -8,6 +8,7 @@
 #include <string>
 #include <boost/filesystem.hpp>
 #include <boost/algorithm/string/predicate.hpp>
+#include <uhal/ValMem.hpp>
 
 namespace dunedaq {
   namespace dtpcontrols {
@@ -37,6 +38,29 @@ namespace dunedaq {
     }
 //-----------------------------------------------------------------------------
 
+//-----------------------------------------------------------------------------    
+    std::vector<std::uint32_t> format_36b_to_32b
+    (const std::vector<std::uint64_t>& pattern_36b) {
+      std::vector<std::uint32_t> pattern_32b;
+      for(auto & item : pattern_36b) {
+	pattern_32b.push_back(item & 0x3ffff);
+	pattern_32b.push_back((item>>18) & 0x3ffff);
+      }
+      return pattern_32b;
+    }
+//-----------------------------------------------------------------------------
+
+//-----------------------------------------------------------------------------    
+    std::vector<std::uint64_t> format_32b_to_36b
+    (const uhal::ValVector<uint32_t>& pattern_32b) {
+      std::vector<std::uint64_t> pattern_36b;
+      for(auto item=pattern_32b.begin(); item!=pattern_32b.end(); item+2) {
+	pattern_36b.push_back(((*(item+1)&0x3ffff)<<18)+(*item & 0x3ffff));
+      }
+      return pattern_36b;
+    }
+//-----------------------------------------------------------------------------
+    
   }  // namespace dtpcontrols
 
 } // namespace dunedaq
