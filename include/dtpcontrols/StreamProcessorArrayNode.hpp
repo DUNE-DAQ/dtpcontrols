@@ -28,9 +28,6 @@ public:
   explicit StreamProcessorArrayNode(const uhal::Node& );
   virtual ~StreamProcessorArrayNode();
 
-  void cap_counters(const bool);
-  void stream_select(const uint32_t, const bool);
-
   const StreamProcessorNode& get_stream_proc_node() const;
 
 };
