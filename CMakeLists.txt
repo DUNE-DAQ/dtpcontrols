@@ -9,6 +9,7 @@ find_package(ers REQUIRED)
 find_package(logging REQUIRED)
 find_package(pybind11 REQUIRED)
 find_package(uhal REQUIRED)
+find_package(uhallibs REQUIRED)
 
 ##############################################################################
 daq_add_library(*.cpp LINK_LIBRARIES ers::ers logging::logging uhal::uhal)
@@ -18,8 +19,8 @@ daq_add_python_bindings(*.cpp LINK_LIBRARIES ${PROJECT_NAME})
 
 ##############################################################################
 # Integration tests
-daq_add_application(dtpcontrols_test_nodes test_nodes.cxx TEST LINK_LIBRARIES uhal::uhal uhallibs dtpcontrols)
-daq_add_application(dtpcontrols_test_fw_reset test_fw_reset.cxx TEST LINK_LIBRARIES uhal::uhal uhallibs dtpcontrols)
+daq_add_application(dtpcontrols_test_nodes test_nodes.cxx TEST LINK_LIBRARIES uhal::uhal uhallibs::uhallibs dtpcontrols)
+daq_add_application(dtpcontrols_test_fw_reset test_fw_reset.cxx TEST LINK_LIBRARIES uhal::uhal uhallibs::uhallibs dtpcontrols)
 
 ##############################################################################
 daq_install()
