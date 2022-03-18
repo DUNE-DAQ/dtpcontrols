@@ -14,13 +14,15 @@
 #define DTPCONTROLS_INCLUDE_DTPCONTROLS_WIBULATORNODE_HPP_
 
 // dtpcontrols Headers
-
+#include "dtpcontrols/toolbox.hpp"
 // uhal headers
 
 #include "uhal/DerivedNode.hpp"
 #include "ers/Issue.hpp"
 
 // C++ Headers
+#include <fstream>
+#include <vector>
 
 namespace dunedaq {
   namespace dtpcontrols {
@@ -34,14 +36,12 @@ namespace dunedaq {
       public:
       explicit WibulatorNode(const uhal::Node& );
       virtual ~WibulatorNode();
-      void set_fire(bool);
-      void set_max_word(const uint32_t&, bool);
-      void set_buffer_address(bool);
-      void set_buffer_data(const std::vector<uint32_t>&, bool);
-      void set_chain(uint32_t, bool);  
-      uhal::ValVector<uint32_t> get_buffer_data(const uint32_t&, bool);
+      std::vector<std::uint64_t> load_WIB_pattern_from_file(const std::string&);
+      void write_pattern(std::vector<std::uint64_t>);
+      std::vector<uint64_t> read_pattern();
+      void fire();
+      void set_fire(const uint32_t&, bool);
       uhal::ValWord<uint32_t> get_address_width(bool);
-      uhal::ValWord<uint32_t> get_max_word(bool);
       uhal::ValWord<uint32_t> get_size(void);      
     };
 
