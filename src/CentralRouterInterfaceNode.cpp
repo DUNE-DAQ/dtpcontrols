@@ -17,5 +17,15 @@ CentralRouterInterfaceNode::CentralRouterInterfaceNode(const uhal::Node &node) :
 
 CentralRouterInterfaceNode::~CentralRouterInterfaceNode() {}
 
+void CentralRouterInterfaceNode::enable_central_router_interface(bool dispatch) {
+  getNode("csr.ctrl.en").write(0x1);
+  if(dispatch) {getClient().dispatch();}
+}
+
+void CentralRouterInterfaceNode::drop_empty(bool dispatch) {
+  getNode("csr.ctrl.drop_empty").write(0x1);
+  if(dispatch) {getClient().dispatch();}
+}
+
 } // namespace dtpcontrols
 } // namespace dunedaq
