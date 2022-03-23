@@ -31,6 +31,16 @@ public:
   explicit FlowMasterNode(const uhal::Node& );
   virtual ~FlowMasterNode();
 
+  void source_select(const std::string&, const bool);
+  void source_select(const uint32_t&, const bool);  
+  void sink_select(const std::string& , const bool);
+  void sink_select(const uint32_t&, bool);
+
+private:
+
+  bool m_exists(const uint32_t&, const std::vector<uint32_t>&);
+  bool m_exists(const std::string&, std::map<std::string, uint32_t>&);  
+
 };
 
 } // namespace dtpcontrols
