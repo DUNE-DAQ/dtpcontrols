@@ -6,10 +6,7 @@
 #include "uhal/uhal.hpp"
 
 // C++ headers
-#include <string>
-#include <map>
-#include <uhal/ValMem.hpp>
-#include <vector>
+
 
 namespace dunedaq {
   namespace dtpcontrols {
