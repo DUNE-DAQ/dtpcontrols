@@ -13,8 +13,7 @@
 #ifndef DTPCONTROLS_INCLUDE_DTPCONTROLS_STREAMPROCESSORNODE_HPP_
 #define DTPCONTROLS_INCLUDE_DTPCONTROLS_STREAMPROCESSORNODE_HPP_
 
-#define MASK_ENABLE 1
-#define MASK_DISABLE 0
+#include "dtpcontrols/MonProbeNode.hpp"
 
 #include "uhal/DerivedNode.hpp"
 
@@ -29,14 +28,10 @@ public:
   explicit StreamProcessorNode(const uhal::Node& );
   virtual ~StreamProcessorNode();
 
-  void drop_empty(const bool);
-  void set_mask_channels(const uint64_t, const bool, const bool);
-  void set_mask_channel_00to31(const uint32_t, const bool, const bool);
-  void set_mask_channel_32to63(const uint32_t, const bool,const bool);
-  void cap_counters(const bool);
-  void set_threshold(const uint32_t, const bool);
-  const uhal::ValWord<uint32_t> get_mask_channel_00to31(const bool);
-  const uhal::ValWord<uint32_t> get_mask_channel_32to63(const bool);
+  const MonProbeNode& get_mon_probe_node(uint32_t i) const;
+
+private:
+  uint32_t m_n_mon_probes;
 
 };
 
