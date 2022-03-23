@@ -27,6 +27,8 @@ public:
   explicit CentralRouterInterfaceNode(const uhal::Node& );
   virtual ~CentralRouterInterfaceNode();
 
+  void enable_central_router_interface(bool);
+  void drop_empty(bool);
 };
 
 } // namespace dtpcontrols
