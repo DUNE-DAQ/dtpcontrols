@@ -17,6 +17,10 @@ StreamProcessorArrayNode::StreamProcessorArrayNode(const uhal::Node& node) : uha
 
 StreamProcessorArrayNode::~StreamProcessorArrayNode(){}
 
+void StreamProcessorArrayNode::stream_select(const uint32_t pipe, const bool dispatch) {
+  getNode("csr.ctrl.stream_sel").write(pipe);
+  if(dispatch) {getClient().dispatch();}  
+}  
 const StreamProcessorNode& StreamProcessorArrayNode::get_stream_proc_node(void) const {
   return getNode<StreamProcessorNode>("stream_proc");
 }
