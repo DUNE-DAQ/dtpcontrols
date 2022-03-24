@@ -38,6 +38,9 @@ public:
   const uhal::ValWord<uint32_t> get_mask_channel_00to31(const bool);
   const uhal::ValWord<uint32_t> get_mask_channel_32to63(const bool);
 
+private:
+  uint32_t m_n_mon_probes;
+  
 };
 
 } // namespace dtpcontrols

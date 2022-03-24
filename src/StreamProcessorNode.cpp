@@ -16,7 +16,8 @@ namespace dtpcontrols {
 
 UHAL_REGISTER_DERIVED_NODE(StreamProcessorNode)
 
-StreamProcessorNode::StreamProcessorNode(const uhal::Node& node) : uhal::Node(node) {}
+StreamProcessorNode::StreamProcessorNode(const uhal::Node& node) : uhal::Node(node),
+m_n_mon_probes(6) {}
 
 StreamProcessorNode::~StreamProcessorNode(){}
 
