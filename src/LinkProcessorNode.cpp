@@ -1,3 +1,10 @@
+/**
+ * @file linkProcessorNode.cpp
+ *
+ * This is part of the DUNE DAQ Software Suite, copyright 2022.
+ * Licensing/copyright details are in the COPYING file that you should have
+ * received with this code.
+ */
 
 #include "dtpcontrols/LinkProcessorNode.hpp"
 
@@ -18,6 +25,6 @@ namespace dunedaq {
       return getNode<StreamProcessorArrayNode>("stream_procs"); 
     }
 
-  }
+  } // namespace dtpcontrols
+} // namespace dunedaq
 
-}
