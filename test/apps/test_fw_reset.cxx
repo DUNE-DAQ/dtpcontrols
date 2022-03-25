@@ -1,9 +1,18 @@
+/**
+ * @file test_fw_reset.cxx
+ *
+ * This is part of the DUNE DAQ Software Suite, copyright 2022.
+ * Licensing/copyright details are in the COPYING file that you should have
+ * received with this code.
+ */
+
 #include "dtpcontrols/DataReceptionNode.hpp"
 #include "dtpcontrols/ControlNode.hpp"
 #include "dtpcontrols/DTPPodNode.hpp"
 #include "dtpcontrols/toolbox.hpp"
 
 #include "uhal/uhal.hpp"
+#include "logging/Logging.hpp"
 
 #include <iostream>
 
@@ -12,7 +21,7 @@ using namespace dunedaq::dtpcontrols;
 
 int main(int argc, char const* argv[]) {
 
-  std::cout << "FLX-TPG FW reset" << std::endl;
+  TLOG() << "FLX-TPG FW reset";
 
   std::string conn_file = find_connection_file();
   std::string device("");
@@ -21,15 +30,15 @@ int main(int argc, char const* argv[]) {
     device = argv[1];
   }
   else {
-    std::cout << "At least specify a device" << std::endl;
+    TLOG() << "At least specify a device";
   }
 
   if (argc > 2) {
     conn_file = std::string(argv[2]);
   }
   
-  std::cout << "Connections : " << conn_file << std::endl;
-  std::cout << "Device      : " << device << std::endl;
+  TLOG() << "Connections : " << conn_file;
+  TLOG() << "Device      : " << device;
 
   uhal::setLogLevelTo(uhal::Debug());
   uhal::ConnectionManager cm(conn_file, {"ipbusflx-2.0"});
