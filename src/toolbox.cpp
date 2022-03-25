@@ -1,19 +1,22 @@
+/**
+ * @file toolbox.cpp
+ *
+ * This is part of the DUNE DAQ Software Suite, copyright 2022.
+ * Licensing/copyright details are in the COPYING file that you should have
+ * received with this code.
+ */
+
 //DTP headers
 #include "dtpcontrols/toolbox.hpp"
 #include "dtpcontrols/DTPPodNode.hpp"
 
 // C++ headers
-#include <sstream>
-#include <cstdlib>
-#include <string>
 #include <boost/filesystem.hpp>
 #include <boost/algorithm/string/predicate.hpp>
-#include <uhal/ValMem.hpp>
 
 namespace dunedaq {
   namespace dtpcontrols {
 
-//-----------------------------------------------------------------------------
     std::string find_connection_file() {
       
       std::string p("");
@@ -62,6 +65,5 @@ namespace dunedaq {
 //-----------------------------------------------------------------------------
     
   }  // namespace dtpcontrols
-
 } // namespace dunedaq
 

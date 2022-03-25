@@ -6,6 +6,7 @@ include(CMakeFindDependencyMacro)
 find_dependency(ers)
 find_dependency(logging)
 find_dependency(uhal)
+find_dependency(uhallibs)
 
 # Figure out whether or not this dependency is an installed package or
 # in repo form

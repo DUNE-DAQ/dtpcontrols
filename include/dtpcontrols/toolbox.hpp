@@ -1,3 +1,10 @@
+/**
+ * @file toolbox.hpp
+ *
+ * This is part of the DUNE DAQ Software Suite, copyright 2022.
+ * Licensing/copyright details are in the COPYING file that you should have
+ * received with this code.
+ */
 
 #ifndef DTPCONTROLS_INCLUDE_DTPCONTROLS_TOOLBOX_HPP_
 #define DTPCONTROLS_INCLUDE_DTPCONTROLS_TOOLBOX_HPP_
@@ -6,7 +13,7 @@
 #include "uhal/uhal.hpp"
 
 // C++ headers
-
+#include <string>
 
 namespace dunedaq {
   namespace dtpcontrols {

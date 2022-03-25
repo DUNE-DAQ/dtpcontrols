@@ -1,8 +1,6 @@
 /**
  * @file WibulatorNode.hpp
  *
- * WibulatorNode is a class derived from uhal::Node.
- * Its purpose is to control the wibulator component inside
  * DTP-firmware which is part of DUNE DAQ.
  *
  * This is part of the DUNE DAQ Software Suite, copyright 2022.
@@ -15,20 +13,19 @@
 
 // dtpcontrols Headers
 #include "dtpcontrols/toolbox.hpp"
-// uhal headers
+
+// uHal Headers
 
 #include "uhal/DerivedNode.hpp"
 #include "ers/Issue.hpp"
 
 // C++ Headers
-#include <fstream>
 #include <vector>
+#include <fstream>
 
 namespace dunedaq {
   namespace dtpcontrols {
-    /**
-     * @brief      Wibulator firmware node.
-     */
+
     class WibulatorNode : public uhal::Node {
 
       UHAL_DERIVEDNODE(WibulatorNode)
@@ -36,6 +33,7 @@ namespace dunedaq {
       public:
       explicit WibulatorNode(const uhal::Node& );
       virtual ~WibulatorNode();
+
       std::vector<std::uint64_t> load_WIB_pattern_from_file(const std::string&);
       void write_pattern(std::vector<std::uint64_t>);
       std::vector<uint64_t> read_pattern();

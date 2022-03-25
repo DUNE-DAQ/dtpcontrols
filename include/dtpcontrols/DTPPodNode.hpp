@@ -28,7 +28,6 @@
 #include <chrono>
 #include <map>
 #include <string>
-#include <uhal/ValMem.hpp>
 
 namespace dunedaq {
   namespace dtpcontrols {
@@ -40,7 +39,7 @@ namespace dunedaq {
 
       public:
 
-      explicit DTPPodNode(const uhal::Node& node, uint n_links=5);
+      explicit DTPPodNode(const uhal::Node& node);
       virtual ~DTPPodNode();
 
       // get nodes
@@ -53,7 +52,7 @@ namespace dunedaq {
       const OutputSinkNode& get_output_sink_node() const;
 
       // read firmware config info
-      std::map<std::string, uint32_t> get_firmware_config_info();
+      std::map<std::string, uint32_t> get_firmware_config_info() const;
       // reset everything
       void reset();
 
