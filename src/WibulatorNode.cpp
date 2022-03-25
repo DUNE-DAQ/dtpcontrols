@@ -31,7 +31,7 @@ namespace dunedaq {
       const char separator =  ' ';
       std::ifstream pattern_file_stream(path);
       if (!pattern_file_stream.is_open()) {
-	std::cout << "Cannot open pattern file. Please check." << std::endl;
+	//ers place holder
       }
       // each pattern-file line is of example form '0x00554a00 1 0 0 1'
       else {
@@ -59,7 +59,7 @@ namespace dunedaq {
       auto buffer_size = get_size();
       pattern.erase(pattern.end()-buffer_size, pattern.end());
       uint64_t pattern_length = pattern.size();
-      std::cout << "Writing Wibulator pattern of length " << pattern_length << std::endl;
+      TLOG() << "Writing Wibulator pattern of length " << pattern_length;
       std::vector<uint32_t> ported_pattern = format_36b_to_32b(pattern); 
       getNode("buf.addr").write(0x0);
       getNode("buf.data").writeBlock(ported_pattern);
