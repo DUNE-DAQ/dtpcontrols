@@ -110,30 +110,4 @@ namespace dunedaq {
     }
 //-----------------------------------------------------------------------------
   } // namespace dtpcontrols
-=======
-
-#include "logging/Logging.hpp"
-
-#include <map>
-#include <string>
-
-namespace dunedaq {
-namespace dtpcontrols {
-
-UHAL_REGISTER_DERIVED_NODE(WibulatorNode)
-
-//-----------------------------------------------------------------------------
-WibulatorNode::WibulatorNode(const uhal::Node& node)
-  : uhal::Node(node)
-{}
-//-----------------------------------------------------------------------------
-
-//-----------------------------------------------------------------------------
-WibulatorNode::~WibulatorNode() {}
-//-----------------------------------------------------------------------------
-
-//-----------------------------------------------------------------------------
-
-} // namespace dtpcontrols
->>>>>>> 41b733f45c2366f78447c57ba67a187dc0cb3f50
 } // namespace dunedaq

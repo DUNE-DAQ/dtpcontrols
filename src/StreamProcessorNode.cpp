@@ -8,6 +8,7 @@
 
 #include "dtpcontrols/StreamProcessorNode.hpp"
 #include "dtpcontrols/MonProbeNode.hpp"
+
 #include <algorithm>
 #include <vector>
 
@@ -81,8 +82,4 @@ namespace dunedaq {
 
 
   } // namespace dtpcontrols
-} // namespace dunedaq
-
-
-} // namespace dtpcontrols
 } // namespace dunedaq
