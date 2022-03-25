@@ -58,10 +58,10 @@ namespace dunedaq {
 
       // configure TP generation
       // this is a placeholder - a configuration set will be needed as argument
-      void configure();
+      void configure()const;
 
       // enable TP generation
-      void enable();
+      void enable()const;
 
     private:
       
