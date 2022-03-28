@@ -14,6 +14,8 @@
 #ifndef DTPCONTROLS_INCLUDE_DTPCONTROLS_FLOWMASTERNODE_HPP_
 #define DTPCONTROLS_INCLUDE_DTPCONTROLS_FLOWMASTERNODE_HPP_
 
+#include "dtpcontrols/toolbox.hpp"
+
 #include "uhal/DerivedNode.hpp"
 
 #include <vector>
@@ -28,8 +30,13 @@ class FlowMasterNode : public uhal::Node {
   UHAL_DERIVEDNODE(FlowMasterNode)
   
 public:
-  explicit FlowMasterNode(const uhal::Node& );
+  explicit FlowMasterNode(const uhal::Node& node);
   virtual ~FlowMasterNode();
+
+  void source_select(const std::string& source, bool dispatch=true);
+  void source_select(const uint32_t& source, bool dispatch=true);
+  void sink_select(const std::string& sink, bool dispatch=true);
+  void sink_select(const uint32_t& sink, bool dispatch=true);
 
 };
 

@@ -61,6 +61,9 @@ namespace dunedaq {
       // enable TP generation
       void enable() const;
 
+      // disable TP generation
+      void disable() const;
+
     private:
       
       // how many links does this build contain

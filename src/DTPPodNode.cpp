@@ -68,7 +68,6 @@ namespace dunedaq {
       return getNode<OutputSinkNode>("outsink");
     }
     
-
     void DTPPodNode::reset() const {
     
       auto lCtrlNode = get_control_node();
@@ -82,5 +81,36 @@ namespace dunedaq {
 
     }
     
+    void DTPPodNode::configure() const {
+
+      // set source to gbt (links)
+      auto lFlowMasterNode = get_flowmaster_node();
+      lFlowMasterNode.source_select("gbt", true);
+      lFlowMasterNode.sink_select("hits", true);
+
+      // set CRIF to drop empty packets
+      auto lCRIFNode = get_crif_node();
+      lCRIFNode.getNode("csr.ctrl.drop_empty").write(0x1);
+      getClient().dispatch();
+
+    }
+
+    void DTPPodNode::enable() const {
+
+      auto lCRIFNode = get_crif_node();
+      lCRIFNode.getNode("csr.ctrl.en").write(0x1);
+      getClient().dispatch();
+   
+    }
+
+    void DTPPodNode::disable() const {
+
+      auto lCRIFNode = get_crif_node();
+      lCRIFNode.getNode("csr.ctrl.en").write(0x0);
+      getClient().dispatch();
+
+    }
+
+
   } // namespace dtpcontrols
 } // namespace dunedaq
