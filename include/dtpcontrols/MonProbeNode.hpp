@@ -23,7 +23,7 @@ class MonProbeNode : public uhal::Node {
   UHAL_DERIVEDNODE(MonProbeNode)
   
 public:
-  explicit MonProbeNode(const uhal::Node& );
+  explicit MonProbeNode(const uhal::Node& node);
   virtual ~MonProbeNode();
 
   uhal::ValWord<uint32_t> ready(bool dispatch=true);

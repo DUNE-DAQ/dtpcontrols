@@ -20,9 +20,9 @@ namespace dunedaq {
 
     std::string find_connection_file();
     std::vector<std::uint32_t> format_36b_to_32b
-    (const std::vector<std::uint64_t>&);
+    (const std::vector<std::uint64_t>& pattern_36b);
     std::vector<std::uint64_t> format_32b_to_36b
-    (const uhal::ValVector<uint32_t>&);
+    (const uhal::ValVector<uint32_t>& pattern_32b);
 
   } // namespace dtp_controls
 } // namespace dunedaq

@@ -23,7 +23,7 @@ class ControlNode : public uhal::Node {
   UHAL_DERIVEDNODE(ControlNode)
   
 public:
-  explicit ControlNode(const uhal::Node& );
+  explicit ControlNode(const uhal::Node& node);
   virtual ~ControlNode();
 
   void nuke(bool dispatch=true);

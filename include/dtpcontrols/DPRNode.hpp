@@ -25,7 +25,7 @@ class DPRNode : public uhal::Node {
   UHAL_DERIVEDNODE(DPRNode)
   
 public:
-  explicit DPRNode(const uhal::Node& );
+  explicit DPRNode(const uhal::Node& node);
   virtual ~DPRNode();
 
 };

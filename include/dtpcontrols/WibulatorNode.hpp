@@ -31,15 +31,15 @@ namespace dunedaq {
       UHAL_DERIVEDNODE(WibulatorNode)
       
       public:
-      explicit WibulatorNode(const uhal::Node& );
+      explicit WibulatorNode(const uhal::Node& node);
       virtual ~WibulatorNode();
 
-      std::vector<std::uint64_t> load_WIB_pattern_from_file(const std::string&);
+      std::vector<std::uint64_t> load_WIB_pattern_from_file(const std::string& path);
       void write_pattern(std::vector<std::uint64_t>);
       std::vector<uint64_t> read_pattern();
       void fire();
-      void set_fire(const uint32_t&, bool);
-      uhal::ValWord<uint32_t> get_address_width(bool);
+      void set_fire(const uint32_t& fire_value, bool dispatch=true);
+      uhal::ValWord<uint32_t> get_address_width(bool dispatch=true);
       uhal::ValWord<uint32_t> get_size(void);      
     };
 

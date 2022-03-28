@@ -28,18 +28,18 @@ class FlowMasterNode : public uhal::Node {
   UHAL_DERIVEDNODE(FlowMasterNode)
   
 public:
-  explicit FlowMasterNode(const uhal::Node& );
+  explicit FlowMasterNode(const uhal::Node& node);
   virtual ~FlowMasterNode();
 
-  void source_select(const std::string&, const bool);
-  void source_select(const uint32_t&, const bool);  
-  void sink_select(const std::string& , const bool);
-  void sink_select(const uint32_t&, bool);
+  void source_select(const std::string& source, bool dispatch=true);
+  void source_select(const uint32_t& source, bool dispatch=true);
+  void sink_select(const std::string& sink, bool dispatch=true);
+  void sink_select(const uint32_t& sink, bool dispatch=true);
 
 private:
 
-  bool m_exists(const uint32_t&, const std::vector<uint32_t>&);
-  bool m_exists(const std::string&, std::map<std::string, uint32_t>&);  
+  bool m_exists(const uint32_t& name, const std::vector<uint32_t>& map);
+  bool m_exists(const std::string& name, std::map<std::string, uint32_t>& mux_values);
 
 };
 

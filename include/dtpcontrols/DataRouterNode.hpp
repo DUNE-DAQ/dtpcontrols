@@ -25,10 +25,10 @@ class DataRouterNode : public uhal::Node {
   UHAL_DERIVEDNODE(DataRouterNode)
   
 public:
-  explicit DataRouterNode(const uhal::Node& );
+  explicit DataRouterNode(const uhal::Node& node);
   virtual ~DataRouterNode();
 
-  const DataReceptionNode& get_data_reception_node(void) const ;
+  const DataReceptionNode& get_data_reception_node(void) const;
   const DPRNode& get_dpr_node(void) const;
 
 };
