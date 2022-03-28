@@ -17,7 +17,7 @@ namespace dunedaq {
 
     StreamProcessorArrayNode::~StreamProcessorArrayNode(){}
 
-    void StreamProcessorArrayNode::stream_select(const uint32_t pipe, const bool dispatch) {
+    void StreamProcessorArrayNode::stream_select(const uint32_t pipe, bool dispatch) {
       getNode("csr.ctrl.stream_sel").write(pipe);
       if(dispatch) {getClient().dispatch();}  
     }

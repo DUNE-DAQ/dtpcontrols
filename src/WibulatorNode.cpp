@@ -96,7 +96,7 @@ namespace dunedaq {
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
-    uhal::ValWord<uint32_t> WibulatorNode::get_address_width(const bool dispatch) {
+    uhal::ValWord<uint32_t> WibulatorNode::get_address_width(bool dispatch) {
       uhal::ValWord<uint32_t> addr_width{ getNode("csr.addr_width").read() };
       if(dispatch) {getClient().dispatch();}
       return addr_width;

@@ -68,14 +68,14 @@ namespace dunedaq {
     }
 
 
-    bool FlowMasterNode::m_exists(const std::string &s,
+    bool FlowMasterNode::m_exists(const std::string& name,
 				  std::map<std::string, uint32_t> &map) {
-      return   map.find(s) != map.end()?1:0;
+      return   map.find(name) != map.end()?1:0;
     }
 
-    bool FlowMasterNode::m_exists(const uint32_t &s,
-				  const std::vector<uint32_t> &mux_values) {
-      return   std::find(mux_values.begin(), mux_values.end(), s) != mux_values.end()?1:0;
+    bool FlowMasterNode::m_exists(const uint32_t& name,
+				  const std::vector<uint32_t>& mux_values) {
+      return   std::find(mux_values.begin(), mux_values.end(), name) != mux_values.end()?1:0;
     }
 
   } // namespace dtpcontrols
