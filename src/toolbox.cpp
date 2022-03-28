@@ -63,6 +63,20 @@ namespace dunedaq {
       return pattern_36b;
     }
 //-----------------------------------------------------------------------------
+
+//-----------------------------------------------------------------------------    
+    bool source_sink_exists(const std::string& name,
+				  std::map<std::string, uint32_t> &map) {
+      return   map.find(name) != map.end()?1:0;
+    }
+//-----------------------------------------------------------------------------
+
+//-----------------------------------------------------------------------------
+    bool source_sink_exists(const uint32_t& name,
+				  const std::vector<uint32_t>& mux_values) {
+      return   std::find(mux_values.begin(), mux_values.end(), name) != mux_values.end()?1:0;
+    }
+//-----------------------------------------------------------------------------    
     
   }  // namespace dtpcontrols
 } // namespace dunedaq

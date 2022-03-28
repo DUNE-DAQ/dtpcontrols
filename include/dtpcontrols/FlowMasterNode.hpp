@@ -14,6 +14,8 @@
 #ifndef DTPCONTROLS_INCLUDE_DTPCONTROLS_FLOWMASTERNODE_HPP_
 #define DTPCONTROLS_INCLUDE_DTPCONTROLS_FLOWMASTERNODE_HPP_
 
+#include "dtpcontrols/toolbox.hpp"
+
 #include "uhal/DerivedNode.hpp"
 
 #include <vector>
@@ -35,11 +37,6 @@ public:
   void source_select(const uint32_t& source, bool dispatch=true);
   void sink_select(const std::string& sink, bool dispatch=true);
   void sink_select(const uint32_t& sink, bool dispatch=true);
-
-private:
-
-  bool m_exists(const uint32_t& name, const std::vector<uint32_t>& map);
-  bool m_exists(const std::string& name, std::map<std::string, uint32_t>& mux_values);
 
 };
 
