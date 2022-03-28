@@ -54,14 +54,14 @@ namespace dunedaq {
       // read firmware config info
       std::map<std::string, uint32_t> get_firmware_config_info() const;
       // reset everything
-      void reset();
+      void reset() const;
 
       // configure TP generation
       // this is a placeholder - a configuration set will be needed as argument
-      void configure()const;
+      void configure() const;
 
       // enable TP generation
-      void enable()const;
+      void enable() const;
 
     private:
       

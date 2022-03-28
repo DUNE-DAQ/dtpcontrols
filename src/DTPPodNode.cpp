@@ -80,9 +80,8 @@ namespace dunedaq {
       return l_firmware_info;
     }
 
-    void DTPPodNode::reset() {
-      m_dtp_fw_info = get_firmware_config_info();
-      m_n_links = m_dtp_fw_info["n_links"];
+    void DTPPodNode::reset() const{
+
       auto lCtrlNode = get_control_node();
       lCtrlNode.soft_reset(true);
       lCtrlNode.master_reset(true);   
