@@ -23,7 +23,7 @@ class DataReceptionNode : public uhal::Node {
   UHAL_DERIVEDNODE(DataReceptionNode)
   
 public:
-  explicit DataReceptionNode(const uhal::Node& );
+  explicit DataReceptionNode(const uhal::Node& node);
   virtual ~DataReceptionNode();
 
   void reset_input_word_counter(bool dispatch=true);

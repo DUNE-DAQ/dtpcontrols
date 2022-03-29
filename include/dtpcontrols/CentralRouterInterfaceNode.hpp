@@ -24,7 +24,7 @@ class CentralRouterInterfaceNode : public uhal::Node {
   UHAL_DERIVEDNODE(CentralRouterInterfaceNode)
   
 public:
-  explicit CentralRouterInterfaceNode(const uhal::Node& );
+  explicit CentralRouterInterfaceNode(const uhal::Node& node);
   virtual ~CentralRouterInterfaceNode();
 
 };

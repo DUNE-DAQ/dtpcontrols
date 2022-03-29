@@ -23,7 +23,7 @@ class MonProbeNode : public uhal::Node {
   UHAL_DERIVEDNODE(MonProbeNode)
   
 public:
-  explicit MonProbeNode(const uhal::Node& );
+  explicit MonProbeNode(const uhal::Node& node);
   virtual ~MonProbeNode();
 
   uhal::ValWord<uint32_t> ready(bool dispatch=true);
@@ -33,6 +33,7 @@ public:
   uhal::ValWord<uint32_t> last_error(bool dispatch=true);
   uhal::ValWord<uint32_t> packet_count(bool dispatch=true);
   uhal::ValWord<uint32_t> axi_error(bool dispatch=true);
+
 };
 
 } // namespace dtpcontrols

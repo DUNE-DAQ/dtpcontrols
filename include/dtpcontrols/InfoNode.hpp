@@ -19,7 +19,6 @@
 
 // C++ Headers
 
-
 namespace dunedaq {
   namespace dtpcontrols {
     /**
@@ -34,6 +33,9 @@ namespace dunedaq {
       explicit InfoNode(const uhal::Node& node);
       virtual ~InfoNode();
 
+      // read firmware config info
+      std::map<std::string, uint32_t> get_firmware_config_info() const;
+      
     };
 
   } // namespace dtpcontrols
