@@ -17,22 +17,27 @@ namespace dtpcontrols {
   
   DataReceptionNode::~DataReceptionNode(){}
 
-  void DataReceptionNode::reset_input_word_counter(bool dispatch) {
+  void DataReceptionNode::enable(bool dispatch) const {
+    getNode("csr.ctrl.en").write(0x1);
+    if (dispatch) { getClient().dispatch(); }
+  }
+  
+  void DataReceptionNode::reset_input_word_counter(bool dispatch) const {
     getNode("csr.ctrl.rst_inctr").write(0x1);
     if(dispatch) {getClient().dispatch();}  
   }
 
-  void DataReceptionNode::reset_output_word_counter(bool dispatch) {
+  void DataReceptionNode::reset_output_word_counter(bool dispatch) const {
     getNode("csr.ctrl.rst_outctr").write(0x1);
     if(dispatch) {getClient().dispatch();}  
   }
 
-  void DataReceptionNode::error_reset(bool dispatch) {
+  void DataReceptionNode::error_reset(bool dispatch) const {
     getNode("csr.ctrl.err_rst").write(0x1);
     if(dispatch) {getClient().dispatch();}  
   }
 
-  void DataReceptionNode::reset(bool dispatch) {
+  void DataReceptionNode::reset(bool dispatch) const {
     getNode("csr.ctrl.err_rst").write(0x1);
     getNode("csr.ctrl.rst_inctr").write(0x1);
     getNode("csr.ctrl.rst_outctr").write(0x1);

@@ -9,13 +9,23 @@
 #include "dtpcontrols/CentralRouterInterfaceNode.hpp"
 
 namespace dunedaq {
-namespace dtpcontrols {
+  namespace dtpcontrols {
+    
+    UHAL_REGISTER_DERIVED_NODE(CentralRouterInterfaceNode)
+    
+    CentralRouterInterfaceNode::CentralRouterInterfaceNode(const uhal::Node &node) : uhal::Node(node) {}
+    
+    CentralRouterInterfaceNode::~CentralRouterInterfaceNode() {}
+    
+    void CentralRouterInterfaceNode::enable(bool dispatch) const {
+      getNode("csr.ctrl.enable").write(0x1);
+      if(dispatch) {getClient().dispatch();}
+    }    
 
-UHAL_REGISTER_DERIVED_NODE(CentralRouterInterfaceNode)
-
-CentralRouterInterfaceNode::CentralRouterInterfaceNode(const uhal::Node &node) : uhal::Node(node) {}
-
-CentralRouterInterfaceNode::~CentralRouterInterfaceNode() {}
-
-} // namespace dtpcontrols
+    void CentralRouterInterfaceNode::drop_empty(bool dispatch) const {
+      getNode("csr.ctrl.drop_empty").write(0x1);
+      if(dispatch) {getClient().dispatch();}
+    }
+    
+  } // namespace dtpcontrols
 } // namespace dunedaq

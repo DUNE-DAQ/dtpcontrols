@@ -50,6 +50,7 @@ namespace dunedaq {
       void set_outsink_width(uint32_t outsink_width);
       void set_wibtors_en(uint32_t wibtors_en);
       void set_outsink_en(uint32_t outsink_en);      
+
       // get nodes
       const InfoNode& get_info_node() const;
       const ControlNode& get_control_node() const;
@@ -63,8 +64,7 @@ namespace dunedaq {
       void reset() const;
 
       // configure TP generation
-      // this is a placeholder - a configuration set will be needed as argument
-      void configure() const;
+      void configure(uint32_t threshold, std::vector<uint64_t> masks) const;
 
       // enable TP generation
       void enable() const;

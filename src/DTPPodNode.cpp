@@ -22,7 +22,7 @@ namespace dunedaq {
     {
       //values from
       //https://gitlab.cern.ch/dune-daq/readout/dtp-firmware/-/blob/dtp-v2.0.0/projects/ultimate/firmware/sim_hdl/dtpc_params.vhd
-      TLOG() << "DTPPodNode initialising ";
+      TLOG_DEBUG(1) << "DTPPodNode initialising ";
       set_n_links(5);
       set_n_port(4);
       set_n_mux(64);
@@ -36,37 +36,37 @@ namespace dunedaq {
 
     void DTPPodNode::set_n_links(uint32_t n_links) {
       m_n_links = n_links;
-      TLOG() << "Number of links set to " << m_n_links;
+      TLOG_DEBUG(1) << "Number of links set to " << m_n_links;
     }
 
     void DTPPodNode::set_n_port(uint32_t n_port) {
       m_n_port = n_port;
-      TLOG() << "Number of ports set to " << m_n_port;
+      TLOG_DEBUG(1) << "Number of ports set to " << m_n_port;
     }
 
     void DTPPodNode::set_n_mux(uint32_t n_mux) {
       m_n_mux = n_mux;
-      TLOG() << "Number of mux set to " << m_n_links;
+      TLOG_DEBUG(1) << "Number of mux set to " << m_n_links;
     }
 
     void DTPPodNode::set_wibtors_width(uint32_t wibtors_width) {
       m_wibtors_width = wibtors_width;
-      TLOG() << "Wibulator width set to " << m_wibtors_width;
+      TLOG_DEBUG(1) << "Wibulator width set to " << m_wibtors_width;
     }
 
     void DTPPodNode::set_outsink_width(uint32_t outsink_width) {
       m_outsink_width = outsink_width;
-      TLOG() << "Outsink width set to " << m_wibtors_width;
+      TLOG_DEBUG(1) << "Outsink width set to " << m_wibtors_width;
     }    
 
     void DTPPodNode::set_wibtors_en(uint32_t wibtors_en) {
       m_wibtors_en = wibtors_en;
-      TLOG() << "Wibulator enable set to " << m_wibtors_en;
+      TLOG_DEBUG(1) << "Wibulator enable set to " << m_wibtors_en;
     }
 
     void DTPPodNode::set_outsink_en(uint32_t outsink_en) {
       m_outsink_en = outsink_en;
-      TLOG() << "Outsink enable set to " << m_outsink_en;
+      TLOG_DEBUG(1) << "Outsink enable set to " << m_outsink_en;
     }        
     
     const InfoNode& DTPPodNode::get_info_node() const {
@@ -115,7 +115,6 @@ namespace dunedaq {
     
       auto lCtrlNode = get_control_node();
       lCtrlNode.soft_reset(true);
-      lCtrlNode.master_reset(true);   
 
       for (uint i=0; i!=m_n_links; ++i) {	
 	auto lDataReceptionNode = get_link_processor_node(i).get_data_router_node().get_data_reception_node();
@@ -124,7 +123,7 @@ namespace dunedaq {
 
     }
     
-    void DTPPodNode::configure() const {
+    void DTPPodNode::configure(uint32_t threshold, std::vector<uint64_t> masks) const {
 
       // set source to gbt (links)
       auto lFlowMasterNode = get_flowmaster_node();
@@ -133,8 +132,45 @@ namespace dunedaq {
 
       // set CRIF to drop empty packets
       auto lCRIFNode = get_crif_node();
-      lCRIFNode.getNode("csr.ctrl.drop_empty").write(0x1);
+      lCRIFNode.drop_empty(false);
+
+      // configure link processors
+      for (uint32_t i=0; i!=m_n_links; ++i) {
+
+	// enable data reception
+	auto l_dr_node = get_link_processor_node(i).get_data_router_node();
+	l_dr_node.get_data_reception_node().enable(false);
+
+	// set DPR mux
+	auto l_dpr_node = l_dr_node.get_dpr_node();
+	l_dpr_node.set_mux_in(0x1);
+	l_dpr_node.set_mux_out(0x1);
+
+	// configure pipelines
+	for (uint32_t j=0; j!=m_n_port; ++j) {
+
+	  auto l_sa_node = get_link_processor_node(i).get_stream_proc_array_node();
+	  l_sa_node.stream_select(j, false);
+
+	  // set drop empty
+	  l_sa_node.get_stream_proc_node().drop_empty(false);
+
+	  // set hitfinder threshold
+	  l_sa_node.get_stream_proc_node().set_threshold(threshold, false);
+
+	  // set masks
+	  uint64_t mask = masks[i*m_n_port + j];
+	  l_sa_node.get_stream_proc_node().set_mask_channels(mask, false);
+
+	}
+
+      }
+
       getClient().dispatch();
+
+      // and read it all back
+      
+
 
     }
 

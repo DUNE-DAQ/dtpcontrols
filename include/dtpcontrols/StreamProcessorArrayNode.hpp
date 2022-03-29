@@ -28,9 +28,10 @@ namespace dunedaq {
       explicit StreamProcessorArrayNode(const uhal::Node& node);
       virtual ~StreamProcessorArrayNode();
 
+      const StreamProcessorNode& get_stream_proc_node() const;
+
       void stream_select(const uint32_t pipe, bool dispatch=true);
 
-      const StreamProcessorNode& get_stream_proc_node() const;
 
     };
 

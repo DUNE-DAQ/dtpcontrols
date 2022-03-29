@@ -17,13 +17,13 @@ namespace dunedaq {
 
     StreamProcessorArrayNode::~StreamProcessorArrayNode(){}
 
+    const StreamProcessorNode& StreamProcessorArrayNode::get_stream_proc_node(void) const {
+      return getNode<StreamProcessorNode>("stream_proc");
+    }
+
     void StreamProcessorArrayNode::stream_select(const uint32_t pipe, bool dispatch) {
       getNode("csr.ctrl.stream_sel").write(pipe);
       if(dispatch) {getClient().dispatch();}  
-    }
-
-    const StreamProcessorNode& StreamProcessorArrayNode::get_stream_proc_node(void) const {
-      return getNode<StreamProcessorNode>("stream_proc");
     }
 
   } // namespace dtpcontrols

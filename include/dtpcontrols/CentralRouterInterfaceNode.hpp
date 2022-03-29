@@ -17,19 +17,23 @@
 #include "uhal/DerivedNode.hpp"
 
 namespace dunedaq {
-namespace dtpcontrols {
+  namespace dtpcontrols {
+    
+    class CentralRouterInterfaceNode : public uhal::Node {
+      
+      UHAL_DERIVEDNODE(CentralRouterInterfaceNode)
+      
+      public:
+      explicit CentralRouterInterfaceNode(const uhal::Node& node);
+      virtual ~CentralRouterInterfaceNode();
+      
+      void enable(bool dispatch=true) const;
+      
+      void drop_empty(bool dispatch=true) const;
 
-class CentralRouterInterfaceNode : public uhal::Node {
-
-  UHAL_DERIVEDNODE(CentralRouterInterfaceNode)
-  
-public:
-  explicit CentralRouterInterfaceNode(const uhal::Node& node);
-  virtual ~CentralRouterInterfaceNode();
-
-};
-
-} // namespace dtpcontrols
+    };
+    
+  } // namespace dtpcontrols
 } // namespace dunedaq
 
 #endif // DTPCONTROLS_INCLUDE_DTPCONTROLS_CENTRALROUTERINTERFACENODE_HPP_

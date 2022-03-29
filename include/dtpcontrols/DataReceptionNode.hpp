@@ -26,10 +26,11 @@ public:
   explicit DataReceptionNode(const uhal::Node& node);
   virtual ~DataReceptionNode();
 
-  void reset_input_word_counter(bool dispatch=true);
-  void reset_output_word_counter(bool dispatch=true);
-  void error_reset(bool dispatch=true);
-  void reset(bool dispatch=true);
+  void enable(bool dispatch=true) const;
+  void reset_input_word_counter(bool dispatch=true) const;
+  void reset_output_word_counter(bool dispatch=true) const;
+  void error_reset(bool dispatch=true) const;
+  void reset(bool dispatch=true) const;
 
 };
 
