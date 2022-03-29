@@ -51,8 +51,6 @@ namespace dunedaq {
       const CentralRouterInterfaceNode& get_crif_node() const;
       const OutputSinkNode& get_output_sink_node() const;
 
-      // read firmware config info
-      std::map<std::string, uint32_t> get_firmware_config_info() const;
       // reset everything
       void reset() const;
 
