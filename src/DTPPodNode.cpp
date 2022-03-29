@@ -18,13 +18,57 @@ namespace dunedaq {
     
     UHAL_REGISTER_DERIVED_NODE(DTPPodNode)
     
-    DTPPodNode::DTPPodNode(const uhal::Node& node) :uhal::Node(node),
-      m_n_links(5)
+    DTPPodNode::DTPPodNode(const uhal::Node& node) :uhal::Node(node)
     {
+      //values from
+      //https://gitlab.cern.ch/dune-daq/readout/dtp-firmware/-/blob/dtp-v2.0.0/projects/ultimate/firmware/sim_hdl/dtpc_params.vhd
+      TLOG() << "DTPPodNode initialising ";
+      set_n_links(5);
+      set_n_port(4);
+      set_n_mux(64);
+      set_wibtors_width(13);
+      set_outsink_width(13);
+      set_wibtors_en(true);
+      set_outsink_en(true);
     }
 
     DTPPodNode::~DTPPodNode() {}
 
+    void DTPPodNode::set_n_links(uint32_t n_links) {
+      m_n_links = n_links;
+      TLOG() << "Number of links set to " << m_n_links;
+    }
+
+    void DTPPodNode::set_n_port(uint32_t n_port) {
+      m_n_port = n_port;
+      TLOG() << "Number of ports set to " << m_n_port;
+    }
+
+    void DTPPodNode::set_n_mux(uint32_t n_mux) {
+      m_n_mux = n_mux;
+      TLOG() << "Number of mux set to " << m_n_links;
+    }
+
+    void DTPPodNode::set_wibtors_width(uint32_t wibtors_width) {
+      m_wibtors_width = wibtors_width;
+      TLOG() << "Wibulator width set to " << m_wibtors_width;
+    }
+
+    void DTPPodNode::set_outsink_width(uint32_t outsink_width) {
+      m_outsink_width = outsink_width;
+      TLOG() << "Outsink width set to " << m_wibtors_width;
+    }    
+
+    void DTPPodNode::set_wibtors_en(uint32_t wibtors_en) {
+      m_wibtors_en = wibtors_en;
+      TLOG() << "Wibulator enable set to " << m_wibtors_en;
+    }
+
+    void DTPPodNode::set_outsink_en(uint32_t outsink_en) {
+      m_outsink_en = outsink_en;
+      TLOG() << "Outsink enable set to " << m_outsink_en;
+    }        
+    
     const InfoNode& DTPPodNode::get_info_node() const {
       return getNode<InfoNode>("info");
     }

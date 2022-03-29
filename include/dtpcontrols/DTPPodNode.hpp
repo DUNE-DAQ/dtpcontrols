@@ -42,6 +42,14 @@ namespace dunedaq {
       explicit DTPPodNode(const uhal::Node& node);
       virtual ~DTPPodNode();
 
+      // set firmware build config information
+      void set_n_links(uint32_t n_links);
+      void set_n_port(uint32_t n_port);
+      void set_n_mux(uint32_t n_mux);
+      void set_wibtors_width(uint32_t wibtors_width);
+      void set_outsink_width(uint32_t outsink_width);
+      void set_wibtors_en(uint32_t wibtors_en);
+      void set_outsink_en(uint32_t outsink_en);      
       // get nodes
       const InfoNode& get_info_node() const;
       const ControlNode& get_control_node() const;
@@ -63,10 +71,15 @@ namespace dunedaq {
 
     private:
       
-      // how many links does this build contain
+      // firware config info this build contains
       std::map<std::string, uint32_t> m_dtp_fw_info;
-      uint32_t m_n_links;
-
+      uint32_t m_n_links = 0;
+      uint32_t m_n_port = 0;
+      uint32_t m_n_mux = 0;
+      uint32_t m_wibtors_width = 0;
+      uint32_t m_outsink_width = 0;
+      uint32_t m_wibtors_en = false;
+      uint32_t m_outsink_en = false;      
     };
 
   } // namespace dtpcontrols
