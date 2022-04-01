@@ -2,7 +2,6 @@ cmake_minimum_required(VERSION 3.12)
 
 project(dtpcontrols VERSION 2.0.0)
 
-
 find_package(daq-cmake REQUIRED)
 
 daq_setup_environment()
@@ -17,7 +16,7 @@ find_package(uhallibs REQUIRED)
 daq_add_library(*.cpp LINK_LIBRARIES ers::ers logging::logging uhal::uhal)
 
 ##############################################################################
-daq_add_python_bindings(*.cpp LINK_LIBRARIES ${PROJECT_NAME})
+#daq_add_python_bindings(*.cpp LINK_LIBRARIES ${PROJECT_NAME})
 
 ##############################################################################
 # Integration tests
