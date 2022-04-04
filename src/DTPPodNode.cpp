@@ -113,64 +113,114 @@ namespace dunedaq {
     
     void DTPPodNode::reset() const {
     
-      auto lCtrlNode = get_control_node();
-      lCtrlNode.soft_reset(true);
+      auto ctrl_node = get_control_node();
+      ctrl_node.soft_reset(true);
+      ctrl_node.master_reset(true);	
 
-      for (uint i=0; i!=m_n_links; ++i) {	
+      /*      for (uint i=0; i!=m_n_links; ++i) {	
 	auto lDataReceptionNode = get_link_processor_node(i).get_data_router_node().get_data_reception_node();
 	lDataReceptionNode.reset(true);
-      }
+	} */
+
+    }
+
+    void DTPPodNode::reset_counters() const {
+
+      
 
     }
     
-    void DTPPodNode::configure(uint32_t threshold, std::vector<uint64_t> masks) const {
+    void DTPPodNode::set_source_int() const {
+      auto lFlowMasterNode = get_flowmaster_node();
+      lFlowMasterNode.source_select("wtor", true);
+    }
 
-      // set source to gbt (links)
+    void DTPPodNode::set_source_ext() const {
       auto lFlowMasterNode = get_flowmaster_node();
       lFlowMasterNode.source_select("gbt", true);
-      lFlowMasterNode.sink_select("hits", true);
+    }
 
-      // set CRIF to drop empty packets
+
+    void DTPPodNode::set_sink_hits() const {
+      auto lFlowMasterNode = get_flowmaster_node();
+      lFlowMasterNode.sink_select("hits", true);
+    }
+
+    void DTPPodNode::set_crif_drop_empty() const {
       auto lCRIFNode = get_crif_node();
       lCRIFNode.drop_empty(false);
+    }
 
-      // configure link processors
-      for (uint32_t i=0; i!=m_n_links; ++i) {
+    void DTPPodNode::setup_link_proc(int link) const {
 
-	// enable data reception
-	auto l_dr_node = get_link_processor_node(i).get_data_router_node();
-	l_dr_node.get_data_reception_node().enable(false);
+      // enable data reception
+      auto l_dr_node = get_link_processor_node(link).get_data_router_node();
+      l_dr_node.get_data_reception_node().enable(false);
+      
+      // set DPR mux
+      auto l_dpr_node = l_dr_node.get_dpr_node();
+      l_dpr_node.set_mux_in(0x1);
+      l_dpr_node.set_mux_out(0x1);
 
-	// set DPR mux
-	auto l_dpr_node = l_dr_node.get_dpr_node();
-	l_dpr_node.set_mux_in(0x1);
-	l_dpr_node.set_mux_out(0x1);
+      getClient().dispatch();
+      
+    }
 
-	// configure pipelines
-	for (uint32_t j=0; j!=m_n_port; ++j) {
+    void DTPPodNode::set_threshold_all(int threshold) const {
 
-	  auto l_sa_node = get_link_processor_node(i).get_stream_proc_array_node();
-	  l_sa_node.stream_select(j, false);
-
-	  // set drop empty
-	  l_sa_node.get_stream_proc_node().drop_empty(false);
-
-	  // set hitfinder threshold
-	  l_sa_node.get_stream_proc_node().set_threshold(threshold, false);
-
-	  // set masks
-	  uint64_t mask = masks[i*m_n_port + j];
-	  l_sa_node.get_stream_proc_node().set_mask_channels(mask, false);
-
-	}
-
+      for (uint32_t i_link=0; i_link!=m_n_links; ++i_link) {
+        for (uint32_t i_pipe=0; i_pipe!=m_n_port; ++i_pipe) {
+	  
+          auto l_sa_node = get_link_processor_node(i_link).get_stream_proc_array_node();
+          l_sa_node.stream_select(i_pipe, false);
+          l_sa_node.get_stream_proc_node().set_threshold(threshold, false);
+	  
+        }
       }
 
       getClient().dispatch();
 
-      // and read it all back
-      
+    }
 
+    void DTPPodNode::reset_masks() const {
+
+      for (uint32_t i_link=0; i_link!=m_n_links; ++i_link) {
+        for (uint32_t i_pipe=0; i_pipe!=m_n_port; ++i_pipe) {
+	  
+          auto l_sa_node = get_link_processor_node(i_link).get_stream_proc_array_node();
+          l_sa_node.stream_select(i_pipe, false);
+	  l_sa_node.get_stream_proc_node().set_mask_channels(0x0, false);
+	  
+        }
+      }
+
+      getClient().dispatch();
+
+    }
+
+    void DTPPodNode::set_channel_mask(int link, int pipe, uint64_t mask) const {
+      auto l_sa_node = get_link_processor_node(link).get_stream_proc_array_node();
+      l_sa_node.stream_select(pipe, false);
+      l_sa_node.get_stream_proc_node().set_mask_channels(mask, false);
+      getClient().dispatch();
+    }
+
+    void DTPPodNode::mask_channel(int link, int pipe, int channel) const {
+
+      auto l_sa_node = get_link_processor_node(link).get_stream_proc_array_node();
+      l_sa_node.stream_select(pipe, true);
+
+      l_sa_node.get_stream_proc_node().mask_channel(channel);
+
+    }
+
+    void DTPPodNode::configure(uint32_t threshold) const {
+
+      set_source_int();
+      set_sink_hits();
+      set_crif_drop_empty();
+
+      set_threshold_all(threshold);
 
     }
 
@@ -190,33 +240,40 @@ namespace dunedaq {
 
     }
 
-    std::vector<MonProbeNodeInfo> DTPPodNode::get_mon_probe_info() const {
+    std::vector<MonProbeNodeInfo> DTPPodNode::get_mon_probe_info(int link, int pipe) const {
 
       std::vector<MonProbeNodeInfo> tmp;
 
-      // loop over all the links and all the processors
-      for (uint32_t i_link=0; i_link!=m_n_links; ++i_link) {
-	for (uint32_t i_port=0; i_port!=m_n_port; ++i_port) {
+      auto l_sa_node = get_link_processor_node(link).get_stream_proc_array_node();
 
-	  auto l_sa_node = get_link_processor_node(i_link).get_stream_proc_array_node();
-	  l_sa_node.stream_select(i_port, true);
-	    
-	  int n_probes = l_sa_node.get_stream_proc_node().get_n_probes();
+      // capture counters
+      l_sa_node.getNode("csr.ctrl.cap_ctrs").write(0x1);
+      l_sa_node.getNode("csr.ctrl.cap_ctrs").write(0x0);
+      l_sa_node.getClient().dispatch();
 
-	  for (uint32_t i_probe=0; i_probe!=n_probes; ++i_probe) {
-	    
-	    MonProbeNodeInfo info = l_sa_node.get_stream_proc_node().get_mon_probe_node(i_probe).get_info();
-	    info.link = i_link;
-	    info.pipe = i_port;
-	    info.probe = i_probe;
-	    
-	    tmp.push_back(info);
-	  }
-	}
-      }
+      // select link
+      l_sa_node.stream_select(pipe, true);
+      l_sa_node.getClient().dispatch();
+
+      // loop over probes
+      int n_probes = l_sa_node.get_stream_proc_node().get_n_probes();     
+      //      std::cout << l_sa_node.get_stream_proc_node().get_mon_probe_node(0).get_info().ready << std::endl;
+ 
+      /*      for (uint32_t i_probe=0; i_probe!=n_probes; ++i_probe) {
+	
+	MonProbeNodeInfo info = l_sa_node.get_stream_proc_node().get_mon_probe_node(i_probe).get_info();
+
+	std::cout << info.ready << std::endl;
+	info.link = link;
+	info.pipe = pipe;
+	info.probe = i_probe;
+	
+	tmp.push_back(info);
+      } 
+    */
       
       return tmp;
-
+      
     }
 
   } // namespace dtpcontrols

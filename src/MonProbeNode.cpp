@@ -8,6 +8,8 @@
 
 #include "dtpcontrols/MonProbeNode.hpp"
 
+#include "logging/Logging.hpp"
+
 namespace dunedaq {
   namespace dtpcontrols {
     
@@ -19,17 +21,17 @@ namespace dunedaq {
     
     MonProbeNodeInfo MonProbeNode::get_info() const {
 
-      const uhal::Node& node = getNode("mon");
+      TLOG_DEBUG(0) << "Getting monitor probe info";
 
       MonProbeNodeInfo info;
       
-      info.ready = node.getNode("ready").read();
-      info.valid = node.getNode("valid").read();
-      info.user = node.getNode("user").read();
-      info.last = node.getNode("last").read();
-      info.last_err = node.getNode("last_err").read();
-      info.pkt_ctr = node.getNode("pkt_ctr").read();
-      info.axi_err = node.getNode("axi_err").read();
+      info.ready = getNode("ready").read();
+/*      info.valid = getNode("valid").read();
+      info.user = getNode("user").read();
+      info.last = getNode("last").read();
+      info.last_err = getNode("last_err").read();
+      info.pkt_ctr = getNode("pkt_ctr").read();
+      info.axi_err = getNode("axi_err").read(); */
 
       getClient().dispatch();
 

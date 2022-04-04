@@ -21,20 +21,31 @@ using namespace dunedaq::dtpcontrols;
 
 int main(int argc, char const* argv[]) {
 
-  TLOG() << "FLX-TPG FW reset";
+dunedaq::logging::Logging::setup();
 
+TLOG() << "FLX-TPG FW reset";
+
+// default options                                                            
   std::string conn_file = find_connection_file();
-  std::string device("");
+  std::string device("flx-0-p2-hf");
 
-  if (argc >1) {
-    device = argv[1];
-  }
-  else {
-    TLOG() << "At least specify a device";
-  }
+  // get options                                                               
+  const std::vector<std::string_view> args(argv + 1, argv + argc);
 
-  if (argc > 2) {
-    conn_file = std::string(argv[2]);
+  for (auto it = args.begin(), end = args.end(); it != end; ++it) {
+
+    std::cout << (*it) << std::endl;
+
+    // device name
+    if (*it == "-d") {
+      device = *(it + 1);
+    }
+
+    // connection file
+    if (*it == "-c") {
+      conn_file = *(it + 1);
+    }
+
   }
   
   TLOG() << "Connections : " << conn_file;
@@ -42,10 +53,11 @@ int main(int argc, char const* argv[]) {
 
   uhal::setLogLevelTo(uhal::Debug());
   uhal::ConnectionManager cm(conn_file, {"ipbusflx-2.0"});
-  uhal::HwInterface flx = cm.getDevice(std::string(argv[1]));
+  uhal::HwInterface flx = cm.getDevice(device);
 
-  DTPPodNode dtp_pod_node (flx.getNode());
-  dtp_pod_node.reset();
-  
+DTPPodNode dtp_pod_node (flx.getNode());
+dtp_pod_node.reset();
+
+
 }
 

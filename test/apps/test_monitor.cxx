@@ -31,7 +31,9 @@ int main(int argc, char const* argv[]) {
   // default options
   std::string conn_file = find_connection_file();
   std::string device("flx-0-p2-hf");
-  int period(5);
+  int period=5;
+  int link=0;
+  int pipe=0;
   bool debug=false;
 
   // get options
@@ -46,6 +48,16 @@ int main(int argc, char const* argv[]) {
     // connection file
     if (*it == "-c") { // || *it == "--connection") {
       conn_file = *(it + 1);
+    }
+
+    // link
+    if (*it =="-l") { // ||*it =="--disable") {
+      link = std::stoi( std::string(*(it + 1)) );
+    }
+
+    // pipe
+    if (*it =="-p") { // ||*it =="--disable") {
+      pipe = std::stoi( std::string(*(it + 1)) );
     }
 
     // period between reads
@@ -77,16 +89,17 @@ int main(int argc, char const* argv[]) {
   // monitor it
   while (true) {
 
-    std::vector<MonProbeNodeInfo> info = dtp_pod_node.get_info();
+    // loop over enabled links
+    std::vector<MonProbeNodeInfo> info = dtp_pod_node.get_mon_probe_info(link, pipe);
 
     std::stringstream out;
 
-    for (auto i=0; i!=6; i++) {
-
+    for (auto i=0; i!=info.size(); i++) {
+      
       out << "| " << i;
-
+      
       out << " | " << info.at(i).pkt_ctr;
-
+      
       if (info.at(i).ready > 0) {
 	out << " [rdy] ";
       }
@@ -98,7 +111,10 @@ int main(int argc, char const* argv[]) {
 
     }
 
-    std::cout << out;
+    std::cout << out.str();
+
+    std::cout << std::endl;
+    std::cout << std::endl;
 
     sleep(period);
   }
