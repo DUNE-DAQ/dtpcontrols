@@ -31,10 +31,10 @@ int main(int argc, char const* argv[]) {
   // default options
   std::string conn_file = find_connection_file();
   std::string device("flx-0-p2-hf");
-  int period=5;
-  int link=0;
-  int pipe=0;
-  bool debug=false;
+  int period  = 2;
+  int n_links = 5;
+  int n_pipes = 4;
+  bool verbose=false;
 
   // get options
   const std::vector<std::string_view> args(argv + 1, argv + argc);
@@ -50,14 +50,20 @@ int main(int argc, char const* argv[]) {
       conn_file = *(it + 1);
     }
 
+    // verbose mode
+    if (*it == "-v") {
+      verbose = true;
+    }
+
     // link
     if (*it =="-l") { // ||*it =="--disable") {
-      link = std::stoi( std::string(*(it + 1)) );
+      n_links = std::stoi( std::string(*(it + 1)) );
     }
 
     // pipe
+    int n_pipes = 4;
     if (*it =="-p") { // ||*it =="--disable") {
-      pipe = std::stoi( std::string(*(it + 1)) );
+      n_pipes = std::stoi( std::string(*(it + 1)) );
     }
 
     // period between reads
@@ -65,21 +71,17 @@ int main(int argc, char const* argv[]) {
       period = std::stoi( std::string(*(it + 1)) );
     }
 
-    // debug mode
-    if (*it =="-debug") { // ||*it =="--disable") {
-      debug = true;
-    }
-
   }
+
+  // verbose mode
+  if (verbose) {
+    uhal::setLogLevelTo(uhal::Debug());
+  }  
 
   // setup connections/device
   TLOG() << "Connections : " << conn_file;
   TLOG() << "Device      : " << device;
 
-  if (debug) {
-    uhal::setLogLevelTo(uhal::Debug());
-  }
-  
   uhal::ConnectionManager cm(conn_file, {"ipbusflx-2.0"});
   uhal::HwInterface flx = cm.getDevice(device);
 
@@ -88,35 +90,56 @@ int main(int argc, char const* argv[]) {
 
   // monitor it
   while (true) {
-
-    // loop over enabled links
-    std::vector<MonProbeNodeInfo> info = dtp_pod_node.get_mon_probe_info(link, pipe);
-
+    
     std::stringstream out;
-
-    for (auto i=0; i!=info.size(); i++) {
+    out << std::endl;
+    
+    // loop over enabled links
+    for (int i_link=0; i_link<n_links; ++i_link) {
       
-      out << "| " << i;
+      out << "Link processor : " << i_link << std::endl;
       
-      out << " | " << info.at(i).pkt_ctr;
+      std::vector<std::vector<MonProbeNodeInfo> > infos;
       
-      if (info.at(i).ready > 0) {
-	out << " [rdy] ";
+      // loop over pipes
+      for (int i_pipe=0; i_pipe<n_pipes; ++i_pipe) {
+	std::vector<MonProbeNodeInfo> info = dtp_pod_node.get_mon_probe_info(i_link, i_pipe);
+	infos.push_back(info);
       }
-      else {
-	out << " [bsy] ";
-      }  
+       
+      // display info
+      for (int i_p=0; i_p!=6; i_p++) {
+	
+	out << "| probe " << i_p << " | ";
+	
+	for (int i_pipe=0; i_pipe!=n_pipes; i_pipe++) {
+	  
+	  // one cell
+	  out << infos.at(i_pipe).at(i_p).pkt_ctr;
+	  
+	  if (infos.at(i_pipe).at(i_p).ready > 0) {
+	    out << " [rdy] ";
+	  }
+	  else {
+	    out << " [bsy] ";
+	  }  
+	  
+	  out << infos.at(i_pipe).at(i_p).last_err << " | ";
+	  
+	}
+	
+	out << std::endl;
+	
+      }
       
-      out << info.at(i).last_err ;
-
     }
 
-    std::cout << out.str();
+    out << std::endl;
 
-    std::cout << std::endl;
-    std::cout << std::endl;
-
+    TLOG() << out.str();
+        
     sleep(period);
+
   }
 
 }

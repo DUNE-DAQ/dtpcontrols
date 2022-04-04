@@ -19,21 +19,28 @@ namespace dunedaq {
     
     MonProbeNode::~MonProbeNode(){}
     
-    MonProbeNodeInfo MonProbeNode::get_info() const {
+    const MonProbeNodeInfo MonProbeNode::get_info() const {
 
       TLOG_DEBUG(0) << "Getting monitor probe info";
 
-      MonProbeNodeInfo info;
-      
-      info.ready = getNode("ready").read();
-/*      info.valid = getNode("valid").read();
-      info.user = getNode("user").read();
-      info.last = getNode("last").read();
-      info.last_err = getNode("last_err").read();
-      info.pkt_ctr = getNode("pkt_ctr").read();
-      info.axi_err = getNode("axi_err").read(); */
+      auto ready = getNode("ready").read();
+      auto valid = getNode("valid").read();
+      auto user = getNode("user").read();
+      auto last = getNode("last").read();
+      auto last_err = getNode("last_err").read();
+      auto pkt_ctr = getNode("pkt_ctr").read();
+      auto axi_err = getNode("axi_err").read();
 
       getClient().dispatch();
+
+      MonProbeNodeInfo info;
+      info.ready    = int( ready );
+      info.valid    = int( valid );
+      info.user     = int( user );
+      info.last     = int( last );
+      info.last_err = int( last_err );
+      info.pkt_ctr  = int( pkt_ctr );
+      info.axi_err  = int( axi_err );
 
       return info;
 

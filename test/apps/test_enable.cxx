@@ -67,10 +67,10 @@ int main(int argc, char const* argv[]) {
 
   // configure it
   if (disable) {
-    dtp_pod_node.disable();
+    dtp_pod_node.disable_crif();
   }
   else {
-    dtp_pod_node.enable();
+    dtp_pod_node.enable_crif();
   }
 
 }

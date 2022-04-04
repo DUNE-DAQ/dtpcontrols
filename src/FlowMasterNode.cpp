@@ -18,6 +18,16 @@ namespace dunedaq {
     FlowMasterNode::FlowMasterNode(const uhal::Node& node) : uhal::Node(node) {}
   
     FlowMasterNode::~FlowMasterNode() {}
+
+    void FlowMasterNode::select_source_gbt(bool dispatch) const {
+      getNode("csr.ctrl.gbt_src").write(0x0);
+      if(dispatch) { getClient().dispatch(); }
+    }
+
+    void FlowMasterNode::select_source_wtor(bool dispatch) const {
+      getNode("csr.ctrl.gbt_src").write(0x1);
+      if(dispatch) { getClient().dispatch(); }
+    }
   
     void FlowMasterNode::source_select(const std::string& source, const bool dispatch) {
       std::map<std::string, uint32_t> src_map{{"gbt", 0}, {"wibtor", 1}};

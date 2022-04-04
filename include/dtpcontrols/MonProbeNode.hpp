@@ -29,7 +29,7 @@ public:
   explicit MonProbeNode(const uhal::Node& node);
   virtual ~MonProbeNode();
 
-  MonProbeNodeInfo get_info() const; // retrieve monitor info from firmware
+  const MonProbeNodeInfo get_info() const; // retrieve monitor info from firmware
 
 };
 

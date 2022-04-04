@@ -81,7 +81,7 @@ namespace dunedaq {
       void set_crif_drop_empty() const;
 
       // setup a link processor
-      void setup_link_proc(int link) const;
+      void setup_processors() const;
 
       // set all thresholds
       void set_threshold_all(int threshold) const;
@@ -95,14 +95,11 @@ namespace dunedaq {
       // mask one channel
       void mask_channel(int link, int pipe, int channel) const;
 
-      // configure everthing (except masks)
-      void configure(uint32_t threshold) const;
+      // enable CRIF
+      void enable_crif() const;
 
-      // enable TP generation
-      void enable() const;
-
-      // disable TP generation
-      void disable() const;
+      // disable CRIF
+      void disable_crif() const;
 
       // get mon probe info
       std::vector<MonProbeNodeInfo> get_mon_probe_info(int link, int pipe) const;

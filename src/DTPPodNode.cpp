@@ -132,12 +132,12 @@ namespace dunedaq {
     
     void DTPPodNode::set_source_int() const {
       auto lFlowMasterNode = get_flowmaster_node();
-      lFlowMasterNode.source_select("wtor", true);
+      lFlowMasterNode.select_source_wtor(true);
     }
 
     void DTPPodNode::set_source_ext() const {
       auto lFlowMasterNode = get_flowmaster_node();
-      lFlowMasterNode.source_select("gbt", true);
+      lFlowMasterNode.select_source_gbt(true);
     }
 
 
@@ -151,17 +151,21 @@ namespace dunedaq {
       lCRIFNode.drop_empty(false);
     }
 
-    void DTPPodNode::setup_link_proc(int link) const {
+    void DTPPodNode::setup_processors() const {
 
-      // enable data reception
-      auto l_dr_node = get_link_processor_node(link).get_data_router_node();
-      l_dr_node.get_data_reception_node().enable(false);
+      for (int i=0; i!=m_n_links; ++i) {
+	
+	// enable data reception
+	auto l_dr_node = get_link_processor_node(i).get_data_router_node();
+	l_dr_node.get_data_reception_node().enable(false);
+	
+	// set DPR mux
+	auto l_dpr_node = l_dr_node.get_dpr_node();
+	l_dpr_node.set_mux_in(0x1);
+	l_dpr_node.set_mux_out(0x1);
+	
+      }
       
-      // set DPR mux
-      auto l_dpr_node = l_dr_node.get_dpr_node();
-      l_dpr_node.set_mux_in(0x1);
-      l_dpr_node.set_mux_out(0x1);
-
       getClient().dispatch();
       
     }
@@ -214,17 +218,8 @@ namespace dunedaq {
 
     }
 
-    void DTPPodNode::configure(uint32_t threshold) const {
 
-      set_source_int();
-      set_sink_hits();
-      set_crif_drop_empty();
-
-      set_threshold_all(threshold);
-
-    }
-
-    void DTPPodNode::enable() const {
+    void DTPPodNode::enable_crif() const {
 
       auto lCRIFNode = get_crif_node();
       lCRIFNode.getNode("csr.ctrl.en").write(0x1);
@@ -232,7 +227,7 @@ namespace dunedaq {
    
     }
 
-    void DTPPodNode::disable() const {
+    void DTPPodNode::disable_crif() const {
 
       auto lCRIFNode = get_crif_node();
       lCRIFNode.getNode("csr.ctrl.en").write(0x0);
@@ -257,20 +252,17 @@ namespace dunedaq {
 
       // loop over probes
       int n_probes = l_sa_node.get_stream_proc_node().get_n_probes();     
-      //      std::cout << l_sa_node.get_stream_proc_node().get_mon_probe_node(0).get_info().ready << std::endl;
  
-      /*      for (uint32_t i_probe=0; i_probe!=n_probes; ++i_probe) {
+      for (uint32_t i_probe=0; i_probe!=n_probes; ++i_probe) {
 	
 	MonProbeNodeInfo info = l_sa_node.get_stream_proc_node().get_mon_probe_node(i_probe).get_info();
 
-	std::cout << info.ready << std::endl;
 	info.link = link;
 	info.pipe = pipe;
 	info.probe = i_probe;
 	
 	tmp.push_back(info);
-      } 
-    */
+      }
       
       return tmp;
       
