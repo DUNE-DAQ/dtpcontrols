@@ -9,13 +9,34 @@
 #include "dtpcontrols/MonProbeNode.hpp"
 
 namespace dunedaq {
-namespace dtpcontrols {
+  namespace dtpcontrols {
+    
+    UHAL_REGISTER_DERIVED_NODE(MonProbeNode)
+    
+    MonProbeNode::MonProbeNode(const uhal::Node& node) : uhal::Node(node) {}
+    
+    MonProbeNode::~MonProbeNode(){}
+    
+    MonProbeNodeInfo MonProbeNode::get_info() const {
 
-UHAL_REGISTER_DERIVED_NODE(MonProbeNode)
+      const uhal::Node& node = getNode("mon");
 
-MonProbeNode::MonProbeNode(const uhal::Node& node) : uhal::Node(node) {}
+      MonProbeNodeInfo info;
+      
+      info.ready = node.getNode("ready").read();
+      info.valid = node.getNode("valid").read();
+      info.user = node.getNode("user").read();
+      info.last = node.getNode("last").read();
+      info.last_err = node.getNode("last_err").read();
+      info.pkt_ctr = node.getNode("pkt_ctr").read();
+      info.axi_err = node.getNode("axi_err").read();
 
-MonProbeNode::~MonProbeNode(){}
+      getClient().dispatch();
+
+      return info;
+
+    }
+    
 
 } // namespace dtpcontrols
 } // namespace dunedaq

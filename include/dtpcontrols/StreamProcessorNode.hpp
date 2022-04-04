@@ -30,6 +30,8 @@ namespace dunedaq {
 
       const MonProbeNode& get_mon_probe_node(uint32_t i) const;
 
+      int get_n_probes() const;
+
       void set_threshold(const uint32_t threshold, bool dispatch=true) const;
 
       void set_mask_channels(const uint64_t msb00to31_lsb31to64,

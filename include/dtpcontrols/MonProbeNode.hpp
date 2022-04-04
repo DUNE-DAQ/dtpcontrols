@@ -13,6 +13,8 @@
 #ifndef DTPCONTROLS_INCLUDE_DTPCONTROLS_MONPROBENODE_HPP_
 #define DTPCONTROLS_INCLUDE_DTPCONTROLS_MONPROBENODE_HPP_
 
+#include "MonProbeNodeInfo.hpp"
+
 #include "uhal/DerivedNode.hpp"
 
 namespace dunedaq {
@@ -22,17 +24,12 @@ class MonProbeNode : public uhal::Node {
 
   UHAL_DERIVEDNODE(MonProbeNode)
   
+  
 public:
   explicit MonProbeNode(const uhal::Node& node);
   virtual ~MonProbeNode();
 
-  uhal::ValWord<uint32_t> ready(bool dispatch=true);
-  uhal::ValWord<uint32_t> valid(bool dispatch=true);
-  uhal::ValWord<uint32_t> user(bool dispatch=true);
-  uhal::ValWord<uint32_t> last(bool dispatch=true);
-  uhal::ValWord<uint32_t> last_error(bool dispatch=true);
-  uhal::ValWord<uint32_t> packet_count(bool dispatch=true);
-  uhal::ValWord<uint32_t> axi_error(bool dispatch=true);
+  MonProbeNodeInfo get_info() const; // retrieve monitor info from firmware
 
 };
 

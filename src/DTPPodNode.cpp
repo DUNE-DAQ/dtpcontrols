@@ -190,6 +190,34 @@ namespace dunedaq {
 
     }
 
+    std::vector<MonProbeNodeInfo> DTPPodNode::get_mon_probe_info() const {
+
+      std::vector<MonProbeNodeInfo> tmp;
+
+      // loop over all the links and all the processors
+      for (uint32_t i_link=0; i_link!=m_n_links; ++i_link) {
+	for (uint32_t i_port=0; i_port!=m_n_port; ++i_port) {
+
+	  auto l_sa_node = get_link_processor_node(i_link).get_stream_proc_array_node();
+	  l_sa_node.stream_select(i_port, true);
+	    
+	  int n_probes = l_sa_node.get_stream_proc_node().get_n_probes();
+
+	  for (uint32_t i_probe=0; i_probe!=n_probes; ++i_probe) {
+	    
+	    MonProbeNodeInfo info = l_sa_node.get_stream_proc_node().get_mon_probe_node(i_probe).get_info();
+	    info.link = i_link;
+	    info.pipe = i_port;
+	    info.probe = i_probe;
+	    
+	    tmp.push_back(info);
+	  }
+	}
+      }
+      
+      return tmp;
+
+    }
 
   } // namespace dtpcontrols
 } // namespace dunedaq

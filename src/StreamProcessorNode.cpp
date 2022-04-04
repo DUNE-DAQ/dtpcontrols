@@ -21,6 +21,10 @@ namespace dunedaq {
       m_n_mon_probes(6) {}
 
     StreamProcessorNode::~StreamProcessorNode(){}
+
+    int StreamProcessorNode::get_n_probes() const {
+      return m_n_mon_probes;
+    }
     
     const MonProbeNode& StreamProcessorNode::get_mon_probe_node(uint32_t i) const {
       std::string name("mon.p");

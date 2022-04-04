@@ -21,7 +21,9 @@ daq_add_library(*.cpp LINK_LIBRARIES ers::ers logging::logging uhal::uhal)
 ##############################################################################
 # Integration tests
 daq_add_application(dtpcontrols_test_nodes test_nodes.cxx TEST LINK_LIBRARIES uhal::uhal uhallibs::uhallibs dtpcontrols)
-daq_add_application(dtpcontrols_test_fw_reset test_fw_reset.cxx TEST LINK_LIBRARIES uhal::uhal uhallibs::uhallibs dtpcontrols)
+daq_add_application(dtpcontrols_test_reset test_reset.cxx TEST LINK_LIBRARIES uhal::uhal uhallibs::uhallibs dtpcontrols)
+daq_add_application(dtpcontrols_test_config test_config.cxx TEST LINK_LIBRARIES uhal::uhal uhallibs::uhallibs dtpcontrols)
+daq_add_application(dtpcontrols_test_enable test_enable.cxx TEST LINK_LIBRARIES uhal::uhal uhallibs::uhallibs dtpcontrols)
 
 
 ##############################################################################

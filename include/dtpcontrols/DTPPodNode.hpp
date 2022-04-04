@@ -19,6 +19,8 @@
 #include "dtpcontrols/OutputSinkNode.hpp"
 #include "dtpcontrols/WibulatorNode.hpp"
 #include "dtpcontrols/LinkProcessorNode.hpp"
+#include "dtpcontrols/MonProbeNodeInfo.hpp"
+
 
 // uHal Headers
 #include "uhal/DerivedNode.hpp"
@@ -71,6 +73,9 @@ namespace dunedaq {
 
       // disable TP generation
       void disable() const;
+
+      // get mon probe info
+      std::vector<MonProbeNodeInfo> get_mon_probe_info() const;
 
     private:
       
