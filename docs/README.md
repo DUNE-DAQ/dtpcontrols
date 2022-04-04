@@ -2,26 +2,54 @@
 
 This package contains python tools for control of the DUNE Trigger Primitive firmware.
 
-## Setup and build
+## Python tools
 
-To use a version from a frozen dunedaq release, setup a dunedaq environment according to the instructions at :
-https://dune-daq-sw.readthedocs.io/en/latest/packages/daq-buildtools/#running-a-release-from-cvmfs
+hfButler.py provides control, test and diagnostic functions.  Some examples of usage are given below.
 
-For more info on setup and build, see : 
-https://dune-daq-sw.readthedocs.io/en/latest/packages/daq-buildtools/
+Note that the first argument is the device to control. These examples control TPG firmware in one half FELIX.
 
-
-## Use with dunedaq-v2.9.0
-
-Use the recipe below to use this package with dunedaq-v2.9.0.
-
+* reset and configure TPG FW with the internal wibulator data source
 ```
-source /cvmfs/dunedaq.opensciencegrid.org/setup_dunedaq.sh
-setup_dbt dunedaq-v2.9.0
-dbt-create.sh workDir
-cd workDir/sourcecode
-git clone https://github.com/DUNE-DAQ/dtpcontrols.git [ -b <tag> ]
-git clone https://github.com/DUNE-DAQ/uhallibs.git
-dbt-workarea-env
-dbt-build.py
+hfButler.py flx-0-p2-hf init
+hfButler.py flx-0-p2-hf cr-if --on --drop-empty
+hfButler.py flx-0-p2-hf flowmaster --src-sel wibtor --sink-sel hits
+hfButler.py flx-0-p2-hf link hitfinder -t 20
+hfButler.py flx-0-p2-hf link mask enable -c 1-63
+hfButler.py flx-0-p2-hf link config --dr-on --dpr-mux passthrough --drop-empty
 ```
+
+* to configure for external data, replace the relevant line above with
+```
+hfButler.py flx-0-p2-hf flowmaster --src-sel gbt --sink-sel hits
+```
+
+* configure the wibulator data source to send patterns.  Note the last line will cause the wiulator to fire in one-shot mode.
+```
+hfButler.py flx-0-p2-hf wtor -i 0 config dtp-patterns/FixedHits/A/FixedHits_A_wib_axis_32b.txt
+hfButler.py flx-0-p2-hf wtor -i 0 fire -l
+```
+
+## C++ tools
+
+The following tools test the C++ code in standalone mode (ie. outside dunedaq).  Only basic functionality is provided so far.
+
+* reset TP firmware
+```
+dtpcontrols_test_reset
+```
+
+* configure TP firmware
+```
+dtpcontrols_test_reset
+```
+
+* enable TP production
+```
+dtpcontrols_test_enable
+```
+
+* monitor TP processing
+```
+dtpcontrols_test_monitor
+```
+
