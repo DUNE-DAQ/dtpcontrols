@@ -26,8 +26,6 @@ using namespace dunedaq::dtpcontrols;
 
 int main(int argc, char const* argv[]) {
 
-  TLOG() << "FLX-TPG FW configuration";
-
   // default options
   std::string conn_file = find_connection_file();
   std::string device("flx-0-p2-hf");
@@ -52,9 +50,20 @@ int main(int argc, char const* argv[]) {
       disable = true;
     }
 
+    // help
+    if (*it == "-h") {
+      std::cout << "\nUsage:\n dtpcontrols_test_enable [options]\n\n";
+      std::cout << "Options:\n";
+      std::cout << "  -c <filename>\tconnection file name\n";
+      std::cout << "  -d <device>\tdevice name\n";
+      std::cout << "  -s \t\tdisable\n";
+      exit(0);
+    }
+
   }
 
   // setup connections/device
+  TLOG() << "FLX-TPG FW configuration";
   TLOG() << "Connections : " << conn_file;
   TLOG() << "Device      : " << device;
 

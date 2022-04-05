@@ -23,9 +23,7 @@ int main(int argc, char const* argv[]) {
 
 dunedaq::logging::Logging::setup();
 
-TLOG() << "FLX-TPG FW reset";
-
-// default options                                                            
+  // default options
   std::string conn_file = find_connection_file();
   std::string device("flx-0-p2-hf");
 
@@ -33,8 +31,6 @@ TLOG() << "FLX-TPG FW reset";
   const std::vector<std::string_view> args(argv + 1, argv + argc);
 
   for (auto it = args.begin(), end = args.end(); it != end; ++it) {
-
-    std::cout << (*it) << std::endl;
 
     // device name
     if (*it == "-d") {
@@ -46,8 +42,18 @@ TLOG() << "FLX-TPG FW reset";
       conn_file = *(it + 1);
     }
 
+    // help
+    if (*it == "-h") {
+      std::cout << "\nUsage:\n dtpcontrols_test_reset [options]\n\n";
+      std::cout << "Options:\n";
+      std::cout << "  -c <filename>\tconnection file name\n";
+      std::cout << "  -d <device>\tdevice name\n";      
+      exit(0);
+    }
+
   }
-  
+
+  TLOG() << "FLX-TPG FW reset";
   TLOG() << "Connections : " << conn_file;
   TLOG() << "Device      : " << device;
 

@@ -71,6 +71,19 @@ int main(int argc, char const* argv[]) {
       period = std::stoi( std::string(*(it + 1)) );
     }
 
+    // help
+    if (*it == "-h") {
+      std::cout << "\nUsage:\n dtpcontrols_test_monitor [options]\n\n";
+      std::cout << "Options:\n";
+      std::cout << "  -c <filename>\tconnection file name\n";
+      std::cout << "  -d <device>\tdevice name\n";
+      std::cout << "  -v \t\tverbose mode\n";
+      std::cout << "  -l <n_links> \t number of links\n";
+      std::cout << "  -p <n_pipes> \t number of pipes\n";
+      std::cout << "  -s <period> \t time between reads\n";
+      exit(0);
+    }
+
   }
 
   // verbose mode

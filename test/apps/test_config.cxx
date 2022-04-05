@@ -26,8 +26,6 @@ using namespace dunedaq::dtpcontrols;
 
 int main(int argc, char const* argv[]) {
 
-  TLOG() << "FLX-TPG FW configuration";
-
   // default options
   std::string conn_file = find_connection_file();
   std::string device("flx-0-p2-hf");
@@ -67,12 +65,25 @@ int main(int argc, char const* argv[]) {
       // to do
     }
 
+    // help
+    if (*it == "-h") {
+      std::cout << "\nUsage:\n dtpcontrols_test_config [options]\n\n";
+      std::cout << "Options:\n";
+      std::cout << "  -c <filename>\t\tconnection file name\n";
+      std::cout << "  -d <device>\t\tdevice name\n";      
+      std::cout << "  -v \t\t\tverbose mode\n";      
+      std::cout << "  -t <threshold>\tTP threshold\n";      
+      std::cout << "  -m <mask>\t\tcomma-separated list of channels to mask\n";
+      exit(0);
+    }
+
   }
 
   // verbose output (mainly uHAL debug mode)
   if (verbose) { uhal::setLogLevelTo(uhal::Debug()); }
 
   // setup connections/device
+  TLOG() << "FLX-TPG FW configuration";
   TLOG() << "Connections : " << conn_file;
   TLOG() << "Device      : " << device;
 
