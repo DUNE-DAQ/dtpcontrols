@@ -57,8 +57,8 @@ Usage:
  dtpcontrols_test_reset [options]
 
 Options:
-  -c <filename>	   connection file name
-  -d <device>	     device name
+  -c <filename>   connection file name
+  -d <device>     device name
 ```
 
 * Configuration
@@ -69,11 +69,11 @@ Usage:
  dtpcontrols_test_config [options]
 
 Options:
-  -c <filename>	  connection file name
-  -d <device>	    device name
-  -v 		           verbose mode
-  -t <threshold>	 TP threshold
-  -m <mask>	      comma-separated list of channels to mask
+  -c <filename>   connection file name
+  -d <device>     device name
+  -v              verbose mode
+  -t <threshold>  TP threshold
+  -m <mask>       comma-separated list of channels to mask
 ```
 
 * Enable/disable
@@ -84,9 +84,9 @@ Usage:
  dtpcontrols_test_enable [options]
 
 Options:
-  -c <filename>	  connection file name
-  -d <device>	    device name
-  -s 		           disable
+  -c <filename>    connection file name
+  -d <device>      device name
+  -s               disable
 
 ```
 
@@ -98,11 +98,11 @@ Usage:
  dtpcontrols_test_monitor [options]
 
 Options:
-  -c <filename>	  connection file name
-  -d <device>	    device name
-  -v 		           verbose mode
-  -l <n_links> 	  number of links
-  -p <n_pipes> 	  number of pipes
-  -s <period> 	   time between reads
+  -c <filename>   connection file name
+  -d <device>     device name
+  -v              verbose mode
+  -l <n_links>    number of links
+  -p <n_pipes>    number of pipes
+  -s <period>     time between reads
 ```
 
