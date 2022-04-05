@@ -2,6 +2,21 @@
 
 This package contains python tools for control of the DUNE Trigger Primitive firmware.
 
+## Control API
+
+The entry point for control of the firmware is the DTPPodNode, which should be created using a uhal::HwInterface :
+
+```C++
+uhal::ConnectionManager cm( conn_file_name , {"ipbusflx-2.0"});
+uhal::HwInterface flx = cm.getDevice( device_name );
+DTPPodNode dtp_pod_node ( flx.getNode() );
+```
+
+The DTPPodNode provides methods to navigate the firmware node structure, such as `get_control_node()` etc.  These methods return firmware nodes of various types, which provide further navigation methods, as well as methods that control/configure the firmware.
+
+However, all high level actions can be instigated via methods on DTPPodNode. The C++ applications in test/apps can be used as examples. 
+
+
 ## Python tools
 
 hfButler.py provides control, test and diagnostic functions.  Some examples of usage are given below.
