@@ -49,23 +49,60 @@ hfButler.py flx-0-p2-hf wtor -i 0 fire -l
 
 The following tools test the C++ code in standalone mode (ie. outside dunedaq).  Only basic functionality is provided so far.
 
-* reset TP firmware
+* Reset
 ```
 dtpcontrols_test_reset
+
+Usage:
+ dtpcontrols_test_reset [options]
+
+Options:
+  -c <filename>	   connection file name
+  -d <device>	     device name
 ```
 
-* configure TP firmware
+* Configuration
 ```
-dtpcontrols_test_reset
+dtpcontrols_test_config
+
+Usage:
+ dtpcontrols_test_config [options]
+
+Options:
+  -c <filename>	  connection file name
+  -d <device>	    device name
+  -v 		          verbose mode
+  -t <threshold>	TP threshold
+  -m <mask>	      comma-separated list of channels to mask
 ```
 
-* enable TP production
+* Enable/disable
 ```
 dtpcontrols_test_enable
+
+Usage:
+ dtpcontrols_test_enable [options]
+
+Options:
+  -c <filename>	  connection file name
+  -d <device>	    device name
+  -s 		          disable
+
 ```
 
-* monitor TP processing
+* Monitor
 ```
 dtpcontrols_test_monitor
+
+Usage:
+ dtpcontrols_test_monitor [options]
+
+Options:
+  -c <filename>	  connection file name
+  -d <device>	    device name
+  -v 		          verbose mode
+  -l <n_links> 	  number of links
+  -p <n_pipes> 	  number of pipes
+  -s <period> 	  time between reads
 ```
 
