@@ -16,6 +16,7 @@ The DTPPodNode provides methods to navigate the firmware node structure, such as
 
 However, all high level actions can be instigated via methods on DTPPodNode. The C++ applications in test/apps can be used as examples. 
 
+DTPPodNode is not currently thread safe.
 
 ## Python tools
 
