@@ -71,8 +71,8 @@ Usage:
 Options:
   -c <filename>	  connection file name
   -d <device>	    device name
-  -v 		          verbose mode
-  -t <threshold>	TP threshold
+  -v 		           verbose mode
+  -t <threshold>	 TP threshold
   -m <mask>	      comma-separated list of channels to mask
 ```
 
@@ -86,7 +86,7 @@ Usage:
 Options:
   -c <filename>	  connection file name
   -d <device>	    device name
-  -s 		          disable
+  -s 		           disable
 
 ```
 
@@ -100,9 +100,9 @@ Usage:
 Options:
   -c <filename>	  connection file name
   -d <device>	    device name
-  -v 		          verbose mode
+  -v 		           verbose mode
   -l <n_links> 	  number of links
   -p <n_pipes> 	  number of pipes
-  -s <period> 	  time between reads
+  -s <period> 	   time between reads
 ```
 
