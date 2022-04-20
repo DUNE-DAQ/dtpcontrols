@@ -26,7 +26,7 @@ def get_devices(ctx, args, incomplete):
     devs = setup.connectionManager(ctx.params['connection']).getDevices()
     return [k for k in devs if incomplete in k]
 
-extra_autocompl = {'shell_complete': get_devices} if parse_version(click.__version__) >= parse_version('7.0') else {}
+extra_autocompl = {'shell_complete': get_devices} if parse_version(click.__version__) >= parse_version('8.1') else {'autocompletion': get_devices} if parse_version(click.__version__) >= parse_version('7.0') else {}
 
 @click.group(context_settings=CONTEXT_SETTINGS, invoke_without_command=True)
 @click.option('-e', '--exception-stack', 'aExcStack', is_flag=True, help="Display full exception stack")
