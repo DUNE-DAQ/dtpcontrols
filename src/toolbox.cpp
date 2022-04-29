@@ -76,6 +76,20 @@ namespace dunedaq {
 				  const std::vector<uint32_t>& mux_values) {
       return   std::find(mux_values.begin(), mux_values.end(), name) != mux_values.end()?1:0;
     }
+//-----------------------------------------------------------------------------
+
+//-----------------------------------------------------------------------------
+    std::map<std::string, uint32_t>
+    get_child_registers(const uhal::Node& node) {
+      auto l_node_names = node.getNodes();
+      std::map<std::string, uint32_t> l_node_info;
+      for (auto& l_name : l_node_names) {
+	auto temp = node.getNode(l_name).read();
+	node.getClient().dispatch();
+	l_node_info.insert({l_name, temp});
+      }
+      return l_node_info;
+    }
 //-----------------------------------------------------------------------------    
     
   }  // namespace dtpcontrols

@@ -30,7 +30,10 @@ namespace dunedaq {
 		const std::vector<uint32_t>& map);
     
     bool source_sink_exists(const std::string& name,
-		std::map<std::string, uint32_t>& mux_values);    
+			    std::map<std::string, uint32_t>& mux_values);
+
+    std::map<std::string, uint32_t>
+    get_child_registers(const uhal::Node& node);
 
   } // namespace dtp_controls
 } // namespace dunedaq
