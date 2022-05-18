@@ -8,6 +8,9 @@
 
 #include <pybind11/pybind11.h>
 #include <pybind11/stl.h>
+#include <pybind11/stl_bind.h>
+
+PYBIND11_MAKE_OPAQUE(std::vector<int>)
 
 namespace py = pybind11;
 
@@ -23,8 +26,12 @@ namespace dunedaq {
       extern void register_stream_processor_node(py::module& m);
       extern void register_dtppod_node(py::module& m);
       extern void register_wibulator_node(py::module& m);
+      extern void register_link_processor_node(py::module& m);
       extern void register_toolbox(py::module& m);
       extern void register_info_node(py::module& m);
+      extern void register_data_router_node(py::module& m);
+      extern void register_dpr_node(py::module& m);
+      extern void register_output_sink_node(py::module& m);
       
       PYBIND11_MODULE(_daq_dtpcontrols_py, top_module) {
 
@@ -40,8 +47,12 @@ namespace dunedaq {
 	dtpcontrols::python::register_stream_processor_node(core_module);
 	dtpcontrols::python::register_dtppod_node(core_module);
 	dtpcontrols::python::register_wibulator_node(core_module);
+	dtpcontrols::python::register_link_processor_node(core_module);
 	dtpcontrols::python::register_toolbox(core_module);
 	dtpcontrols::python::register_info_node(core_module);
+	dtpcontrols::python::register_data_router_node(core_module);
+	dtpcontrols::python::register_dpr_node(core_module);
+	dtpcontrols::python::register_output_sink_node(core_module);
       }
 
     } // namespace python
