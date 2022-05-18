@@ -29,10 +29,7 @@ namespace dunedaq {
 	  .def("get_link_processor_node", &dtpcontrols::DTPPodNode::get_link_processor_node, py::arg("i"))
 	  .def("get_crif_node", &dtpcontrols::DTPPodNode::get_crif_node)
 	  .def("get_output_sink_node", &dtpcontrols::DTPPodNode::get_output_sink_node)
-	  //	  .def("get_firmware_config_info", &dtpcontrols::DTPPodNode::get_firmware_config_info)
 	  .def("reset", &dtpcontrols::DTPPodNode::reset);
-	  //.def("configure", &dtpcontrols::DTPPodNode::configure)
-	  //.def("enable", &dtpcontrols::DTPPodNode::enable);
       }
 
     } // namespace python
