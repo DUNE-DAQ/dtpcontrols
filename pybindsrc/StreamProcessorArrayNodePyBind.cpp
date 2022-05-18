@@ -24,8 +24,10 @@ namespace dunedaq {
 	  .def(py::init<const uhal::Node &>())
 	  .def("stream_select",
 	       &dtpcontrols::StreamProcessorArrayNode::stream_select,
-	       py::arg("pipe"), py::arg("dispatch") = true);
-
+	       py::arg("pipe"), py::arg("dispatch") = true)
+	  .def("get_stream_proc_node",
+	       &dtpcontrols::StreamProcessorArrayNode::get_stream_proc_node);
+	
       }
 
     } // namespace python
