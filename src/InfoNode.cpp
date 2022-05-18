@@ -32,7 +32,7 @@ namespace dunedaq {
 //-----------------------------------------------------------------------------    
 
     std::map<std::string, uint32_t> InfoNode::get_firmware_config_info() const {
-      auto info_node = getNode<InfoNode>("info");
+      auto info_node = getNode<InfoNode>("");
       auto l_config_names = info_node.getNode("config").getNodes();
       std::map<std::string, uint32_t> l_firmware_info;
       for (auto& l_name : l_config_names) {
