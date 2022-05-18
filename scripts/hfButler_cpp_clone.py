@@ -31,7 +31,7 @@ def get_devices(ctx, args, incomplete):
 
 #extra_autocompl = {'autocompletion': get_devices} if parse_version(click.__version__) >= parse_version('7.0') else {}
 extra_autocompl = {'shell_complete': get_devices} if parse_version(click.__version__) >= parse_version('8.1') else {'autocompletion': get_devices} if parse_version(click.__version__) >= parse_version('7.0') else {}
-print(extra_autocompl)
+
 @click.group(context_settings=CONTEXT_SETTINGS, invoke_without_command=True)
 @click.option('-e', '--exception-stack', 'aExcStack', is_flag=True, help="Display full exception stack")
 @click.option('-c', '--connection', type=click.Path(exists=True), default=controls.find_connection_file()[6:])
@@ -79,7 +79,6 @@ def link(obj, ids):
         obj.mLinkNodes = [obj.podNode.get_link_processor_node(i) for i in ids]
     except Exception as lExc:
         click.Abort('Wibulator {} not found in address table'.format(id))
-
 dpr_mux_choices = {
     'reset': (0, 0),
     'playback': (0, 1),
@@ -100,7 +99,8 @@ def link_config(obj, dr_on, dpr_mux, drop_empty):
         if dpr_mux:
             dprNode = ln.get_data_router_node().get_dpr_node()
             print("Configuring DPR mux : ", dpr_mux)
-            dprNode.set_mux_in_out(dpr_mux)
+            dprNode.set_mux_in(dpr_mux_choices[dpr_mux][0])
+            dprNode.set_mux_out(dpr_mux_choices[dpr_mux][1])
             #dpr.setup(dprNode, *dpr_mux_choices[dpr_mux])
         
         if dr_on is not None:
@@ -230,8 +230,7 @@ def wtor(obj, ids):
 @click.option('-i', '--pad-idles', is_flag=True, help='Pad pattern with idles', default=None)
 @click.pass_obj
 def wtor_config(obj, pattern, trim_length, pad_idles):
-
-    p = controls.WibulatorNode.loadWIBPatternFromFile(pattern)
+    p = controls.load_WIB_pattern_from_file(str(pattern))
 
     print('Pattern file:', pattern)
     print('      length:', len(p))
@@ -251,7 +250,7 @@ def wtor_config(obj, pattern, trim_length, pad_idles):
 
     for wn in obj.mWibtorNodes:
         print('>> Wibulator', wn.getId())
-        wn.writePattern(p)
+        wn.write_pattern(p)
 
 
 # -----------------------------------------------------------------------------
@@ -301,7 +300,7 @@ def cr_if(obj, cr_on, drop_empty):
     if cr_on is not None:
         crNode.getNode('csr.ctrl.en').write(0x01)
         crNode.getNode('csr.ctrl.drop_empty').write(0x01)
-        crNode.getClient.dispatch()
+        obj.mHW.dispatch()
         
     if drop_empty is not None:
         crNode.getNode('csr.ctrl.drop_empty').write(0x01)
@@ -319,7 +318,7 @@ def cr_if(obj, cr_on, drop_empty):
 @click.pass_obj
 def capture_sink(obj, path, timeout, drop_idles):
 
-    osNode = obj.podNode.getNode('outsink')
+    osNode = obj.podNode.get_output_sink_node()
 
     print('Capturing axis32bsink data')
     osNode.getNode('csr.ctrl.en').write(0)
