@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.12)
 
-project(dtpcontrols VERSION 2.0.1)
+project(dtpcontrols VERSION 2.0.2)
 
 find_package(daq-cmake REQUIRED)
 
