@@ -24,7 +24,7 @@ namespace dunedaq {
     (const std::vector<std::uint64_t>& pattern_36b);
     
     std::vector<std::uint64_t> format_32b_to_36b
-    (const uhal::ValVector<uint32_t>& pattern_32b);
+    (const std::vector<uint32_t>& pattern_32b);
 
     bool source_sink_exists(const uint32_t& name,
 		const std::vector<uint32_t>& map);
