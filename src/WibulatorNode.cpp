@@ -52,7 +52,7 @@ namespace dunedaq {
       getNode("buf.addr").write(0x0);
       auto p = getNode("buf.data").readBlock(length);
       getClient().dispatch();
-      return format_32b_to_36b(p);
+      return format_32b_to_36b(p.value());
     }
 //-----------------------------------------------------------------------------
 
