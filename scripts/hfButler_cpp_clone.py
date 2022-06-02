@@ -51,7 +51,7 @@ def cli(ctx, aExcStack, connection, device):
     id_info = infoNode.get_firmware_id_info()
 
     printDictTable(config_info)
-    printDictTable(id_info)
+    printRegTable(id_info)
     
     obj.mIdInfo = id_info
     obj.mConfigInfo = config_info
@@ -99,15 +99,14 @@ def link_config(obj, dr_on, dpr_mux, drop_empty):
         if dpr_mux:
             dprNode = ln.get_data_router_node().get_dpr_node()
             print("Configuring DPR mux : ", dpr_mux)
-            dprNode.set_mux_in(dpr_mux_choices[dpr_mux][0])
-            dprNode.set_mux_out(dpr_mux_choices[dpr_mux][1])
-            #dpr.setup(dprNode, *dpr_mux_choices[dpr_mux])
+            dprNode.set_mux_in(dpr_mux_choices[dpr_mux][0], True)
+            dprNode.set_mux_out(dpr_mux_choices[dpr_mux][1], True)
         
         if dr_on is not None:
             print("Configuring data-reception : ", str(dr_on))
             drNode = ln.get_data_router_node().get_data_reception_node()
-            drNode.getNode("csr.ctrl.en").write(0x01)
-            #dr.enable(drNode, dr_on)
+            drNode.getNode("csr.ctrl.en").write(dr_on)
+            drNode.getClient().dispatch()
 
         if drop_empty is not None:
             strmArrayNode = ln.get_stream_proc_array_node()
@@ -117,7 +116,7 @@ def link_config(obj, dr_on, dpr_mux, drop_empty):
                 print("Setting drop empty to {} on stream {} ".format(drop_empty, i))
                 strmArrayNode.stream_select(i)
                 strmNode.getNode('csr.ctrl.drop_empty').write(drop_empty)
-                ln.getClient().dispatch()
+            ln.getClient().dispatch()
 
         print('<< Link Processor ', ln.getId())
 
@@ -284,10 +283,15 @@ def flowmaster(obj, src_sel, sink_sel):
     sink_map.update({ 'link'+str(d): (1, d) for d in range(obj.mConfigInfo['n_links']) })
 
     if src_sel:
-        fmNode.source_select(src_sel)
+        if src_sel == 'gbt':
+            fmNode.source_select_gbt()
+        elif src_sel == 'wibtor':
+            fmNode.source_select_wtor()
+        else:
+            print("Invalid source")
     if sink_sel is not None:
         fmNode.sink_select(sink_sel)
-    fmNode.getClient().dispatch()
+        fmNode.getClient().dispatch()
 
 # -----------------------------------------------------------------------------
 @cli.command('cr-if')
@@ -308,7 +312,7 @@ def cr_if(obj, cr_on, drop_empty):
 
     print('--- cr_if.csr ---')
     regs = controls.get_child_registers(crNode.getNode("csr"))
-    printDictTable(regs, False)
+    printRegTable(regs, False)
 
 # -----------------------------------------------------------------------------
 @cli.command('capture-sink')
@@ -353,11 +357,12 @@ def capture_sink(obj, path, timeout, drop_idles):
     count = osNode.getNode('buf.count').read()
     osNode.getClient().dispatch()
 
-
     print('Reading out %s frames' % count)
     d = osNode.getNode('buf.data').readBlock(2*int(count))
     osNode.getClient().dispatch()
-    data = [((w >> 32) & 0x1, w & 0xffffffff) for w in controls.format_32b_to_36b(d)]
+    dd = controls.format_32b_to_36b(d)
+    print("heRE")
+    data = [((w >> 32) & 0x1, w & 0xffffffff) for w in dd]
     with open(path, 'w') as lFile:
         for i, (k, d) in enumerate(data):
             lFile.write('0x{1:08x} {0}\n'.format(k, d)) 
