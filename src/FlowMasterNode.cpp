@@ -64,8 +64,8 @@ namespace dunedaq {
     }
   
     void FlowMasterNode::sink_select(const uint32_t& sink, bool dispatch) {
-      std::vector<uint32_t> sink_src{0, 1};
-      std::vector<std::uint32_t> sink_link{0, 1, 2, 3, 4};
+      std::vector<uint32_t> sink_src{0, 1, 1, 1, 1, 1};
+      std::vector<uint32_t> sink_link{0, 0, 1, 2, 3, 4};
       if (source_sink_exists(sink, sink_src)) {
 	getNode("csr.ctrl.sink_src").write(sink_src[sink]);
 	if(dispatch) {getClient().dispatch();}
