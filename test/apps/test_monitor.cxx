@@ -61,7 +61,6 @@ int main(int argc, char const* argv[]) {
     }
 
     // pipe
-    int n_pipes = 4;
     if (*it =="-p") { // ||*it =="--disable") {
       n_pipes = std::stoi( std::string(*(it + 1)) );
     }
