@@ -60,6 +60,7 @@ namespace dunedaq {
       std::vector<std::uint64_t> pattern_36b;
       uint16_t rm_last = 0;
       if (pattern_32b.size()%2 != 0) {
+	//remove last element if size odd, for below crashes otherwise.
 	rm_last = 1;
       }
       for(auto item=pattern_32b.begin(); item!=pattern_32b.end()-rm_last; ++++item) {

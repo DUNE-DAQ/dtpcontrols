@@ -353,7 +353,6 @@ def capture_sink(obj, path, timeout, drop_idles):
     count = osNode.getNode('buf.count').read()
     osNode.getClient().dispatch()
 
-
     print('Reading out %s frames' % count)
     d = osNode.getNode('buf.data').readBlock(2*int(count))
     osNode.getClient().dispatch()
