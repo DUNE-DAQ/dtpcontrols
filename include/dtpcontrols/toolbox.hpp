@@ -24,13 +24,18 @@ namespace dunedaq {
     (const std::vector<std::uint64_t>& pattern_36b);
     
     std::vector<std::uint64_t> format_32b_to_36b
-    (const uhal::ValVector<uint32_t>& pattern_32b);
+    (const std::vector<uint32_t>& pattern_32b);
 
     bool source_sink_exists(const uint32_t& name,
 		const std::vector<uint32_t>& map);
     
     bool source_sink_exists(const std::string& name,
-		std::map<std::string, uint32_t>& mux_values);    
+			    std::map<std::string, uint32_t>& mux_values);
+
+    std::map<std::string, uint32_t>
+    get_child_registers(const uhal::Node& node);
+
+    std::vector<std::uint64_t> load_WIB_pattern_from_file(std::string& path);
 
   } // namespace dtp_controls
 } // namespace dunedaq

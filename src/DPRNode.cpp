@@ -12,13 +12,13 @@
 
 namespace dunedaq {
   namespace dtpcontrols {
-    
+
     UHAL_REGISTER_DERIVED_NODE(DPRNode)
-    
+
     DPRNode::DPRNode(const uhal::Node& node) : uhal::Node(node) {}
-    
+
     DPRNode::~DPRNode() {}
-    
+
     void DPRNode::set_mux_in(uint32_t mode, bool dispatch) const {
       getNode("csr.ctrl.config.mux_in").write(mode);
       if(dispatch) {getClient().dispatch();}

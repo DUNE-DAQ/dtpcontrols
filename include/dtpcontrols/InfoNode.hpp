@@ -35,7 +35,7 @@ namespace dunedaq {
 
       // read firmware config info
       std::map<std::string, uint32_t> get_firmware_config_info() const;
-      
+      std::map<std::string, uint32_t> get_firmware_id_info() const;      
     };
 
   } // namespace dtpcontrols
