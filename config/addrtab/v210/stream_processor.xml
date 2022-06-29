@@ -1,0 +1,23 @@
+<node id="stream_processor" description="Stream processor" fwinfo="endpoint">
+    <node id="csr" address="0x0">
+        <node id="ctrl" address="0x0">
+            <node id="drop_empty" mask="0x1"/>
+            <node id="cap_ctrs" mask="0x2"/>
+        </node>
+        <node id="mask" address="0x1">
+            <node id="ch-00-31" address="0x0"/>
+            <node id="ch-32-63" address="0x1"/>
+        </node>
+        <node id="hitfinder" address="0x3">
+            <node id="threshold" mask="0xffff"/>
+        </node>
+        <node id="mon" address="0x8">
+            <node id="p0" address="0x0" module="file://dtpc_mon_probe.xml"/>
+            <node id="p1" address="0x1" module="file://dtpc_mon_probe.xml"/>
+            <node id="p2" address="0x2" module="file://dtpc_mon_probe.xml"/>
+            <node id="p3" address="0x3" module="file://dtpc_mon_probe.xml"/>
+            <node id="p4" address="0x4" module="file://dtpc_mon_probe.xml"/>
+            <node id="p5" address="0x5" module="file://dtpc_mon_probe.xml"/>
+        </node>
+    </node>
+</node>

@@ -1,0 +1,19 @@
+<node id="dtpc_dpr" description="Data receiver" fwinfo="endpoint">
+  <node id="csr" address="0x0" fwinfo="endpoint;width=3" >
+    <node id="ctrl" address="0x0">
+      <node id="en" description="Enable data reception" mask="0x1"/>
+      <node id="rst_inctr" description="Reset the input word count" mask="0x2"/>
+      <node id="rst_outctr" description="Reset output-word counter" mask="0x4"/>
+      <node id="err_rst" description="error reset" mask="0x8"/>
+    </node>
+    <node id="stat" address="0x4">
+      <node id="dpr_wen" description="1 if the output RAM is being written" mask="0x1"/>
+      <node id="err" description="Sticky error bit" mask="0x2"/>      
+      <node id="bp" description="Backpressure bit" mask="0x4"/>      
+      <node id="oos" description="Stycky Out-of-sync" mask="0x8"/>      
+    </node>
+    <node id="rcvd_wrd_cnt" address="0x5"></node>
+    <node id="sent_wrd_cnt" address="0x6"></node>        
+    <node id="sent_pkt_cnt" address="0x7"></node>        
+  </node>
+</node>

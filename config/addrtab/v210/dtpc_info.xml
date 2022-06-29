@@ -1,0 +1,20 @@
+<node id="info" description="PDTS master global registers" fwinfo="endpoint">
+    <node id="id" address="0x0" description="ID register" fwinfo="endpoint;width=2">
+        <node id="magic" address="0x0"/>
+        <node id="revision" address="0x1">
+            <node id="design" mask="0xff000000" description="UID for firmware design"/>
+            <node id="major"  mask="0x00ff0000"/>
+            <node id="minor"  mask="0x0000ff00"/>
+            <node id="patch"  mask="0x000000ff"/>
+        </node>
+    </node>
+    <node id="config" address="0x2" fwinfo="endpoint;width=0">
+        <node id="n_links" mask="0xf"/>
+        <node id="n_port" mask="0xf0"/>
+        <node id="n_mux" mask="0xff00"/>
+        <node id="wibtors_en" mask="0x400000"/>
+        <node id="outsink_en" mask="0x800000"/>
+        <node id="wibtors_width" mask="0x0f000000"/>
+        <node id="outsink_width" mask="0xf0000000"/>
+    </node>
+</node>
