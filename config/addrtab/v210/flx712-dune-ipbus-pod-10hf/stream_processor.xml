@@ -1,4 +1,4 @@
-<node id="stream_processor" description="Stream processor" fwinfo="endpoint">
+<node id="stream_processor" description="Stream processor" fwinfo="endpoint" class="StreamProcessorNode">
     <node id="csr" address="0x0">
         <node id="ctrl" address="0x0">
             <node id="drop_empty" mask="0x1"/>

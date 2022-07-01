@@ -1,4 +1,4 @@
-<node id="dtpc_dpr" description="dual port RAM for time-order --> channel order rearrangement" fwinfo="endpoint">
+<node id="dtpc_dpr" description="dual port RAM for time-order --> channel order rearrangement" fwinfo="endpoint" class="DPRNode">
     <node id="csr" fwinfo="endpoint;width=4">
         <node id="ctrl">
             <node id="config" address="0x0"  description="Control for DPR Mux">

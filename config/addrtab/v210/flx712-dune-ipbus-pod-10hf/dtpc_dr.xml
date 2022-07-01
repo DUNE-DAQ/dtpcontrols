@@ -1,4 +1,4 @@
-<node id="dtpc_dpr" description="Data receiver" fwinfo="endpoint">
+<node id="dtpc_dpr" description="Data receiver" fwinfo="endpoint" class="DataReceptionNode">
   <node id="csr" address="0x0" fwinfo="endpoint;width=3" >
     <node id="ctrl" address="0x0">
       <node id="en" description="Enable data reception" mask="0x1"/>

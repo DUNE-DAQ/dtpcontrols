@@ -1,4 +1,4 @@
-<node id="cr_interface" description="Central Router interface" fwinfo="endpoint">
+<node id="cr_interface" description="Central Router interface" fwinfo="endpoint" class="CentralRouterInterfaceNode">
   <node id="csr"  address="0x0" fwinfo="endpoint;width=4" >
     <node id="ctrl" address="0x0">
         <node id="en" mask="0x1"/>

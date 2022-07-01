@@ -1,4 +1,4 @@
-<node id="dtpc_mon_probe">
+<node id="dtpc_mon_probe" class="MonProbeNode">
     <node id="ready" mask="0x1"/>
     <node id="valid" mask="0x2"/>
     <node id="user" mask="0x4"/>
