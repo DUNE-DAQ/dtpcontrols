@@ -94,36 +94,34 @@ int main(int argc, char const* argv[]) {
   DTPPodNode dtp_pod_node (flx.getNode());
 
   // set source to wibulator
-  dtp_pod_node.set_source_int();
+  TLOG()  << "Setting source to wibulator (flowmaster.csr.ctrl.gbt_src)" <<std::endl;
+  dtp_pod_node.get_flowmaster_node().set_source_wtor();
 
   // read back value
-  auto gbt_src = dtp_pod_node.getNode("flowmaster.csr.ctrl.gbt_src").read();
-  dtp_pod_node.getClient().dispatch();
+  uint32_t gbt_src = dtp_pod_node.get_flowmaster_node().get_source();
   TLOG()  << "Source select (flowmaster.csr.ctrl.gbt_src) : " << std::hex << int(gbt_src) <<std::endl;
 
   // set sink to hits
-  dtp_pod_node.set_sink_hits();
+  TLOG()  << "Setting sink to hits (flowmaster.csr.ctrl.sink_src)" <<std::endl;
+  dtp_pod_node.get_flowmaster_node().set_sink_hits(true);
   
   // read back value
-  auto sink_src = dtp_pod_node.getNode("flowmaster.csr.ctrl.sink_src").read();
-  dtp_pod_node.getClient().dispatch();
+  uint32_t sink_src = dtp_pod_node.get_flowmaster_node().get_sink();
   TLOG()  << "Sink select (flowmaster.csr.ctrl.sink_src) : " << std::hex << int(sink_src) <<std::endl;
 
 
   // set CRIF to drop empty packets
-  dtp_pod_node.set_crif_drop_empty();
+  dtp_pod_node.get_crif_node().set_drop_empty(true);
       
   // read back value
-  auto crif_de = dtp_pod_node.getNode("cr_if.csr.ctrl.drop_empty").read();
-  dtp_pod_node.getClient().dispatch();
+  uint32_t crif_de = dtp_pod_node.get_crif_node().get_drop_empty();
   TLOG()  << "CRIF drop-empty (crif.csr.ctrl.drop_empty) : " << std::hex << int(crif_de) <<std::endl;  
 
   // setup each link
-  dtp_pod_node.setup_processors();
-  
-  // set TP threshold
-  dtp_pod_node.set_threshold_all(threshold);
-
+  int n_links = dtp_pod_node.get_n_links();
+  for (int i = 0; i<n_links; ++i) {
+    dtp_pod_node.get_link_processor_node(i).setup(true, true, 20);
+  }
 
 }
 

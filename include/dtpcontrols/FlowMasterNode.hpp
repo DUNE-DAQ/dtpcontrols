@@ -33,13 +33,13 @@ public:
   explicit FlowMasterNode(const uhal::Node& node);
   virtual ~FlowMasterNode();
 
-  void select_source_gbt(bool dispatch=true) const;
-  void select_source_wtor(bool dispatch=true) const;
+  void set_source_gbt(bool dispatch=true) const;
+  void set_source_wtor(bool dispatch=true) const;
+  uint32_t get_source() const;
 
-  void source_select(const std::string& source, bool dispatch=true);
-  void source_select(const uint32_t& source, bool dispatch=true);
-  void sink_select(const std::string& sink, bool dispatch=true);
-  void sink_select(const uint32_t& sink, bool dispatch=true);
+  void set_sink_hits(bool dispatch=true) const;
+  void set_sink_link(const uint32_t link, bool dispatch=true) const;
+  uint32_t get_sink() const;
 
 };
 

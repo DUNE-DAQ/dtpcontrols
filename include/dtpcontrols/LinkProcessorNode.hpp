@@ -32,6 +32,11 @@ public:
   const DataRouterNode& get_data_router_node() const;
   const StreamProcessorArrayNode& get_stream_proc_array_node() const;
 
+  void setup(bool enable, bool drop_empty, int threshold) const;
+
+private:
+  int m_n_streams;
+
 };
 
 

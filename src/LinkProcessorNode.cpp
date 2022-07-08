@@ -13,7 +13,11 @@ namespace dunedaq {
 
     UHAL_REGISTER_DERIVED_NODE(LinkProcessorNode)
 
-    LinkProcessorNode::LinkProcessorNode(const uhal::Node& node) : uhal::Node(node) { }
+    LinkProcessorNode::LinkProcessorNode(const uhal::Node& node) : 
+    uhal::Node(node),
+      m_n_streams(4)
+    {
+    }
 
     LinkProcessorNode::~LinkProcessorNode() {}
 
@@ -23,6 +27,35 @@ namespace dunedaq {
 
     const StreamProcessorArrayNode& LinkProcessorNode::get_stream_proc_array_node() const {
       return getNode<StreamProcessorArrayNode>("stream_procs"); 
+    }
+
+    void LinkProcessorNode::setup(bool enable, bool drop_empty, int threshold) const {
+
+      // enable data reception
+      if (enable) {
+	auto l_dr_node = get_data_router_node().get_data_reception_node();
+	l_dr_node.enable(false);
+      }
+
+      // enable DPR passthrough
+      // TODO : add other modes
+      auto l_dpr_node = get_data_router_node().get_dpr_node();
+      l_dpr_node.set_mux_in(0x1);
+      l_dpr_node.set_mux_out(0x1);
+
+      // setup stream processors
+      auto l_strm_proc_arr_node = get_stream_proc_array_node();
+      for (uint32_t s=0; s!=m_n_streams; ++s) {
+	l_strm_proc_arr_node.stream_select(s, false);
+	auto l_strm_proc_node = l_strm_proc_arr_node.get_stream_proc_node();
+	if (drop_empty) {
+	  l_strm_proc_node.drop_empty(false);
+	}
+	l_strm_proc_node.set_threshold(threshold);
+      }
+    
+      getClient().dispatch();
+
     }
 
   } // namespace dtpcontrols

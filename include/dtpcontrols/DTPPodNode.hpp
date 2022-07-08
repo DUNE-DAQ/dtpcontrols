@@ -50,8 +50,16 @@ namespace dunedaq {
       void set_n_mux(uint32_t n_mux);
       void set_wibtors_width(uint32_t wibtors_width);
       void set_outsink_width(uint32_t outsink_width);
-      void set_wibtors_en(uint32_t wibtors_en);
-      void set_outsink_en(uint32_t outsink_en);      
+      void set_wibtors_en(bool wibtors_en);
+      void set_outsink_en(bool outsink_en);      
+
+      int get_n_links();
+      int get_n_streams();
+      int get_n_mux();
+      int get_wibtors_width();
+      int get_outsink_width();
+      bool get_wibtors_en();
+      bool get_outsink_en();
 
       // get nodes
       const InfoNode& get_info_node() const;
@@ -68,20 +76,8 @@ namespace dunedaq {
       // reset counters
       void reset_counters() const;
 
-      // set input to wibulator
-      void set_source_int() const;
-
-      // set input to external data
-      void set_source_ext() const;
-
-      // set sink (spy) to hits
-      void set_sink_hits() const;
-
-      // set crif to drop empty packets
-      void set_crif_drop_empty() const;
-
       // setup a link processor
-      void setup_processors() const;
+      void setup_processor(uint32_t link, bool enable, bool drop_empty) const;
 
       // set all thresholds
       void set_threshold_all(int threshold) const;
@@ -108,13 +104,13 @@ namespace dunedaq {
       
       // firware config info this build contains
       std::map<std::string, uint32_t> m_dtp_fw_info;
-      uint32_t m_n_links = 0;
-      uint32_t m_n_port = 0;
-      uint32_t m_n_mux = 0;
-      uint32_t m_wibtors_width = 0;
-      uint32_t m_outsink_width = 0;
-      uint32_t m_wibtors_en = false;
-      uint32_t m_outsink_en = false;      
+      int m_n_links = 0;
+      int m_n_streams = 0;
+      int m_n_mux = 0;
+      int m_wibtors_width = 0;
+      int m_outsink_width = 0;
+      bool m_wibtors_en = false;
+      bool m_outsink_en = false;      
     };
 
   } // namespace dtpcontrols
