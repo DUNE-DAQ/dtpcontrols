@@ -45,6 +45,15 @@ namespace dunedaq {
       }
       else {} //placeholder for ERS error
     }
+
+    uint32_t StreamProcessorNode::get_threshold() const {
+
+      uhal::ValWord<uint32_t> tmp = getNode("csr.hitfinder.threshold").read();
+      getClient().dispatch();
+      return tmp.value();      
+
+    }
+
     
     uint64_t StreamProcessorNode::get_channel_mask_all() const {
       
@@ -66,9 +75,9 @@ namespace dunedaq {
 
     }
 
-    uint64_t StreamProcessorNode::get_channel_mask(int channel) const {
+    uint32_t StreamProcessorNode::get_channel_mask(int channel) const {
 
-      uint64_t mask = 0;
+      uint32_t mask = 0;
       
       if (channel >= 0 and channel <32) {
 	mask = getNode("csr.mask.ch-00-31").read();

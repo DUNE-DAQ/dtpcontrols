@@ -45,11 +45,11 @@ namespace dunedaq {
       virtual ~DTPPodNode();
 
       // set firmware build config information
-      void set_n_links(uint32_t n_links);
-      void set_n_port(uint32_t n_port);
-      void set_n_mux(uint32_t n_mux);
-      void set_wibtors_width(uint32_t wibtors_width);
-      void set_outsink_width(uint32_t outsink_width);
+      void set_n_links(int n_links);
+      void set_n_port(int n_port);
+      void set_n_mux(int n_mux);
+      void set_wibtors_width(int wibtors_width);
+      void set_outsink_width(int outsink_width);
       void set_wibtors_en(bool wibtors_en);
       void set_outsink_en(bool outsink_en);      
 
@@ -65,8 +65,8 @@ namespace dunedaq {
       const InfoNode& get_info_node() const;
       const ControlNode& get_control_node() const;
       const FlowMasterNode& get_flowmaster_node() const;
-      const WibulatorNode& get_wibulator_node(uint i) const;
-      const LinkProcessorNode& get_link_processor_node(uint i) const;
+      const WibulatorNode& get_wibulator_node(int i) const;
+      const LinkProcessorNode& get_link_processor_node(int i) const;
       const CentralRouterInterfaceNode& get_crif_node() const;
       const OutputSinkNode& get_output_sink_node() const;
 
@@ -77,7 +77,7 @@ namespace dunedaq {
       void reset_counters() const;
 
       // setup a link processor
-      void setup_processor(uint32_t link, bool enable, bool drop_empty) const;
+      void setup_processor(int link, bool enable, bool drop_empty) const;
 
       // set all thresholds
       void set_threshold_all(int threshold) const;

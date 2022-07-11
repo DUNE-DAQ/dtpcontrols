@@ -29,7 +29,7 @@ namespace dunedaq {
       return getNode<StreamProcessorArrayNode>("stream_procs"); 
     }
 
-    void LinkProcessorNode::setup(bool enable, bool drop_empty, int threshold) const {
+    void LinkProcessorNode::setup(bool enable, bool drop_empty, uint32_t threshold) const {
 
       // enable data reception
       if (enable) {
@@ -57,6 +57,56 @@ namespace dunedaq {
       getClient().dispatch();
 
     }
+
+    void LinkProcessorNode::set_threshold(uint32_t stream, uint32_t threshold) const {
+      auto l_strm_proc_arr_node = get_stream_proc_array_node();    
+      l_strm_proc_arr_node.stream_select(stream, false);
+      l_strm_proc_arr_node.get_stream_proc_node().set_threshold(threshold);
+      getClient().dispatch();
+      
+    }
+
+    uint32_t LinkProcessorNode::get_threshold(uint32_t stream) const {
+
+      auto l_strm_proc_arr_node = get_stream_proc_array_node();
+      l_strm_proc_arr_node.stream_select(stream, false);
+      return l_strm_proc_arr_node.get_stream_proc_node().get_threshold();
+
+    }
+
+    void LinkProcessorNode::set_channel_mask(uint32_t stream, uint32_t channel, uint32_t mask) const {
+      
+      auto l_strm_proc_arr_node = get_stream_proc_array_node();
+      l_strm_proc_arr_node.stream_select(stream, false);
+      l_strm_proc_arr_node.get_stream_proc_node().set_channel_mask(channel, mask);
+      getClient().dispatch();
+      
+    }
+    
+    uint32_t LinkProcessorNode::get_channel_mask(uint32_t stream, uint32_t channel) const {
+      
+      auto l_strm_proc_arr_node = get_stream_proc_array_node();
+      l_strm_proc_arr_node.stream_select(stream, false);
+      return l_strm_proc_arr_node.get_stream_proc_node().get_channel_mask(channel);
+
+    }
+    void LinkProcessorNode::set_channel_mask_all(uint32_t stream, uint64_t mask) const {
+      
+      auto l_strm_proc_arr_node = get_stream_proc_array_node();
+      l_strm_proc_arr_node.stream_select(stream, false);
+      l_strm_proc_arr_node.get_stream_proc_node().set_channel_mask_all(mask, false);
+      getClient().dispatch();
+      
+    }
+
+    uint64_t LinkProcessorNode::get_channel_mask_all(uint32_t stream) const {
+
+      auto l_strm_proc_arr_node = get_stream_proc_array_node();
+      l_strm_proc_arr_node.stream_select(stream, false);
+      return l_strm_proc_arr_node.get_stream_proc_node().get_channel_mask_all();
+
+    }
+
 
   } // namespace dtpcontrols
 } // namespace dunedaq

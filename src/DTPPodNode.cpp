@@ -34,27 +34,27 @@ namespace dunedaq {
 
     DTPPodNode::~DTPPodNode() {}
 
-    void DTPPodNode::set_n_links(uint32_t n_links) {
+    void DTPPodNode::set_n_links(int n_links) {
       m_n_links = n_links;
       TLOG_DEBUG(1) << "Number of links set to " << m_n_links;
     }
 
-    void DTPPodNode::set_n_port(uint32_t n_streams) {
+    void DTPPodNode::set_n_port(int n_streams) {
       m_n_streams = n_streams;
       TLOG_DEBUG(1) << "Number of streams set to " << m_n_streams;
     }
 
-    void DTPPodNode::set_n_mux(uint32_t n_mux) {
+    void DTPPodNode::set_n_mux(int n_mux) {
       m_n_mux = n_mux;
       TLOG_DEBUG(1) << "Number of mux set to " << m_n_links;
     }
 
-    void DTPPodNode::set_wibtors_width(uint32_t wibtors_width) {
+    void DTPPodNode::set_wibtors_width(int wibtors_width) {
       m_wibtors_width = wibtors_width;
       TLOG_DEBUG(1) << "Wibulator width set to " << m_wibtors_width;
     }
 
-    void DTPPodNode::set_outsink_width(uint32_t outsink_width) {
+    void DTPPodNode::set_outsink_width(int outsink_width) {
       m_outsink_width = outsink_width;
       TLOG_DEBUG(1) << "Outsink width set to " << m_wibtors_width;
     }    
@@ -109,7 +109,7 @@ namespace dunedaq {
       return getNode<FlowMasterNode>("flowmaster");
     }
     
-    const LinkProcessorNode& DTPPodNode::get_link_processor_node(uint32_t i) const {
+    const LinkProcessorNode& DTPPodNode::get_link_processor_node(int i) const {
       if (i < m_n_links) {
 	std::string name("linkproc");
 	name += std::to_string(i);
@@ -120,7 +120,7 @@ namespace dunedaq {
       }
     }
 
-    const WibulatorNode& DTPPodNode::get_wibulator_node(uint32_t i) const {
+    const WibulatorNode& DTPPodNode::get_wibulator_node(int i) const {
       if (i < m_n_links) {
 	std::string name("wibtor");
 	name += std::to_string(i);
@@ -160,11 +160,13 @@ namespace dunedaq {
     
     void DTPPodNode::set_threshold_all(int threshold) const {
 
-      for (uint32_t i_link=0; i_link!=m_n_links; ++i_link) {
-        for (uint32_t i_stream=0; i_stream!=m_n_streams; ++i_stream) {
+      for (int i_link=0; i_link!=m_n_links; ++i_link) {
+        for (int i_stream=0; i_stream!=m_n_streams; ++i_stream) {
 	  
-          auto l_sa_node = get_link_processor_node(i_link).get_stream_proc_array_node();
-          l_sa_node.stream_select(i_stream, false);
+	  uint32_t il = static_cast<uint32_t>(i_link);
+	  uint32_t is = static_cast<uint32_t>(i_stream);
+          auto l_sa_node = get_link_processor_node(il).get_stream_proc_array_node();
+          l_sa_node.stream_select(is, false);
           l_sa_node.get_stream_proc_node().set_threshold(threshold, false);
 	  
         }
@@ -192,9 +194,10 @@ namespace dunedaq {
       // loop over probes
       int n_probes = l_sa_node.get_stream_proc_node().get_n_probes();     
  
-      for (uint32_t i_probe=0; i_probe!=n_probes; ++i_probe) {
+      for (int i_probe=0; i_probe!=n_probes; ++i_probe) {
 	
-	MonProbeNodeInfo info = l_sa_node.get_stream_proc_node().get_mon_probe_node(i_probe).get_info();
+	uint32_t ip = static_cast<uint32_t>(i_probe);
+	MonProbeNodeInfo info = l_sa_node.get_stream_proc_node().get_mon_probe_node(ip).get_info();
 
 	info.link = link;
 	info.stream = stream;

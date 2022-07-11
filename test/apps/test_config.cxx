@@ -122,7 +122,7 @@ int main(int argc, char const* argv[]) {
   // setup each link
   int n_links = dtp_pod_node.get_n_links();
   for (int i = 0; i<n_links; ++i) {
-    dtp_pod_node.get_link_processor_node(i).setup(true, true, 20);
+    dtp_pod_node.get_link_processor_node(i).setup(true, true, threshold);
   }
 
 }
