@@ -109,6 +109,8 @@ int main(int argc, char const* argv[]) {
   uint32_t sink_src = dtp_pod_node.get_flowmaster_node().get_sink();
   TLOG()  << "Sink select (flowmaster.csr.ctrl.sink_src) : " << std::hex << int(sink_src) <<std::endl;
 
+  // enable CRIF
+  dtp_pod_node.get_crif_node().enable(true);
 
   // set CRIF to drop empty packets
   dtp_pod_node.get_crif_node().set_drop_empty(true);

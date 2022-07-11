@@ -174,55 +174,6 @@ namespace dunedaq {
 
     }
 
-    void DTPPodNode::reset_masks() const {
-
-      for (uint32_t i_link=0; i_link!=m_n_links; ++i_link) {
-        for (uint32_t i_stream=0; i_stream!=m_n_streams; ++i_stream) {
-	  
-          auto l_sa_node = get_link_processor_node(i_link).get_stream_proc_array_node();
-          l_sa_node.stream_select(i_stream, false);
-	  l_sa_node.get_stream_proc_node().set_mask_channels(0x0, false);
-	  
-        }
-      }
-
-      getClient().dispatch();
-
-    }
-
-    void DTPPodNode::set_channel_mask(int link, int stream, uint64_t mask) const {
-      auto l_sa_node = get_link_processor_node(link).get_stream_proc_array_node();
-      l_sa_node.stream_select(stream, false);
-      l_sa_node.get_stream_proc_node().set_mask_channels(mask, false);
-      getClient().dispatch();
-    }
-
-    void DTPPodNode::mask_channel(int link, int stream, int channel) const {
-
-      auto l_sa_node = get_link_processor_node(link).get_stream_proc_array_node();
-      l_sa_node.stream_select(stream, true);
-
-      l_sa_node.get_stream_proc_node().mask_channel(channel);
-
-    }
-
-
-    void DTPPodNode::enable_crif() const {
-
-      auto lCRIFNode = get_crif_node();
-      lCRIFNode.getNode("csr.ctrl.en").write(0x1);
-      getClient().dispatch();
-   
-    }
-
-    void DTPPodNode::disable_crif() const {
-
-      auto lCRIFNode = get_crif_node();
-      lCRIFNode.getNode("csr.ctrl.en").write(0x0);
-      getClient().dispatch();
-
-    }
-
     std::vector<MonProbeNodeInfo> DTPPodNode::get_mon_probe_info(int link, int stream) const {
 
       std::vector<MonProbeNodeInfo> tmp;
