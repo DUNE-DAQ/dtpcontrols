@@ -34,40 +34,68 @@ namespace dunedaq {
 
     DTPPodNode::~DTPPodNode() {}
 
-    void DTPPodNode::set_n_links(uint32_t n_links) {
+    void DTPPodNode::set_n_links(int n_links) {
       m_n_links = n_links;
       TLOG_DEBUG(1) << "Number of links set to " << m_n_links;
     }
 
-    void DTPPodNode::set_n_port(uint32_t n_port) {
-      m_n_port = n_port;
-      TLOG_DEBUG(1) << "Number of ports set to " << m_n_port;
+    void DTPPodNode::set_n_port(int n_streams) {
+      m_n_streams = n_streams;
+      TLOG_DEBUG(1) << "Number of streams set to " << m_n_streams;
     }
 
-    void DTPPodNode::set_n_mux(uint32_t n_mux) {
+    void DTPPodNode::set_n_mux(int n_mux) {
       m_n_mux = n_mux;
       TLOG_DEBUG(1) << "Number of mux set to " << m_n_links;
     }
 
-    void DTPPodNode::set_wibtors_width(uint32_t wibtors_width) {
+    void DTPPodNode::set_wibtors_width(int wibtors_width) {
       m_wibtors_width = wibtors_width;
       TLOG_DEBUG(1) << "Wibulator width set to " << m_wibtors_width;
     }
 
-    void DTPPodNode::set_outsink_width(uint32_t outsink_width) {
+    void DTPPodNode::set_outsink_width(int outsink_width) {
       m_outsink_width = outsink_width;
       TLOG_DEBUG(1) << "Outsink width set to " << m_wibtors_width;
     }    
 
-    void DTPPodNode::set_wibtors_en(uint32_t wibtors_en) {
+    void DTPPodNode::set_wibtors_en(bool wibtors_en) {
       m_wibtors_en = wibtors_en;
       TLOG_DEBUG(1) << "Wibulator enable set to " << m_wibtors_en;
     }
 
-    void DTPPodNode::set_outsink_en(uint32_t outsink_en) {
+    void DTPPodNode::set_outsink_en(bool outsink_en) {
       m_outsink_en = outsink_en;
       TLOG_DEBUG(1) << "Outsink enable set to " << m_outsink_en;
     }        
+
+    int DTPPodNode::get_n_links() {
+      return m_n_links;
+    }
+
+    int DTPPodNode::get_n_streams() {
+      return m_n_streams;
+    }
+
+    int DTPPodNode::get_n_mux() {
+      return m_n_mux;
+    }
+
+    int DTPPodNode::get_wibtors_width() {
+      return m_wibtors_width;
+    }
+
+    int DTPPodNode::get_outsink_width() {
+      return m_outsink_width;
+    }
+
+    bool DTPPodNode::get_wibtors_en() {
+      return m_wibtors_en;
+    }
+
+    bool DTPPodNode::get_outsink_en() {
+      return m_outsink_en;
+    }
     
     const InfoNode& DTPPodNode::get_info_node() const {
       return getNode<InfoNode>("info");
@@ -81,7 +109,7 @@ namespace dunedaq {
       return getNode<FlowMasterNode>("flowmaster");
     }
     
-    const LinkProcessorNode& DTPPodNode::get_link_processor_node(uint32_t i) const {
+    const LinkProcessorNode& DTPPodNode::get_link_processor_node(int i) const {
       if (i < m_n_links) {
 	std::string name("linkproc");
 	name += std::to_string(i);
@@ -92,7 +120,7 @@ namespace dunedaq {
       }
     }
 
-    const WibulatorNode& DTPPodNode::get_wibulator_node(uint32_t i) const {
+    const WibulatorNode& DTPPodNode::get_wibulator_node(int i) const {
       if (i < m_n_links) {
 	std::string name("wibtor");
 	name += std::to_string(i);
@@ -130,53 +158,15 @@ namespace dunedaq {
 
     }
     
-    void DTPPodNode::set_source_int() const {
-      auto lFlowMasterNode = get_flowmaster_node();
-      lFlowMasterNode.select_source_wtor(true);
-    }
-
-    void DTPPodNode::set_source_ext() const {
-      auto lFlowMasterNode = get_flowmaster_node();
-      lFlowMasterNode.select_source_gbt(true);
-    }
-
-
-    void DTPPodNode::set_sink_hits() const {
-      auto lFlowMasterNode = get_flowmaster_node();
-      lFlowMasterNode.sink_select("hits", true);
-    }
-
-    void DTPPodNode::set_crif_drop_empty() const {
-      auto lCRIFNode = get_crif_node();
-      lCRIFNode.drop_empty(false);
-    }
-
-    void DTPPodNode::setup_processors() const {
-
-      for (int i=0; i!=m_n_links; ++i) {
-	
-	// enable data reception
-	auto l_dr_node = get_link_processor_node(i).get_data_router_node();
-	l_dr_node.get_data_reception_node().enable(false);
-	
-	// set DPR mux
-	auto l_dpr_node = l_dr_node.get_dpr_node();
-	l_dpr_node.set_mux_in(0x1);
-	l_dpr_node.set_mux_out(0x1);
-	
-      }
-      
-      getClient().dispatch();
-      
-    }
-
     void DTPPodNode::set_threshold_all(int threshold) const {
 
-      for (uint32_t i_link=0; i_link!=m_n_links; ++i_link) {
-        for (uint32_t i_pipe=0; i_pipe!=m_n_port; ++i_pipe) {
+      for (int i_link=0; i_link!=m_n_links; ++i_link) {
+        for (int i_stream=0; i_stream!=m_n_streams; ++i_stream) {
 	  
-          auto l_sa_node = get_link_processor_node(i_link).get_stream_proc_array_node();
-          l_sa_node.stream_select(i_pipe, false);
+	  uint32_t il = static_cast<uint32_t>(i_link);
+	  uint32_t is = static_cast<uint32_t>(i_stream);
+          auto l_sa_node = get_link_processor_node(il).get_stream_proc_array_node();
+          l_sa_node.stream_select(is, false);
           l_sa_node.get_stream_proc_node().set_threshold(threshold, false);
 	  
         }
@@ -186,56 +176,7 @@ namespace dunedaq {
 
     }
 
-    void DTPPodNode::reset_masks() const {
-
-      for (uint32_t i_link=0; i_link!=m_n_links; ++i_link) {
-        for (uint32_t i_pipe=0; i_pipe!=m_n_port; ++i_pipe) {
-	  
-          auto l_sa_node = get_link_processor_node(i_link).get_stream_proc_array_node();
-          l_sa_node.stream_select(i_pipe, false);
-	  l_sa_node.get_stream_proc_node().set_mask_channels(0x0, false);
-	  
-        }
-      }
-
-      getClient().dispatch();
-
-    }
-
-    void DTPPodNode::set_channel_mask(int link, int pipe, uint64_t mask) const {
-      auto l_sa_node = get_link_processor_node(link).get_stream_proc_array_node();
-      l_sa_node.stream_select(pipe, false);
-      l_sa_node.get_stream_proc_node().set_mask_channels(mask, false);
-      getClient().dispatch();
-    }
-
-    void DTPPodNode::mask_channel(int link, int pipe, int channel) const {
-
-      auto l_sa_node = get_link_processor_node(link).get_stream_proc_array_node();
-      l_sa_node.stream_select(pipe, true);
-
-      l_sa_node.get_stream_proc_node().mask_channel(channel);
-
-    }
-
-
-    void DTPPodNode::enable_crif() const {
-
-      auto lCRIFNode = get_crif_node();
-      lCRIFNode.getNode("csr.ctrl.en").write(0x1);
-      getClient().dispatch();
-   
-    }
-
-    void DTPPodNode::disable_crif() const {
-
-      auto lCRIFNode = get_crif_node();
-      lCRIFNode.getNode("csr.ctrl.en").write(0x0);
-      getClient().dispatch();
-
-    }
-
-    std::vector<MonProbeNodeInfo> DTPPodNode::get_mon_probe_info(int link, int pipe) const {
+    std::vector<MonProbeNodeInfo> DTPPodNode::get_mon_probe_info(int link, int stream) const {
 
       std::vector<MonProbeNodeInfo> tmp;
 
@@ -247,18 +188,19 @@ namespace dunedaq {
       l_sa_node.getClient().dispatch();
 
       // select link
-      l_sa_node.stream_select(pipe, true);
+      l_sa_node.stream_select(stream, true);
       l_sa_node.getClient().dispatch();
 
       // loop over probes
       int n_probes = l_sa_node.get_stream_proc_node().get_n_probes();     
  
-      for (uint32_t i_probe=0; i_probe!=n_probes; ++i_probe) {
+      for (int i_probe=0; i_probe!=n_probes; ++i_probe) {
 	
-	MonProbeNodeInfo info = l_sa_node.get_stream_proc_node().get_mon_probe_node(i_probe).get_info();
+	uint32_t ip = static_cast<uint32_t>(i_probe);
+	MonProbeNodeInfo info = l_sa_node.get_stream_proc_node().get_mon_probe_node(ip).get_info();
 
 	info.link = link;
-	info.pipe = pipe;
+	info.stream = stream;
 	info.probe = i_probe;
 	
 	tmp.push_back(info);

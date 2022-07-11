@@ -22,10 +22,16 @@ namespace dunedaq {
       if(dispatch) {getClient().dispatch();}
     }    
 
-    void CentralRouterInterfaceNode::drop_empty(bool dispatch) const {
+    void CentralRouterInterfaceNode::set_drop_empty(bool dispatch) const {
       getNode("csr.ctrl.drop_empty").write(0x1);
       if(dispatch) {getClient().dispatch();}
     }
     
+    uint32_t CentralRouterInterfaceNode::get_drop_empty() const {
+      uhal::ValWord<uint32_t> tmp = getNode("csr.ctrl.drop_empty").read();
+      getClient().dispatch();
+      return tmp.value();
+    }
+
   } // namespace dtpcontrols
 } // namespace dunedaq

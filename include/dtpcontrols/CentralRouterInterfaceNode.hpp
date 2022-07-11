@@ -28,8 +28,8 @@ namespace dunedaq {
       virtual ~CentralRouterInterfaceNode();
       
       void enable(bool dispatch=true) const;
-      
-      void drop_empty(bool dispatch=true) const;
+      void set_drop_empty(bool dispatch=true) const;
+      uint32_t get_drop_empty() const;
 
     };
     

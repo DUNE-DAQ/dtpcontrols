@@ -45,8 +45,17 @@ namespace dunedaq {
       }
       else {} //placeholder for ERS error
     }
+
+    uint32_t StreamProcessorNode::get_threshold() const {
+
+      uhal::ValWord<uint32_t> tmp = getNode("csr.hitfinder.threshold").read();
+      getClient().dispatch();
+      return tmp.value();      
+
+    }
+
     
-    uint64_t StreamProcessorNode::get_channel_mask() const {
+    uint64_t StreamProcessorNode::get_channel_mask_all() const {
       
       const uint64_t& mask_00to31 = getNode("csr.mask.ch-00-31").read();
       const uint64_t& mask_32to63 = getNode("csr.mask.ch-32-63").read();
@@ -58,7 +67,7 @@ namespace dunedaq {
 
     }
 
-    void StreamProcessorNode::set_channel_mask(uint64_t mask, bool dispatch) const {
+    void StreamProcessorNode::set_channel_mask_all(uint64_t mask, bool dispatch) const {
 
       getNode("csr.mask.ch-00-31").write( mask & 0xFFFFFFFF );
       getNode("csr.mask.ch-00-31").write( (mask >> 32) & 0xFFFFFFFF );
@@ -66,67 +75,39 @@ namespace dunedaq {
 
     }
 
-    void StreamProcessorNode::mask_channel(int channel) const {
+    uint32_t StreamProcessorNode::get_channel_mask(int channel) const {
+
+      uint32_t mask = 0;
+      
+      if (channel >= 0 and channel <32) {
+	mask = getNode("csr.mask.ch-00-31").read();
+	mask &= (0x1 << channel);
+	mask = (mask >> channel) & 0x1;
+      }
+      else if (channel >= 32 and channel <64) {
+	mask = getNode("csr.mask.ch-32-64").read();
+	mask &= (0x1 << channel);
+	mask = (mask >> channel) & 0x1;
+      }
+
+      return mask;
+
+    }
+
+    void StreamProcessorNode::set_channel_mask(int channel, int mask) const {
 
       // get current mask
-      uint64_t mask = get_channel_mask();
+      uint64_t mask_all = get_channel_mask_all();
 
       // mask the channel required
-      mask &= (0x1 << channel);
-      set_channel_mask(mask, true);
+      mask_all &= ((mask & 0x1) << channel);
+      set_channel_mask_all(mask_all, true);
 
       // never makes sense to do this and not dispatch ?
       getClient().dispatch();
 
     }
 
-    void StreamProcessorNode::set_mask_channel_00to31(const uint32_t mask00to31,
-						      bool dispatch,
-						      bool mask_en_dsbl) const {
-      if (mask_en_dsbl) {
-	getNode("csr.mask.ch-00-31").write(mask00to31);
-      }
-      else {
-	getNode("csr.mask.ch-00-31").write(~mask00to31);    
-      }
-      if(dispatch) {getClient().dispatch();}  
-    }
-
-    void StreamProcessorNode::set_mask_channel_32to63(const uint32_t mask32to63,
-						      bool dispatch,
-						      bool mask_en_dsbl) const {
-      if (mask_en_dsbl){
-	getNode("csr.mask.ch-00-31").write(mask32to63);    
-      }
-      else {
-	getNode("csr.mask.ch-00-31").write(~mask32to63);    
-      }
-      if(dispatch) {getClient().dispatch();}
-    }
-
-    void StreamProcessorNode::set_mask_channels(const uint64_t msb00to31_lsb31to64,
-						bool dispatch, bool mask_en_dsbl) const {
-      if (mask_en_dsbl){
-	set_mask_channel_32to63(msb00to31_lsb31to64, dispatch);
-	set_mask_channel_00to31(msb00to31_lsb31to64 >> 32, dispatch);
-      }
-      else {
-	set_mask_channel_32to63(~msb00to31_lsb31to64, dispatch);
-	set_mask_channel_00to31(~msb00to31_lsb31to64 >> 32, dispatch);
-      }
-    }
-    
-    const uhal::ValWord<uint32_t> StreamProcessorNode::get_mask_channel_00to31(bool dispatch) const {
-      uhal::ValWord<uint32_t> m00To32 = getNode("csr.mask.ch-00-31").read();
-      if(dispatch) {getClient().dispatch();}
-      return m00To32;
-    }
-
-    const uhal::ValWord<uint32_t> StreamProcessorNode::get_mask_channel_32to63(bool dispatch) const {
-      uhal::ValWord<uint32_t> m32To63 = getNode("csr.mask.ch-32-63").read();
-      if(dispatch) {getClient().dispatch();}
-      return m32To63;
-    }
 
   } // namespace dtpcontrols
 } // namespace dunedaq
