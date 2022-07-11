@@ -35,6 +35,9 @@ namespace dunedaq {
       // set stream to drop empty packets
       void drop_empty(bool dispatch=true) const;
 
+      // get the TP threshold (all 64 channels)
+      uint32_t get_threshold() const;
+
       // set the TP threshold (all 64 channels)
       void set_threshold(const uint32_t threshold, bool dispatch=true) const;
 
@@ -48,7 +51,7 @@ namespace dunedaq {
       void set_channel_mask(int channel, int mask) const;
 
       // get mask for one channel
-      uint64_t get_channel_mask(int channel) const;
+      uint32_t get_channel_mask(int channel) const;
 
     private:
       uint32_t m_n_mon_probes;
