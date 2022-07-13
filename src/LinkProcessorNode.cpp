@@ -29,7 +29,7 @@ namespace dunedaq {
       return getNode<StreamProcessorArrayNode>("stream_procs"); 
     }
 
-    void LinkProcessorNode::setup(bool enable, bool drop_empty, uint32_t threshold) const {
+    void LinkProcessorNode::setup(bool enable, bool drop_empty) const {
 
       // enable data reception
       if (enable) {
@@ -51,7 +51,6 @@ namespace dunedaq {
 	if (drop_empty) {
 	  l_strm_proc_node.drop_empty(false);
 	}
-	l_strm_proc_node.set_threshold(threshold);
       }
     
       getClient().dispatch();

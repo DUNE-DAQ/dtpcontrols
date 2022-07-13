@@ -33,7 +33,7 @@ public:
   const StreamProcessorArrayNode& get_stream_proc_array_node() const;
 
   // setup all processors
-  void setup(bool enable, bool drop_empty, uint32_t threshold) const;
+  void setup(bool enable, bool drop_empty) const;
 
   // convenience methods for accessing stream processors
   void set_threshold(uint32_t stream, uint32_t threshold) const;

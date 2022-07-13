@@ -119,10 +119,18 @@ int main(int argc, char const* argv[]) {
   uint32_t crif_de = dtp_pod_node.get_crif_node().get_drop_empty();
   TLOG()  << "CRIF drop-empty (crif.csr.ctrl.drop_empty) : " << std::hex << int(crif_de) <<std::endl;  
 
-  // setup each link
+  // set thresolds
   int n_links = dtp_pod_node.get_n_links();
+  int n_streams = dtp_pod_node.get_n_streams();
   for (int i = 0; i<n_links; ++i) {
-    dtp_pod_node.get_link_processor_node(i).setup(true, true, threshold);
+    for (int j = 0; i<n_streams; ++j) {
+      dtp_pod_node.get_link_processor_node(i).set_threshold(j, 20);
+    }
+  }
+
+  // setup each link
+  for (int i = 0; i<n_links; ++i) {
+    dtp_pod_node.get_link_processor_node(i).setup(true, true);
   }
 
 }
