@@ -18,7 +18,7 @@ namespace dunedaq {
     CentralRouterInterfaceNode::~CentralRouterInterfaceNode() {}
     
     void CentralRouterInterfaceNode::enable(bool dispatch) const {
-      getNode("csr.ctrl.enable").write(0x1);
+      getNode("csr.ctrl.en").write(0x1);
       if(dispatch) {getClient().dispatch();}
     }    
 

@@ -29,7 +29,7 @@ namespace dunedaq {
       return getNode<StreamProcessorArrayNode>("stream_procs"); 
     }
 
-    void LinkProcessorNode::setup(bool enable, bool drop_empty, uint32_t threshold) const {
+    void LinkProcessorNode::setup(bool enable, bool drop_empty) const {
 
       // enable data reception
       if (enable) {
@@ -45,64 +45,70 @@ namespace dunedaq {
 
       // setup stream processors
       auto l_strm_proc_arr_node = get_stream_proc_array_node();
-      for (uint32_t s=0; s!=m_n_streams; ++s) {
-	l_strm_proc_arr_node.stream_select(s, false);
+      for (int s=0; s!=m_n_streams; ++s) {
+
+	        l_strm_proc_arr_node.stream_select(static_cast<uint32_t>(s), false);
 	auto l_strm_proc_node = l_strm_proc_arr_node.get_stream_proc_node();
 	if (drop_empty) {
 	  l_strm_proc_node.drop_empty(false);
 	}
-	l_strm_proc_node.set_threshold(threshold);
       }
     
       getClient().dispatch();
 
     }
 
-    void LinkProcessorNode::set_threshold(uint32_t stream, uint32_t threshold) const {
+    void LinkProcessorNode::set_threshold(int stream, uint32_t threshold) const {
+
+      uint32_t strm = static_cast<uint32_t>(stream);
       auto l_strm_proc_arr_node = get_stream_proc_array_node();    
-      l_strm_proc_arr_node.stream_select(stream, false);
+      l_strm_proc_arr_node.stream_select(strm, false);
       l_strm_proc_arr_node.get_stream_proc_node().set_threshold(threshold);
       getClient().dispatch();
       
     }
 
-    uint32_t LinkProcessorNode::get_threshold(uint32_t stream) const {
+    uint32_t LinkProcessorNode::get_threshold(int stream) const {
 
+      uint32_t strm = static_cast<uint32_t>(stream);
       auto l_strm_proc_arr_node = get_stream_proc_array_node();
-      l_strm_proc_arr_node.stream_select(stream, false);
+      l_strm_proc_arr_node.stream_select(strm, false);
       return l_strm_proc_arr_node.get_stream_proc_node().get_threshold();
 
     }
 
-    void LinkProcessorNode::set_channel_mask(uint32_t stream, uint32_t channel, uint32_t mask) const {
+    void LinkProcessorNode::set_channel_mask(int stream, uint32_t channel, uint32_t mask) const {
       
+      uint32_t strm = static_cast<uint32_t>(stream);
       auto l_strm_proc_arr_node = get_stream_proc_array_node();
-      l_strm_proc_arr_node.stream_select(stream, false);
+      l_strm_proc_arr_node.stream_select(strm, false);
       l_strm_proc_arr_node.get_stream_proc_node().set_channel_mask(channel, mask);
       getClient().dispatch();
       
     }
     
-    uint32_t LinkProcessorNode::get_channel_mask(uint32_t stream, uint32_t channel) const {
+    uint32_t LinkProcessorNode::get_channel_mask(int stream, uint32_t channel) const {
       
+      uint32_t strm = static_cast<uint32_t>(stream);
       auto l_strm_proc_arr_node = get_stream_proc_array_node();
-      l_strm_proc_arr_node.stream_select(stream, false);
+      l_strm_proc_arr_node.stream_select(strm, false);
       return l_strm_proc_arr_node.get_stream_proc_node().get_channel_mask(channel);
 
     }
-    void LinkProcessorNode::set_channel_mask_all(uint32_t stream, uint64_t mask) const {
+    void LinkProcessorNode::set_channel_mask_all(int stream, uint64_t mask) const {
       
+      uint32_t strm = static_cast<uint32_t>(stream);
       auto l_strm_proc_arr_node = get_stream_proc_array_node();
-      l_strm_proc_arr_node.stream_select(stream, false);
+      l_strm_proc_arr_node.stream_select(strm, false);
       l_strm_proc_arr_node.get_stream_proc_node().set_channel_mask_all(mask, false);
       getClient().dispatch();
       
     }
 
-    uint64_t LinkProcessorNode::get_channel_mask_all(uint32_t stream) const {
-
+    uint64_t LinkProcessorNode::get_channel_mask_all(int stream) const {
+      uint32_t strm = static_cast<uint32_t>(stream);
       auto l_strm_proc_arr_node = get_stream_proc_array_node();
-      l_strm_proc_arr_node.stream_select(stream, false);
+      l_strm_proc_arr_node.stream_select(strm, false);
       return l_strm_proc_arr_node.get_stream_proc_node().get_channel_mask_all();
 
     }

@@ -27,7 +27,7 @@ namespace dunedaq {
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
-    std::vector<std::uint64_t> WibulatorNode::load_WIB_pattern_from_file(const std::string& path) {
+    std::vector<std::uint64_t> WibulatorNode::load_WIB_pattern_from_file(const std::string& path) const {
       const char separator =  ' ';
       std::ifstream pattern_file_stream(path);
       if (!pattern_file_stream.is_open()) {
@@ -55,7 +55,7 @@ namespace dunedaq {
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
-    void WibulatorNode::write_pattern(std::vector<std::uint64_t> pattern) {
+    void WibulatorNode::write_pattern(std::vector<std::uint64_t> pattern) const {
       auto buffer_size = get_size();
       pattern.erase(pattern.end()-buffer_size, pattern.end());
       uint64_t pattern_length = pattern.size();
@@ -69,7 +69,7 @@ namespace dunedaq {
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
-    std::vector<std::uint64_t> WibulatorNode::read_pattern() {
+    std::vector<std::uint64_t> WibulatorNode::read_pattern() const {
       uhal::ValWord<uint32_t> aw = getNode("csr.addr_width").read();
       uhal::ValWord<uint32_t> mw = getNode("csr.max_word").read();
       getClient().dispatch();
@@ -82,21 +82,21 @@ namespace dunedaq {
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
-    void WibulatorNode::fire() {
+    void WibulatorNode::fire() const {
       set_fire(0, false);
       set_fire(1, true);
     }
 //-----------------------------------------------------------------------------    
     
 //-----------------------------------------------------------------------------
-    void WibulatorNode::set_fire(const uint32_t& fire_value, bool dispatch) {
+    void WibulatorNode::set_fire(const uint32_t& fire_value, bool dispatch) const {
       getNode("csr.ctrl.fire").write(fire_value);
       if(dispatch) {getClient().dispatch();}
     }
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
-    uhal::ValWord<uint32_t> WibulatorNode::get_address_width(bool dispatch) {
+    uhal::ValWord<uint32_t> WibulatorNode::get_address_width(bool dispatch) const {
       uhal::ValWord<uint32_t> addr_width{ getNode("csr.addr_width").read() };
       if(dispatch) {getClient().dispatch();}
       return addr_width;
@@ -104,7 +104,7 @@ namespace dunedaq {
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
-    uhal::ValWord<uint32_t> WibulatorNode::get_size(void) {
+    uhal::ValWord<uint32_t> WibulatorNode::get_size(void) const {
       uhal::ValWord<uint32_t> size { get_address_width(true) };
       return 1<<size.value();
     }
