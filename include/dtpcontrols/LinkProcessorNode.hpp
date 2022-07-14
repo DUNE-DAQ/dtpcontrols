@@ -36,17 +36,17 @@ public:
   void setup(bool enable, bool drop_empty) const;
 
   // convenience methods for accessing stream processors
-  void set_threshold(uint32_t stream, uint32_t threshold) const;
-  uint32_t get_threshold(uint32_t stream) const;
+  void set_threshold(int stream, uint32_t threshold) const;
+  uint32_t get_threshold(int stream) const;
 
-  void set_channel_mask(uint32_t stream, uint32_t channel, uint32_t mask) const;
-  uint32_t get_channel_mask(uint32_t stream, uint32_t channel) const;
+  void set_channel_mask(int stream, uint32_t channel, uint32_t mask) const;
+  uint32_t get_channel_mask(int stream, uint32_t channel) const;
 
-  void set_channel_mask_all(uint32_t stream, uint64_t mask) const;
-  uint64_t get_channel_mask_all(uint32_t stream) const;
+  void set_channel_mask_all(int stream, uint64_t mask) const;
+  uint64_t get_channel_mask_all(int stream) const;
 
 private:
-  uint32_t m_n_streams;
+  int m_n_streams;
 
 };
 
