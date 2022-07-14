@@ -47,7 +47,7 @@ namespace dunedaq {
       auto l_strm_proc_arr_node = get_stream_proc_array_node();
       for (int s=0; s!=m_n_streams; ++s) {
 
-	l_strm_proc_arr_node.stream_select(static_cast<uint32_t>(s), false);
+	        l_strm_proc_arr_node.stream_select(static_cast<uint32_t>(s), false);
 	auto l_strm_proc_node = l_strm_proc_arr_node.get_stream_proc_node();
 	if (drop_empty) {
 	  l_strm_proc_node.drop_empty(false);
