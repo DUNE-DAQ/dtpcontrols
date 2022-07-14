@@ -34,13 +34,13 @@ namespace dunedaq {
       explicit WibulatorNode(const uhal::Node& node);
       virtual ~WibulatorNode();
 
-      std::vector<std::uint64_t> load_WIB_pattern_from_file(const std::string& path);
-      void write_pattern(std::vector<std::uint64_t>);
-      std::vector<uint64_t> read_pattern();
-      void fire();
-      void set_fire(const uint32_t& fire_value, bool dispatch=true);
-      uhal::ValWord<uint32_t> get_address_width(bool dispatch=true);
-      uhal::ValWord<uint32_t> get_size(void);      
+      std::vector<std::uint64_t> load_WIB_pattern_from_file(const std::string& path) const;
+      void write_pattern(std::vector<std::uint64_t>) const;
+      std::vector<uint64_t> read_pattern() const;
+      void fire() const;
+      void set_fire(const uint32_t& fire_value, bool dispatch=true) const;
+      uhal::ValWord<uint32_t> get_address_width(bool dispatch=true) const;
+      uhal::ValWord<uint32_t> get_size(void) const;      
     };
 
   } // namespace dtpcontrols
