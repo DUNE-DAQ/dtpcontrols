@@ -182,6 +182,36 @@ def link_hitfinder(obj, pipes, threshold):
 
 
 # ------------------------------------------------------------------------------
+@link.command('pedsub')
+@click.option('-p', '--pipes', callback=toolbox.validate_proc_ids, default='all')
+@click.option('-c', '--capture-pedestal', default=False)
+@click.pass_obj
+def link_pedsub(obj, pipes, threshold):
+
+    for ln in obj.mLinkNodes:
+        print('>> Link Processor', ln.getId())
+
+        strmArrayCsrNode = ln.getNode('stream_procs.csr')
+        strmCsrNode = ln.getNode('stream_procs.stream_proc.csr')
+
+        # capture pedestals
+        for p in pipes:
+            strmArrayCsrNode.getNode('ctrl.stream_sel').write(p)
+            if (capture-pedestal) :
+                strmCsrNode.getNode('pedsub.pedsub_adj').write(0x1)
+
+        ln.getClient().dispatch()
+
+        # disable capture
+        for p in pipes:
+            strmArrayCsrNode.getNode('ctrl.stream_sel').write(p)
+            if (capture-pedestal) :
+                strmCsrNode.getNode('pedsub.pedsub_adj').write(0x0)
+
+        ln.getClient().dispatch()
+
+
+# ------------------------------------------------------------------------------
 @link.command('watch')
 @click.pass_obj
 @click.option('-r/-R', '--show-dr/--hide-dr', 'dr', default=True)
