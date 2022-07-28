@@ -1,0 +1,12 @@
+<node id="TOP">
+  <node id="info" address="0x0" description="information block" fwinfo="endpoint;width=2" module="file://dtpc_info.xml"/>
+  <node id="ctrl" address="0x8" description="ctrl/stat register" fwinfo="endpoint;width=3" module="file://dtpc_ctrl.xml"/>
+
+  <node id="wibtor0" address="0x110" description="wibulator controls" fwinfo="endpoint;width=4" module="file://wibulator.xml"/>
+
+  <node id="outsink0" address="0x900" description="output controls" fwinfo="endpoint;width=4" module="file://sink_snapshot.xml"/>
+  <node id="outsink1" address="0x910" description="output controls" fwinfo="endpoint;width=4" module="file://sink_snapshot.xml"/>
+  <node id="outsink2" address="0x920" description="output controls" fwinfo="endpoint;width=4" module="file://sink_snapshot.xml"/>
+  <node id="outsink3" address="0x930" description="output controls" fwinfo="endpoint;width=4" module="file://sink_snapshot.xml"/>
+  <node id="outsink4" address="0x940" description="output controls" fwinfo="endpoint;width=4" module="file://sink_snapshot.xml"/>
+</node>

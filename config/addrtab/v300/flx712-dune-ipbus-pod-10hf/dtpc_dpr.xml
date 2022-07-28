@@ -1,0 +1,21 @@
+<node id="dtpc_dpr" description="dual port RAM for time-order --> channel order rearrangement" fwinfo="endpoint" class="DPRNode">
+    <node id="csr" fwinfo="endpoint;width=4">
+        <node id="ctrl">
+            <node id="config" address="0x0"  description="Control for DPR Mux">
+                <node id="mux_in" mask="0x1"/>
+                <node id="mux_out" mask="0x2"/>
+            </node>
+            <node id="write_addr"      address="0x1" ></node>
+            <node id="write_data_high" address="0x2" ></node>
+            <node id="write_data_low"  address="0x3" ></node>
+    
+            <node id="wib_frame_ptr_w" address="0x4" ></node>
+        </node>
+        <node id="stat">
+            <node id="read_addr"       address="0x5" ></node>
+            <node id="read_data_high"  address="0x8" ></node>
+            <node id="read_data_low"   address="0x9" ></node>
+            <node id="wib_frame_ptr_r" address="0xA" ></node>
+        </node>
+    </node>
+</node>

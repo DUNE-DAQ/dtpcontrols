@@ -1,0 +1,9 @@
+<node id="ctrl" description="Control block" class="ControlNode">
+    <node id="csr" address="0x4" description="ctrl/stat register" fwinfo="endpoint;width=1">
+        <node id="ctrl" address="0x0">
+            <node id="nuke" mask="0x1"/>
+            <node id="soft_rst" mask="0x2" description="Soft resets for ipbus registers"/>
+            <node id="mst_rst" mask="0x4" description="Master reset for the processing logic"/>
+        </node>
+    </node>
+</node>

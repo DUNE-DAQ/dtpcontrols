@@ -1,0 +1,15 @@
+<node id="dtpc_mon_probe" fwinfo="endpoint">
+    <node id="csr">
+        <node id="ctrl" address="0x0">
+            <node id="start" mask="0x1"/>
+        </node>
+        <node id="packets" address="0x2">
+            <node id="valid" mask="0x80000000"/>
+            <node id="counts" mask="0x0fffffff"/>
+        </node>
+        <node id="frames" address="0x3">
+            <node id="valid" mask="0x80000000"/>
+            <node id="counts" mask="0x0fffffff"/>
+        </node>
+    </node>
+</node>

@@ -1,0 +1,9 @@
+<node id="dtpc_mon_probe" class="MonProbeNode">
+    <node id="ready" mask="0x1"/>
+    <node id="valid" mask="0x2"/>
+    <node id="user" mask="0x4"/>
+    <node id="last" mask="0x8"/>
+    <node id="last_err" mask="0xff0"/>
+    <node id="pkt_ctr" mask="0xffff000"/>
+    <node id="axi_err" mask="0xf0000000"/>
+</node>
