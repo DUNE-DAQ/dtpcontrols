@@ -274,18 +274,22 @@ def wtor_fire(obj, loop):
 # -----------------------------------------------------------------------------
 @cli.command('flowmaster')
 @click.option('--src-sel', type=click.Choice(['gbt', 'wibtor']), help='Input source selection', default=None)
+@click.option('--out-sel', type=click.Choice(['sink', 'cr']), help='Input source selection', default=None)
 @click.option('--sink-sel', type=click.Choice(['hits']+['link'+str(i) for i in range(5)]), help='Sink input selection', default=None)
 @click.pass_obj
-def flowmaster(obj, src_sel, sink_sel):
+def flowmaster(obj, src_sel, sink_sel, out_sel):
 
     fmNode = obj.podNode.getNode('flowmaster')
 
     src_map = {'gbt': 0, 'wibtor': 1}
+    outflow_map = {'sink': 0, 'cr': 1}
     sink_map = {'hits': (0, 0) }
     sink_map.update({ 'link'+str(d): (1, d) for d in range(5) })
 
     if src_sel:
         fmNode.getNode('csr.ctrl.gbt_src').write(src_map[src_sel])
+    if out_sel:
+        fmNode.getNode('csr.ctrl.out_sel').write(outflow_map[out_sel])
     if sink_sel is not None:
         fmNode.getNode('csr.ctrl.sink_src').write(sink_map[sink_sel][0])
         fmNode.getNode('csr.ctrl.sink_link').write(sink_map[sink_sel][1])
