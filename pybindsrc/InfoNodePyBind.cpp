@@ -23,8 +23,7 @@ namespace dunedaq {
 
 	py::class_<dtpcontrols::InfoNode, uhal::Node>(m, "InfoNode")
 	  .def(py::init<const uhal::Node&>())
-	  .def("get_firmware_config_info", &dtpcontrols::InfoNode::get_firmware_config_info)
-	  .def("get_firmware_id_info", &dtpcontrols::InfoNode::get_firmware_id_info);
+	  .def("get_firmware_config_info", &dtpcontrols::InfoNode::get_firmware_config_info);
       }
 
     } // namespace python

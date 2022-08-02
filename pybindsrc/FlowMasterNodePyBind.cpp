@@ -24,14 +24,10 @@ namespace dunedaq {
 
 	py::class_<dtpcontrols::FlowMasterNode, uhal::Node>(m, "FlowMasterNode")
 	  .def(py::init<const uhal::Node&>())
-	  .def("source_select_gbt", &dtpcontrols::FlowMasterNode::select_source_gbt,
+	  .def("set_source_gbt", &dtpcontrols::FlowMasterNode::set_source_gbt,
 	       py::arg("dispatch") = true)
-	  .def("source_select_wtor", &dtpcontrols::FlowMasterNode::select_source_wtor,
-	       py::arg("dispatch") = true)
-	  .def("source_select", py::overload_cast<const std::string&, const bool>(&FlowMasterNode::source_select),
-	       py::arg("source"), py::arg("dispatch") = true)
-	  .def("sink_select", py::overload_cast<const std::string&, const bool>(&FlowMasterNode::sink_select),
-	       py::arg("sink"), py::arg("dispatch") = true);
+	  .def("set_source_wtor", &dtpcontrols::FlowMasterNode::set_source_wtor,
+	       py::arg("dispatch") = true);
       }
 
     } // namespace python

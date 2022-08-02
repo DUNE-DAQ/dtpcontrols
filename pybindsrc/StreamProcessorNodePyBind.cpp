@@ -24,14 +24,11 @@ namespace dunedaq {
 	  .def(py::init<const uhal::Node &>())
 	  .def("set_threshold", &dtpcontrols::StreamProcessorNode::set_threshold,
 	       py::arg("threshold"), py::arg("dispatch") = true)
-	  .def("set_mask_channel_00to31",
-	       &dtpcontrols::StreamProcessorNode::set_mask_channel_00to31,
-	       py::arg("mask00to31"), py::arg("dispatch") = true,
-	       py::arg("mask_en_dsbl") = true)
-	  .def("set_mask_channel_32to63",
-	       &dtpcontrols::StreamProcessorNode::set_mask_channel_32to63,
-	       py::arg("mask32to63"), py::arg("dispatch") = true,
-	       py::arg("mask_en_dsbl") = true);
+	  .def("set_channel_mask_all",
+	       &dtpcontrols::StreamProcessorNode::set_channel_mask_all,
+	       py::arg("mask"), py::arg("dispatch") = true)
+	  .def("get_channel_mask_all",
+	       &dtpcontrols::StreamProcessorNode::set_channel_mask_all);	
       }
 
     } // namespace python
