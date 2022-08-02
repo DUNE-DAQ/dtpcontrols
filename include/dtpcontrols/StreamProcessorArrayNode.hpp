@@ -30,8 +30,7 @@ namespace dunedaq {
 
       const StreamProcessorNode& get_stream_proc_node() const;
 
-      void stream_select(const uint32_t pipe, bool dispatch=true);
-
+      void stream_select(const uint32_t pipe, bool dispatch=true) const;
 
     };
 

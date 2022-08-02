@@ -13,7 +13,11 @@ namespace dunedaq {
 
     UHAL_REGISTER_DERIVED_NODE(LinkProcessorNode)
 
-    LinkProcessorNode::LinkProcessorNode(const uhal::Node& node) : uhal::Node(node) { }
+    LinkProcessorNode::LinkProcessorNode(const uhal::Node& node) : 
+    uhal::Node(node),
+      m_n_streams(4)
+    {
+    }
 
     LinkProcessorNode::~LinkProcessorNode() {}
 
@@ -24,6 +28,91 @@ namespace dunedaq {
     const StreamProcessorArrayNode& LinkProcessorNode::get_stream_proc_array_node() const {
       return getNode<StreamProcessorArrayNode>("stream_procs"); 
     }
+
+    void LinkProcessorNode::setup(bool enable, bool drop_empty) const {
+
+      // enable data reception
+      if (enable) {
+	auto l_dr_node = get_data_router_node().get_data_reception_node();
+	l_dr_node.enable(false);
+      }
+
+      // enable DPR passthrough
+      // TODO : add other modes
+      auto l_dpr_node = get_data_router_node().get_dpr_node();
+      l_dpr_node.set_mux_in(0x1);
+      l_dpr_node.set_mux_out(0x1);
+
+      // setup stream processors
+      auto l_strm_proc_arr_node = get_stream_proc_array_node();
+      for (int s=0; s!=m_n_streams; ++s) {
+
+	        l_strm_proc_arr_node.stream_select(static_cast<uint32_t>(s), false);
+	auto l_strm_proc_node = l_strm_proc_arr_node.get_stream_proc_node();
+	if (drop_empty) {
+	  l_strm_proc_node.drop_empty(false);
+	}
+      }
+    
+      getClient().dispatch();
+
+    }
+
+    void LinkProcessorNode::set_threshold(int stream, uint32_t threshold) const {
+
+      uint32_t strm = static_cast<uint32_t>(stream);
+      auto l_strm_proc_arr_node = get_stream_proc_array_node();    
+      l_strm_proc_arr_node.stream_select(strm, false);
+      l_strm_proc_arr_node.get_stream_proc_node().set_threshold(threshold);
+      getClient().dispatch();
+      
+    }
+
+    uint32_t LinkProcessorNode::get_threshold(int stream) const {
+
+      uint32_t strm = static_cast<uint32_t>(stream);
+      auto l_strm_proc_arr_node = get_stream_proc_array_node();
+      l_strm_proc_arr_node.stream_select(strm, false);
+      return l_strm_proc_arr_node.get_stream_proc_node().get_threshold();
+
+    }
+
+    void LinkProcessorNode::set_channel_mask(int stream, uint32_t channel, uint32_t mask) const {
+      
+      uint32_t strm = static_cast<uint32_t>(stream);
+      auto l_strm_proc_arr_node = get_stream_proc_array_node();
+      l_strm_proc_arr_node.stream_select(strm, false);
+      l_strm_proc_arr_node.get_stream_proc_node().set_channel_mask(channel, mask);
+      getClient().dispatch();
+      
+    }
+    
+    uint32_t LinkProcessorNode::get_channel_mask(int stream, uint32_t channel) const {
+      
+      uint32_t strm = static_cast<uint32_t>(stream);
+      auto l_strm_proc_arr_node = get_stream_proc_array_node();
+      l_strm_proc_arr_node.stream_select(strm, false);
+      return l_strm_proc_arr_node.get_stream_proc_node().get_channel_mask(channel);
+
+    }
+    void LinkProcessorNode::set_channel_mask_all(int stream, uint64_t mask) const {
+      
+      uint32_t strm = static_cast<uint32_t>(stream);
+      auto l_strm_proc_arr_node = get_stream_proc_array_node();
+      l_strm_proc_arr_node.stream_select(strm, false);
+      l_strm_proc_arr_node.get_stream_proc_node().set_channel_mask_all(mask, false);
+      getClient().dispatch();
+      
+    }
+
+    uint64_t LinkProcessorNode::get_channel_mask_all(int stream) const {
+      uint32_t strm = static_cast<uint32_t>(stream);
+      auto l_strm_proc_arr_node = get_stream_proc_array_node();
+      l_strm_proc_arr_node.stream_select(strm, false);
+      return l_strm_proc_arr_node.get_stream_proc_node().get_channel_mask_all();
+
+    }
+
 
   } // namespace dtpcontrols
 } // namespace dunedaq

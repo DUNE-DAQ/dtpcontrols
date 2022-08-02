@@ -32,6 +32,22 @@ public:
   const DataRouterNode& get_data_router_node() const;
   const StreamProcessorArrayNode& get_stream_proc_array_node() const;
 
+  // setup all processors
+  void setup(bool enable, bool drop_empty) const;
+
+  // convenience methods for accessing stream processors
+  void set_threshold(int stream, uint32_t threshold) const;
+  uint32_t get_threshold(int stream) const;
+
+  void set_channel_mask(int stream, uint32_t channel, uint32_t mask) const;
+  uint32_t get_channel_mask(int stream, uint32_t channel) const;
+
+  void set_channel_mask_all(int stream, uint64_t mask) const;
+  uint64_t get_channel_mask_all(int stream) const;
+
+private:
+  int m_n_streams;
+
 };
 
 

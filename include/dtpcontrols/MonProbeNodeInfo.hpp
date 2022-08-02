@@ -15,7 +15,7 @@
 struct MonProbeNodeInfo {
 
   int link;
-  int pipe;
+  int stream;
   int probe;
   int ready;
   int valid;
