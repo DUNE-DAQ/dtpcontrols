@@ -48,12 +48,12 @@ def cli(ctx, aExcStack, connection, device):
     # Extract info from InfoNode
     infoNode = obj.podNode.get_info_node()
     config_info = infoNode.get_firmware_config_info()
-    id_info = infoNode.get_firmware_id_info()
+    #id_info = infoNode.get_firmware_id_info()
 
     printDictTable(config_info)
-    printRegTable(id_info)
+    #printRegTable(id_info)
     
-    obj.mIdInfo = id_info
+    #obj.mIdInfo = id_info
     obj.mConfigInfo = config_info
 
 # -----------------------------------------------------------------------------
@@ -144,18 +144,15 @@ def link_mask(obj, pipes, chans, action):
 
         for p in pipes:
             strmArrayNode.stream_select(p)
-
-            strmNode.set_mask_channel_00to31(mask_w & 0xffffffff, mask_en_dsbl=en_dsbl)
-            strmNode.set_mask_channel_32to63((mask_w >> 32) & 0xffffffff, mask_en_dsbl=en_dsbl)
+            strmNode.set_channel_mask_all(mask_w)
+            #strmNode.set_mask_channel_00to31(mask_w & 0xffffffff, mask_en_dsbl=en_dsbl)
+            #strmNode.set_mask_channel_32to63((mask_w >> 32) & 0xffffffff, mask_en_dsbl=en_dsbl)
             ln.getClient().dispatch()
 
         mask_r = []
         for p in pipes:
             strmArrayNode.stream_select(p)
-            mask_r += [(
-                strmNode.get_mask_channel_00to31(dispatch = True),
-                strmNode.get_mask_channel_32to63(dispatch = True)
-            )]
+            mask_r += [(strmNode.get_channel_mask_all(dispatch = True))]
             ln.getClient().dispatch()
 
         for p, (m_h, m_l) in zip(pipes, mask_r):
@@ -284,9 +281,9 @@ def flowmaster(obj, src_sel, sink_sel):
 
     if src_sel:
         if src_sel == 'gbt':
-            fmNode.source_select_gbt()
+            fmNode.set_source_gbt()
         elif src_sel == 'wibtor':
-            fmNode.source_select_wtor()
+            fmNode.set_source_wtor()
         else:
             print("Invalid source")
     if sink_sel is not None:
