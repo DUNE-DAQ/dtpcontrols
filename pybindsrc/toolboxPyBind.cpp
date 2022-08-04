@@ -26,7 +26,8 @@ namespace dunedaq {
 	m.def("find_connection_file", &dtpcontrols::find_connection_file);
 	m.def("format_36b_to_32b", &dtpcontrols::format_36b_to_32b, py::arg("pattern_36b"));
 	m.def("format_32b_to_36b", &dtpcontrols::format_32b_to_36b, py::arg("pattern_32b"));
-	m.def("get_child_registers", &dtpcontrols::get_child_registers, py::arg("node"));
+	m.def("read_WIB_pattern_from_file", &dtpcontrols::read_WIB_pattern_from_file,py::arg("path"));
+        m.def("get_child_registers", &dtpcontrols::get_child_registers, py::arg("node"));
         }
 
     } // namespace python
