@@ -27,8 +27,6 @@ namespace dunedaq {
 	       py::arg("pattern"))
 	  .def("read_pattern", &dtpcontrols::WibulatorNode::read_pattern)
 	  .def("fire", &dtpcontrols::WibulatorNode::fire)
-	  .def("load_WIB_pattern_from_file", &dtpcontrols::WibulatorNode::load_WIB_pattern_from_file,
-	       py::arg("path"))
 	  .def("get_size", &dtpcontrols::WibulatorNode::get_size);	  
       }
     } // namespace python
