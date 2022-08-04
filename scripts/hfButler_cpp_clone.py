@@ -48,12 +48,12 @@ def cli(ctx, aExcStack, connection, device):
     # Extract info from InfoNode
     infoNode = obj.podNode.get_info_node()
     config_info = infoNode.get_firmware_config_info()
-    #id_info = infoNode.get_firmware_id_info()
+    id_info = infoNode.get_firmware_id_info()
 
     printDictTable(config_info)
-    #printRegTable(id_info)
+    printRegTable(id_info)
     
-    #obj.mIdInfo = id_info
+    obj.mIdInfo = id_info
     obj.mConfigInfo = config_info
 
 # -----------------------------------------------------------------------------
@@ -226,7 +226,7 @@ def wtor(obj, ids):
 @click.option('-i', '--pad-idles', is_flag=True, help='Pad pattern with idles', default=None)
 @click.pass_obj
 def wtor_config(obj, pattern, trim_length, pad_idles):
-    p = controls.load_WIB_pattern_from_file(str(pattern))
+    p = controls.read_WIB_pattern_from_file(str(pattern))
 
     print('Pattern file:', pattern)
     print('      length:', len(p))
@@ -269,7 +269,7 @@ def wtor_fire(obj, loop):
 # -----------------------------------------------------------------------------
 @cli.command('flowmaster')
 @click.option('--src-sel', type=click.Choice(['gbt', 'wibtor']), help='Input source selection', default=None)
-@click.option('--sink-sel', type=click.Choice(['hits']+['link'+str(i) for i in range(5)]), help='Sink input selection', default=None)
+@click.option('--sink-sel', type=click.Choice(['hits']+['link'+str(i) for i in range(5)]+['link-all']), help='Sink input selection', default=None)
 @click.pass_obj
 def flowmaster(obj, src_sel, sink_sel):
 
@@ -278,7 +278,6 @@ def flowmaster(obj, src_sel, sink_sel):
     src_map = {'gbt': 0, 'wibtor': 1}
     sink_map = {'hits': (0, 0) }
     sink_map.update({ 'link'+str(d): (1, d) for d in range(obj.mConfigInfo['n_links']) })
-
     if src_sel:
         if src_sel == 'gbt':
             fmNode.set_source_gbt()
@@ -287,9 +286,18 @@ def flowmaster(obj, src_sel, sink_sel):
         else:
             print("Invalid source")
     if sink_sel is not None:
-        fmNode.sink_select(sink_sel)
-        fmNode.getClient().dispatch()
-
+        if sink_sel == 'hits':
+            fmNode.set_sink_hits()
+            fmNode.getClient().dispatch()
+        if (sink_sel[:4] == 'link'):
+            if sink_sel[4:] == '-all':
+                for l in range(obj.mConfigInfo['n_links']):
+                    fmNode.set_sink_link(l)               
+                    fmNode.getClient().dispatch()
+                    print(l)
+            if sink_sel[4] in [str(lnk) for lnk in range(obj.mConfigInfo['n_links'])]:
+                fmNode.set_sink_link(int(sink_sel[-1]))
+                fmNode.getClient().dispatch()
 # -----------------------------------------------------------------------------
 @cli.command('cr-if')
 @click.option('--on/--off', 'cr_on', help='Enable central-router interface block', default=None)
