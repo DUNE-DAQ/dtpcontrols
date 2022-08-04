@@ -27,7 +27,11 @@ namespace dunedaq {
 	  .def("set_source_gbt", &dtpcontrols::FlowMasterNode::set_source_gbt,
 	       py::arg("dispatch") = true)
 	  .def("set_source_wtor", &dtpcontrols::FlowMasterNode::set_source_wtor,
-	       py::arg("dispatch") = true);
+	       py::arg("dispatch") = true)
+	  .def("set_sink_hits", &dtpcontrols::FlowMasterNode::set_sink_hits,
+	       py::arg("dispatch") = true)
+	  .def("set_sink_link", &dtpcontrols::FlowMasterNode::set_sink_link,
+	       py::arg("link"), py::arg("dispatch") = true);
       }
 
     } // namespace python
