@@ -326,20 +326,13 @@ def capture_sink(obj, path, timeout, drop_idles):
     osNode = obj.podNode.get_output_sink_node()
 
     print('Capturing axis32bsink data')
-    osNode.getNode('csr.ctrl.en').write(0)
-    osNode.getNode('csr.ctrl.clear').write(1)
-    osNode.getNode('csr.ctrl.clear').write(0)
+    osNode.disable()
+    osNode.clear()
     if drop_idles:
-        osNode.getNode('csr.pattern_kchar').write(0x1)
-        osNode.getNode('csr.pattern_data').write(0xbc)
-        osNode.getNode('csr.ctrl.filter').write(0x1)
+        osNode.drop_idles()
     else:
-        osNode.getNode('csr.pattern_kchar').write(0x0)
-        osNode.getNode('csr.pattern_data').write(0x0)
-        osNode.getNode('csr.ctrl.filter').write(0x0)
-    osNode.getClient().dispatch()
-    osNode.getNode('csr.ctrl.en').write(1)
-    osNode.getClient().dispatch()
+        osNode.keep_idles()
+    osNode.enable()
 
     sleep = 0.1
     max_iter = int(timeout//sleep)
