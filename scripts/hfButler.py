@@ -186,7 +186,7 @@ def link_hitfinder(obj, pipes, threshold):
 @click.option('-p', '--pipes', callback=toolbox.validate_proc_ids, default='all')
 @click.option('--cap-on/--cap-off', 'cp', default=False)
 @click.pass_obj
-def link_pedsub(obj, pipes, capture_pedestal):
+def link_pedsub(obj, pipes, cp):
 
     for ln in obj.mLinkNodes:
         print('>> Link Processor', ln.getId())
