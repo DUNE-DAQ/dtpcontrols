@@ -24,7 +24,7 @@ namespace dunedaq {
 	  .def(py::init<const uhal::Node&>())
 	  .def("enable", &dtpcontrols::CentralRouterInterfaceNode::enable, py::arg("dispatch") = true)
 	  .def("set_drop_empty", &dtpcontrols::CentralRouterInterfaceNode::set_drop_empty, py::arg("dispatch") = true)
-	  .def("get_drop_empty", &dtpcontrols::CentralRouterInterfaceNode::get_drop_empty, py::arg("dispatch") = true);
+	  .def("get_drop_empty", &dtpcontrols::CentralRouterInterfaceNode::set_drop_empty, py::arg("dispatch") = true);
       }
 
     } // namespace python
