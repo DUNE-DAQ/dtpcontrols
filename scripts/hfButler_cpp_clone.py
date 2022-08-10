@@ -105,8 +105,7 @@ def link_config(obj, dr_on, dpr_mux, drop_empty):
         if dr_on is not None:
             print("Configuring data-reception : ", str(dr_on))
             drNode = ln.get_data_router_node().get_data_reception_node()
-            drNode.getNode("csr.ctrl.en").write(dr_on)
-            drNode.getClient().dispatch()
+            drNode.enable()
 
         if drop_empty is not None:
             strmArrayNode = ln.get_stream_proc_array_node()
@@ -115,8 +114,7 @@ def link_config(obj, dr_on, dpr_mux, drop_empty):
             for i in range(obj.mConfigInfo['n_port']):
                 print("Setting drop empty to {} on stream {} ".format(drop_empty, i))
                 strmArrayNode.stream_select(i)
-                strmNode.getNode('csr.ctrl.drop_empty').write(drop_empty)
-            ln.getClient().dispatch()
+                strmNode.drop_empty()
 
         print('<< Link Processor ', ln.getId())
 
@@ -128,9 +126,6 @@ def link_config(obj, dr_on, dpr_mux, drop_empty):
 @click.pass_obj
 def link_mask(obj, pipes, chans, action):
 
-    en_dsbl = True
-    if action == 'disable':
-        en_dsbl = False
 
     for ln in obj.mLinkNodes:
         print('>> Link Processor', ln.getId())
@@ -142,11 +137,14 @@ def link_mask(obj, pipes, chans, action):
         for b in chans:
             mask_w |= (1 << b)
 
+        if action == 'disable':
+            mask_w = ~mask_w            
+
         for p in pipes:
             strmArrayNode.stream_select(p)
             strmNode.set_channel_mask_all(mask_w)
-            #strmNode.set_mask_channel_00to31(mask_w & 0xffffffff, mask_en_dsbl=en_dsbl)
-            #strmNode.set_mask_channel_32to63((mask_w >> 32) & 0xffffffff, mask_en_dsbl=en_dsbl)
+            #mask for channel 00to31 is mask_w & 0xffffffff
+            #mask for channel 32to63 is (mask_w >> 32) & 0xffffffff
             ln.getClient().dispatch()
 
         mask_r = []
@@ -307,13 +305,11 @@ def cr_if(obj, cr_on, drop_empty):
 
     crNode = obj.podNode.get_crif_node()
     if cr_on is not None:
-        crNode.getNode('csr.ctrl.en').write(0x01)
-        crNode.getNode('csr.ctrl.drop_empty').write(0x01)
-        obj.mHW.dispatch()
+        crNode.enable()
+        crNode.set_drop_empty()
         
     if drop_empty is not None:
-        crNode.getNode('csr.ctrl.drop_empty').write(0x01)
-        crNode.getClient.dispatch()
+        crNode.set_drop_empty()
 
     print('--- cr_if.csr ---')
     regs = controls.get_child_registers(crNode.getNode("csr"))
