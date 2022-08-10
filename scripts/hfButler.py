@@ -184,7 +184,7 @@ def link_hitfinder(obj, pipes, threshold):
 # ------------------------------------------------------------------------------
 @link.command('pedsub')
 @click.option('-p', '--pipes', callback=toolbox.validate_proc_ids, default='all')
-@click.option('-c/-C', '--capture-pedestal-on/--capture-pedestal-off', 'cp', default=False)
+@click.option('--cap-on/--cap-off', 'cp', default=False)
 @click.pass_obj
 def link_pedsub(obj, pipes, capture_pedestal):
 
