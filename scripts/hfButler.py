@@ -182,6 +182,36 @@ def link_hitfinder(obj, pipes, threshold):
 
 
 # ------------------------------------------------------------------------------
+@link.command('pedsub')
+@click.option('-p', '--pipes', callback=toolbox.validate_proc_ids, default='all')
+@click.option('-c', '--capture-pedestal', default=False)
+@click.pass_obj
+def link_pedsub(obj, pipes, capture_pedestal):
+
+    for ln in obj.mLinkNodes:
+        print('>> Link Processor', ln.getId())
+
+        strmArrayCsrNode = ln.getNode('stream_procs.csr')
+        strmCsrNode = ln.getNode('stream_procs.stream_proc.csr')
+
+        # capture pedestals
+        for p in pipes:
+            strmArrayCsrNode.getNode('ctrl.stream_sel').write(p)
+            if (capture_pedestal) :
+                strmCsrNode.getNode('pedsub.pedsub_adj').write(0x1)
+
+        ln.getClient().dispatch()
+
+        # disable capture
+        for p in pipes:
+            strmArrayCsrNode.getNode('ctrl.stream_sel').write(p)
+            if (capture_pedestal) :
+                strmCsrNode.getNode('pedsub.pedsub_adj').write(0x0)
+
+        ln.getClient().dispatch()
+
+
+# ------------------------------------------------------------------------------
 @link.command('watch')
 @click.pass_obj
 @click.option('-r/-R', '--show-dr/--hide-dr', 'dr', default=True)
@@ -274,18 +304,22 @@ def wtor_fire(obj, loop):
 # -----------------------------------------------------------------------------
 @cli.command('flowmaster')
 @click.option('--src-sel', type=click.Choice(['gbt', 'wibtor']), help='Input source selection', default=None)
+@click.option('--out-sel', type=click.Choice(['sink', 'cr']), help='Input source selection', default=None)
 @click.option('--sink-sel', type=click.Choice(['hits']+['link'+str(i) for i in range(5)]), help='Sink input selection', default=None)
 @click.pass_obj
-def flowmaster(obj, src_sel, sink_sel):
+def flowmaster(obj, src_sel, sink_sel, out_sel):
 
     fmNode = obj.podNode.getNode('flowmaster')
 
     src_map = {'gbt': 0, 'wibtor': 1}
+    outflow_map = {'sink': 0, 'cr': 1}
     sink_map = {'hits': (0, 0) }
     sink_map.update({ 'link'+str(d): (1, d) for d in range(5) })
 
     if src_sel:
         fmNode.getNode('csr.ctrl.gbt_src').write(src_map[src_sel])
+    if out_sel:
+        fmNode.getNode('csr.ctrl.out_sel').write(outflow_map[out_sel])
     if sink_sel is not None:
         fmNode.getNode('csr.ctrl.sink_src').write(sink_map[sink_sel][0])
         fmNode.getNode('csr.ctrl.sink_link').write(sink_map[sink_sel][1])

@@ -1,0 +1,21 @@
+<node id="wb_sink" description="wibulator sink control" fwinfo="endpoint" class="OutputSinkNode">
+    <node id="csr" address="0x0" fwinfo="endpoint;width=3">
+        <node id="ctrl" address="0x0">
+	        <node id="en" mask="0x1"/>
+            <node id="clear" mask="0x2"/>
+            <node id="filter" mask="0x4"/>
+	    </node>
+        <node id="pattern_tlast" address="0x1" mask="0x1"/>
+        <node id="pattern_data" address="0x2"/>
+	    <node id="stat" address="0x4">
+	        <node id="empty" mask="0x1"/>
+	        <node id="full" mask="0x2"/>
+	        <node id="err" mask="0x4"/>
+            <node id="ready" mask="0x8"/>
+	    </node>
+	</node>
+    <node id="buf" address="0x8" fwinfo="endpoint;width=1">
+        <node id="data" address="0x0" mode="port"/>
+        <node id="count" address="0x1" mask="0xffff"/>
+    </node>	
+</node>
