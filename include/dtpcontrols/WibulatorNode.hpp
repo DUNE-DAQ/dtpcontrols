@@ -34,7 +34,6 @@ namespace dunedaq {
       explicit WibulatorNode(const uhal::Node& node);
       virtual ~WibulatorNode();
 
-      std::vector<std::uint64_t> load_WIB_pattern_from_file(const std::string& path) const;
       void write_pattern(std::vector<std::uint64_t>) const;
       std::vector<uint64_t> read_pattern() const;
       void fire() const;

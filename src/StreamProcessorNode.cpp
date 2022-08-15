@@ -70,7 +70,7 @@ namespace dunedaq {
     void StreamProcessorNode::set_channel_mask_all(uint64_t mask, bool dispatch) const {
 
       getNode("csr.mask.ch-00-31").write( mask & 0xFFFFFFFF );
-      getNode("csr.mask.ch-00-31").write( (mask >> 32) & 0xFFFFFFFF );
+      getNode("csr.mask.ch-32-63").write( (mask >> 32) & 0xFFFFFFFF );
       if (dispatch) { getClient().dispatch(); }
 
     }
@@ -85,7 +85,7 @@ namespace dunedaq {
 	mask = (mask >> channel) & 0x1;
       }
       else if (channel >= 32 and channel <64) {
-	mask = getNode("csr.mask.ch-32-64").read();
+	mask = getNode("csr.mask.ch-32-63").read();
 	mask &= (0x1 << channel);
 	mask = (mask >> channel) & 0x1;
       }
