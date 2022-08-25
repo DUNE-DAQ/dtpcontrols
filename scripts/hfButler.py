@@ -350,11 +350,9 @@ def capture_sink(obj, path, timeout, drop_idles):
     osNode.getNode('csr.ctrl.clear').write(1)
     osNode.getNode('csr.ctrl.clear').write(0)
     if drop_idles:
-        osNode.getNode('csr.pattern_kchar').write(0x1)
         osNode.getNode('csr.pattern_data').write(0xbc)
         osNode.getNode('csr.ctrl.filter').write(0x1)
     else:
-        osNode.getNode('csr.pattern_kchar').write(0x0)
         osNode.getNode('csr.pattern_data').write(0x0)
         osNode.getNode('csr.ctrl.filter').write(0x0)
     osNode.getClient().dispatch()
