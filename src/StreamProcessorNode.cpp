@@ -108,7 +108,7 @@ namespace dunedaq {
     }
 
     void StreamProcessorNode::capture_pedestal(bool enable, bool dispatch) const {
-      getNode("pedsub.pedsub_adj").write(enable);
+      getNode("csr.pedsub.pedsub_adj").write(enable);
       if (dispatch) { getClient().dispatch(); }
     }
 
