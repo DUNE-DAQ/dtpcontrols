@@ -184,9 +184,9 @@ def link_hitfinder(obj, pipes, threshold):
 # ------------------------------------------------------------------------------
 @link.command('pedsub')
 @click.option('-p', '--pipes', callback=toolbox.validate_proc_ids, default='all')
-@click.option('-c', '--capture-pedestal', default=False)
+@click.option('--cap-on/--cap-off', 'cp', default=False)
 @click.pass_obj
-def link_pedsub(obj, pipes, capture_pedestal):
+def link_pedsub(obj, pipes, cp):
 
     for ln in obj.mLinkNodes:
         print('>> Link Processor', ln.getId())
@@ -197,16 +197,7 @@ def link_pedsub(obj, pipes, capture_pedestal):
         # capture pedestals
         for p in pipes:
             strmArrayCsrNode.getNode('ctrl.stream_sel').write(p)
-            if (capture_pedestal) :
-                strmCsrNode.getNode('pedsub.pedsub_adj').write(0x1)
-
-        ln.getClient().dispatch()
-
-        # disable capture
-        for p in pipes:
-            strmArrayCsrNode.getNode('ctrl.stream_sel').write(p)
-            if (capture_pedestal) :
-                strmCsrNode.getNode('pedsub.pedsub_adj').write(0x0)
+            strmCsrNode.getNode('pedsub.pedsub_adj').write(cp)
 
         ln.getClient().dispatch()
 
@@ -359,11 +350,9 @@ def capture_sink(obj, path, timeout, drop_idles):
     osNode.getNode('csr.ctrl.clear').write(1)
     osNode.getNode('csr.ctrl.clear').write(0)
     if drop_idles:
-        osNode.getNode('csr.pattern_kchar').write(0x1)
         osNode.getNode('csr.pattern_data').write(0xbc)
         osNode.getNode('csr.ctrl.filter').write(0x1)
     else:
-        osNode.getNode('csr.pattern_kchar').write(0x0)
         osNode.getNode('csr.pattern_data').write(0x0)
         osNode.getNode('csr.ctrl.filter').write(0x0)
     osNode.getClient().dispatch()
