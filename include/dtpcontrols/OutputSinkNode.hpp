@@ -34,6 +34,11 @@ namespace dunedaq {
       explicit OutputSinkNode(const uhal::Node& node);
       virtual ~OutputSinkNode();
 
+      void enable(bool dispatch) const;
+      void disable(bool dispatch) const;
+      void clear(bool dispatch) const;
+      void drop_idles(bool dispatch) const;
+      void keep_idles(bool dispatch) const;      
     };
 
   } // namespace dtpcontrols

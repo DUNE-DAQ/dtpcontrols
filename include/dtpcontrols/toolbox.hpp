@@ -32,6 +32,11 @@ namespace dunedaq {
     bool source_sink_exists(const std::string& name,
 		std::map<std::string, uint32_t>& mux_values);    
 
+    std::map<std::string, uint32_t>
+    get_child_registers(const uhal::Node& node);
+
+    std::vector<std::uint64_t> read_WIB_pattern_from_file(std::string& path);    
+    
   } // namespace dtp_controls
 } // namespace dunedaq
 

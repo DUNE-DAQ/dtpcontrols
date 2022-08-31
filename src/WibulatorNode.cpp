@@ -27,43 +27,17 @@ namespace dunedaq {
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
-    std::vector<std::uint64_t> WibulatorNode::load_WIB_pattern_from_file(const std::string& path) const {
-      const char separator =  ' ';
-      std::ifstream pattern_file_stream(path);
-      if (!pattern_file_stream.is_open()) {
-	//ers place holder
-      }
-      // each pattern-file line is of example form '0x00554a00 1 0 0 1'
-      else {
-	std::vector<std::uint64_t> pattern_data;
-	std::string pattern_line;
-	while(std::getline(pattern_file_stream, pattern_line)) {
-	  std::stringstream streamData(pattern_line);
-	  std::string val;
-	  std::vector<std::uint64_t> tokens{0, 0, 0, 0, 0};
-	  uint32_t count = 0;
-	  while (std::getline(streamData, val, separator)) {
-	    tokens[count] = std::stoul(val);
-	    count+=1;
-	  }
-	  pattern_data.push_back(tokens[0]+(tokens[1] << 32) + (tokens[2] << 33)
-			 + (tokens[3] << 34) + (tokens[4] << 35));
-	}
-	return pattern_data;
-      }
-    }
-//-----------------------------------------------------------------------------
-
-//-----------------------------------------------------------------------------
     void WibulatorNode::write_pattern(std::vector<std::uint64_t> pattern) const {
-      auto buffer_size = get_size();
-      pattern.erase(pattern.end()-buffer_size, pattern.end());
-      uint64_t pattern_length = pattern.size();
-      TLOG() << "Writing Wibulator pattern of length " << pattern_length;
+      uhal::ValWord<uint32_t> addr_width{ getNode("csr.addr_width").read() };
+      getClient().dispatch();   
+      uint32_t buffer_size{addr_width};
+      buffer_size = 1<<buffer_size;
+      if (pattern.size() > buffer_size) {pattern.resize(buffer_size);}
+      TLOG() << "Writing Wibulator pattern of length " << pattern.size();
       std::vector<uint32_t> ported_pattern = format_36b_to_32b(pattern); 
       getNode("buf.addr").write(0x0);
       getNode("buf.data").writeBlock(ported_pattern);
-      getNode("csr.ctrl.max_word").write(((pattern_length-1)>0)?(pattern_length-1):0);
+      getNode("csr.ctrl.max_word").write(((pattern.size()-1)>0)?(pattern.size()-1):0);
       getClient().dispatch();
     }
 //-----------------------------------------------------------------------------
