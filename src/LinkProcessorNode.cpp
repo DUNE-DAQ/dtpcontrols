@@ -113,6 +113,14 @@ namespace dunedaq {
 
     }
 
+    void LinkProcessorNode::capture_pedestal(int stream, bool enable) const {
+
+      uint32_t strm = static_cast<uint32_t>(stream);
+      auto l_strm_proc_arr_node = get_stream_proc_array_node();
+      l_strm_proc_arr_node.stream_select(strm, false);
+      l_strm_proc_arr_node.get_stream_proc_node().capture_pedestal(enable, false);
+
+    }
 
   } // namespace dtpcontrols
 } // namespace dunedaq

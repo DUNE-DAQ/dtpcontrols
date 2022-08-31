@@ -53,6 +53,9 @@ namespace dunedaq {
       // get mask for one channel
       uint32_t get_channel_mask(int channel) const;
 
+      // capture pedestal
+      void capture_pedestal(bool enable, bool dispatch) const;
+
     private:
       uint32_t m_n_mon_probes;
 

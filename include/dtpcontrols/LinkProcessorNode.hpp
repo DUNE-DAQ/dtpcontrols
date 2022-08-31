@@ -45,6 +45,8 @@ public:
   void set_channel_mask_all(int stream, uint64_t mask) const;
   uint64_t get_channel_mask_all(int stream) const;
 
+  void capture_pedestal(int stream, bool enable) const;
+
 private:
   int m_n_streams;
 

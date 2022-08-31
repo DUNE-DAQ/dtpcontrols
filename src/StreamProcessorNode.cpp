@@ -40,10 +40,11 @@ namespace dunedaq {
     void StreamProcessorNode::set_threshold(const uint32_t threshold, bool dispatch) const {
 
       if (threshold > 0 && threshold < 0x7fff){ // from hfButler; set in firmware JS thinks
-	getNode("csr.hitfinder.threshold").write(threshold);
-	if(dispatch) {getClient().dispatch();}
+        getNode("csr.hitfinder.threshold").write(threshold);
+        if(dispatch) {getClient().dispatch();}
       }
       else {} //placeholder for ERS error
+    
     }
 
     uint32_t StreamProcessorNode::get_threshold() const {
@@ -68,11 +69,9 @@ namespace dunedaq {
     }
 
     void StreamProcessorNode::set_channel_mask_all(uint64_t mask, bool dispatch) const {
-
       getNode("csr.mask.ch-00-31").write( mask & 0xFFFFFFFF );
       getNode("csr.mask.ch-32-63").write( (mask >> 32) & 0xFFFFFFFF );
       if (dispatch) { getClient().dispatch(); }
-
     }
 
     uint32_t StreamProcessorNode::get_channel_mask(int channel) const {
@@ -80,14 +79,14 @@ namespace dunedaq {
       uint32_t mask = 0;
       
       if (channel >= 0 and channel <32) {
-	mask = getNode("csr.mask.ch-00-31").read();
-	mask &= (0x1 << channel);
-	mask = (mask >> channel) & 0x1;
+        mask = getNode("csr.mask.ch-00-31").read();
+        mask &= (0x1 << channel);
+        mask = (mask >> channel) & 0x1;
       }
       else if (channel >= 32 and channel <64) {
-	mask = getNode("csr.mask.ch-32-63").read();
-	mask &= (0x1 << channel);
-	mask = (mask >> channel) & 0x1;
+        mask = getNode("csr.mask.ch-32-63").read();
+        mask &= (0x1 << channel);
+        mask = (mask >> channel) & 0x1;
       }
 
       return mask;
@@ -108,6 +107,10 @@ namespace dunedaq {
 
     }
 
+    void StreamProcessorNode::capture_pedestal(bool enable, bool dispatch) const {
+      getNode("pedsub.pedsub_adj").write(enable);
+      if (dispatch) { getClient().dispatch(); }
+    }
 
   } // namespace dtpcontrols
 } // namespace dunedaq
