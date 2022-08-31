@@ -52,6 +52,10 @@ namespace dunedaq {
       return tmp.value();
     }
 
+    void FlowMasterNode::set_outflow(bool enable, bool dispatch) const {
+      getNode("csr.ctrl.out_sel").write(enable);
+      if(dispatch) { getClient().dispatch(); }
+    }
 
   } // namespace dtpcontrols
 } // namespace dunedaq
