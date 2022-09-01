@@ -5,6 +5,7 @@ from pkg_resources import parse_version
 import click
 import time
 import os
+import uhal
 
 import dtpcontrols.toolbox as toolbox
 import dtpcontrols.setup as setup
@@ -30,16 +31,19 @@ extra_autocompl = {'shell_complete': get_devices} if parse_version(click.__versi
 
 @click.group(context_settings=CONTEXT_SETTINGS, invoke_without_command=True)
 @click.option('-e', '--exception-stack', 'aExcStack', is_flag=True, help="Display full exception stack")
+@click.option('-l', '--loglevel', 'loglevel', type=click.Choice(['DEBUG', 'INFO', 'WARN', 'ERROR']), default=None, help="Ipbus logging verbosity")
 @click.option('-c', '--connection', type=click.Path(exists=True), default=setup.find_conn_file())
 @click.argument('device', **extra_autocompl)
 @click.pass_context
 @click.version_option(version='ultimate')
-def cli(ctx, aExcStack, connection, device):
+def cli(ctx, aExcStack, loglevel, connection, device):
     obj = ctx.obj
 
     obj.mPrintExceptionStack = aExcStack
     hw = setup.connectionManager(connection).getDevice(str(device))
-    hw.setTimeoutPeriod(10000)
+    if loglevel:
+        uhal.setLogLevelTo(getattr(uhal.LogLevel, loglevel))
+    hw.setTimeoutPeriod(10)
     obj.mHW = hw
     obj.podNode = hw.getNode()
 
@@ -365,9 +369,9 @@ def capture_sink(obj, path, timeout, drop_idles):
         full = osNode.getNode('csr.stat.full').read()
         count = osNode.getNode('buf.count').read()
         osNode.getClient().dispatch() 
+        print(f"FIFO read counts {int(count)}, full {bool(full)}") 
         if full.value():
             break
-        print("FIFO counts",int(count))
         if i == (max_iter - 1):
             print('Capture Timeout!!!')
         time.sleep(sleep)
