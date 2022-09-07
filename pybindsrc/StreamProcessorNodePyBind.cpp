@@ -22,6 +22,8 @@ namespace dunedaq {
 
 	py::class_<dtpcontrols::StreamProcessorNode, uhal::Node>(m, "StreamProcessorNode")
 	  .def(py::init<const uhal::Node &>())
+	  .def("drop_empty", &dtpcontrols::StreamProcessorNode::drop_empty,
+	  		py::arg("dispatch") = true)
 	  .def("set_threshold", &dtpcontrols::StreamProcessorNode::set_threshold,
 	       py::arg("threshold"), py::arg("dispatch") = true)
 	  .def("set_channel_mask_all",
