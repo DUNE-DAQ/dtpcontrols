@@ -264,10 +264,6 @@ def read_stream_processor_status(node, nproc,  **kwargs):
     hdr = ['probe']+['{}'.format(k) for k in range(nproc)]
     t = Table(*hdr, **kwargs)
 
-    # tpg_table = Texttable(max_width=0)
-    # tpg_table.header(hdr)
-    # tpg_table.set_deco(Texttable.HEADER | Texttable.BORDER | Texttable.VLINES)
-    # tpg_table.set_chars(['-', '|', '+', '-'])
     for k in range(6):
         lbl = 'p'+str(k)
 
@@ -275,9 +271,6 @@ def read_stream_processor_status(node, nproc,  **kwargs):
 
         row = [lbl+': '+row_names[k]]+['{} [{}] ({}) {}'.format(probes[i][lbl+'.pkt_ctr'], '[green]rdy[/green]' if probes[i][lbl+'.ready'] else '[red]bsy[/red]', flags, probes[i][lbl+'.last_err']) for i in range(4)]
         t.add_row(*row)
-    # tbl = tpg_table.draw()
-    # tbl = tbl.replace('[rdy]', '['+termui.kGreen+'rdy'+termui.kReset+']')
-    # tbl = tbl.replace('[bsy]', '['+termui.kRed+'bsy'+termui.kReset+']')
     return t
 
 

@@ -334,6 +334,7 @@ def flowmaster(obj, src_sel, sink_sel):
             if sink_sel[4] in [str(lnk) for lnk in range(obj.mConfigInfo['n_links'])]:
                 fmNode.set_sink_link(int(sink_sel[-1]))
                 fmNode.getClient().dispatch()
+
 # -----------------------------------------------------------------------------
 @cli.command('cr-if')
 @click.option('--on/--off', 'cr_on', help='Enable central-router interface block', default=None)
@@ -349,9 +350,8 @@ def cr_if(obj, cr_on, drop_empty):
     if drop_empty is not None:
         crNode.set_drop_empty()
 
-    print('--- cr_if.csr ---')
-    regs = controls.get_child_registers(crNode.getNode("csr"))
-    printRegTable(regs, False)
+    regs = dump_sub_regs(crNode.getNode("csr"))
+    print_dict_table(regs, title='cr_if.csr')
 
 # -----------------------------------------------------------------------------
 @cli.command('capture-sink')
@@ -393,12 +393,12 @@ def capture_sink(obj, path, timeout, drop_idles):
     d = osNode.getNode('buf.data').readBlock(2*int(count))
     osNode.getClient().dispatch()
     dd = controls.format_32b_to_36b(d)
-    print("heRE")
+
     data = [((w >> 32) & 0x1, w & 0xffffffff) for w in dd]
     with open(path, 'w') as lFile:
         for i, (k, d) in enumerate(data):
             lFile.write('0x{1:08x} {0}\n'.format(k, d)) 
-            print ('%04d' % i, k, '0x%08x' % d)
+            rprint ('%04d' % i, k, '0x%08x' % d)
 #MAIN-------------------------------------------------------------------------
 
 if __name__ == '__main__':
