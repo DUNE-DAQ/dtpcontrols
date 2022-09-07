@@ -16,9 +16,9 @@ import optionValidators
 
 #INITIALSE---------------------------------------------------------------------
 
-class HFObject(object):
+class DTPObject(object):
     def __init__(self):
-        super(HFObject, self).__init__()
+        super(DTPObject, self).__init__()
 
 CONTEXT_SETTINGS = dict(help_option_names=['-h', '--help'])
 
@@ -29,22 +29,45 @@ def get_devices(ctx, args, incomplete):
     #devs = setup.connectionManager(ctx.params['connection']).getDevices()
     return [k for k in devs if incomplete in k]
 
+def get_connection_manager(conn_file: str):
+    from ctypes import cdll
+
+    try:
+        cdll.LoadLibrary("libuhallibs.so")
+        manager = uhal.ConnectionManager(conn_file, ['ipbusflx-2.0'])
+    except OSError:
+        manager = uhal.ConnectionManager(conn_file)
+
+    return manager
+
 #extra_autocompl = {'autocompletion': get_devices} if parse_version(click.__version__) >= parse_version('7.0') else {}
 extra_autocompl = {'shell_complete': get_devices} if parse_version(click.__version__) >= parse_version('8.1') else {'autocompletion': get_devices} if parse_version(click.__version__) >= parse_version('7.0') else {}
 
 @click.group(context_settings=CONTEXT_SETTINGS, invoke_without_command=True)
-@click.option('-e', '--exception-stack', 'aExcStack', is_flag=True, help="Display full exception stack")
+@click.option('-e', '--exception-stack', 'show_exc_stack', is_flag=True, help="Display full exception stack")
+@click.option('-t', '--timeout', 'timeout', type=int, default=None, help="IPBus timeout")
+@click.option('-l', '--loglevel', 'loglevel', type=click.Choice(['DEBUG', 'INFO', 'WARNING', 'ERROR']), default='WARNING', help="Ipbus logging verbosity")
 @click.option('-c', '--connection', type=click.Path(exists=True), default=controls.find_connection_file()[6:])
 @click.argument('device', **extra_autocompl)
 @click.pass_context
 @click.version_option(version='ultimate')
-def cli(ctx, aExcStack, connection, device):
+def cli(ctx, show_exc_stack, timeout, loglevel, connection, device):
+    
     obj = ctx.obj
-    obj.mPrintExceptionStack = aExcStack
-    hw = uhal.ConnectionManager("file://"+connection).getDevice(str(device))
-    hw.setTimeoutPeriod(10000)
+    
+    obj.mPrintExceptionStack = show_exc_stack
+
+    if loglevel:
+        uhal.setLogLevelTo(getattr(uhal.LogLevel, loglevel))
+
+    hw = get_connection_manager("file://"+connection).getDevice(str(device))
+
+    if timeout:
+        hw.setTimeoutPeriod(timeout)
+
     obj.mHW = hw
     obj.podNode = hw.getNode()
+
     # Extract info from InfoNode
     infoNode = obj.podNode.get_info_node()
     config_info = infoNode.get_firmware_config_info()
@@ -364,4 +387,4 @@ def capture_sink(obj, path, timeout, drop_idles):
 #MAIN-------------------------------------------------------------------------
 
 if __name__ == '__main__':
-    cli(obj=HFObject(), complete_var='_HFBUTLER_COMPLETE')
+    cli(obj=DTPObject(), complete_var='_DTPBUTLER_COMPLETE')

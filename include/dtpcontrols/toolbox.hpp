@@ -16,29 +16,26 @@
 #include <string>
 
 namespace dunedaq {
-  namespace dtpcontrols {
+namespace dtpcontrols {
 
-    std::string find_connection_file();
-    
-    std::vector<std::uint32_t> format_36b_to_32b
-    (const std::vector<std::uint64_t>& pattern_36b);
-    
-    std::vector<std::uint64_t> format_32b_to_36b
-    (const uhal::ValVector<uint32_t>& pattern_32b);
+std::string find_connection_file();
 
-    bool source_sink_exists(const uint32_t& name,
-		const std::vector<uint32_t>& map);
-    
-    bool source_sink_exists(const std::string& name,
-		std::map<std::string, uint32_t>& mux_values);    
+std::vector<std::uint32_t>
+format_36b_to_32b(const std::vector<std::uint64_t> &pattern_36b);
 
-    std::map<std::string, uint32_t>
-    get_child_registers(const uhal::Node& node);
+std::vector<std::uint64_t>
+format_32b_to_36b(const uhal::ValVector<uint32_t> &pattern_32b);
 
-    std::vector<std::uint64_t> read_WIB_pattern_from_file(std::string& path);    
-    
-  } // namespace dtp_controls
+bool source_sink_exists(const uint32_t &name, const std::vector<uint32_t> &map);
+
+bool source_sink_exists(const std::string &name,
+                        std::map<std::string, uint32_t> &mux_values);
+
+std::map<std::string, uint32_t> get_child_registers(const uhal::Node &node);
+
+std::vector<std::uint64_t> read_WIB_pattern_from_file(std::string &path);
+
+} // namespace dtpcontrols
 } // namespace dunedaq
-
 
 #endif // DTPCONTROLS_INCLUDE_DTPCONTROLS_TOOLBOX_HPP_

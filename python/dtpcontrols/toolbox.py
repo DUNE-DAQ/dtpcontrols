@@ -2,6 +2,8 @@ import collections
 from .texttable import Texttable
 from . import termui
 import click
+from rich import print as rprint
+from rich.table import Table
 
 
 # -----------------------------------------------------------------------------
@@ -143,13 +145,14 @@ def readSinkStatus(node):
 
 
 # ------------------------------------------------------------------------------
-def printRegTable(aRegs, aHeader=True, aSort=True):
-    print(( formatRegTable(aRegs, aHeader, aSort) ))
+def printRegTable(aRegs, **kwargs):
+    rprint( dict_to_hextable(aRegs, **kwargs) )
 # ------------------------------------------------------------------------------
 
 
 # ------------------------------------------------------------------------------
 def formatRegTable(aRegs, aHeader=True, aSort=True):
+
     lRegTable = Texttable(max_width=0)
     lRegTable.set_deco(Texttable.VLINES | Texttable.BORDER | Texttable.HEADER)
     lRegTable.set_chars(['-', '|', '+', '-'])
@@ -163,10 +166,48 @@ def formatRegTable(aRegs, aHeader=True, aSort=True):
     return lRegTable.draw()
 # ------------------------------------------------------------------------------
 
+# -----------------------------------------------------------------------------
+def dump_sub_regs(node, names: list = None):
+
+    if names is None:
+        names = sorted(node.getNodes())
+    regs = OrderedDict()
+    for i in names:
+        regs[i] = node.getNode(i).read()
+        node.getClient().dispatch()
+
+    return {k: hex(v.value()) for k, v in regs.items()}
+
+# -----------------------------------------------------------------------------
+def dump_reg(node):
+    v = node.read()
+    node.getClient().dispatch()
+    return {node.getId(): v.value()}
+
+# -----------------------------------------------------------------------------
+def dict_to_table( vals: dict, **kwargs):
+    t = Table(**kwargs)
+    t.add_column('name')
+    t.add_column('value', style='green')
+    for k,v in vals.items():
+        t.add_row(k,str(v))
+
+    return t
+
+# -----------------------------------------------------------------------------
+def dict_to_hextable( vals: dict, **kwargs):
+    t = Table(**kwargs)
+    t.add_column('name')
+    t.add_column('value', style='green')
+    for k,v in vals.items():
+        t.add_row(k,hex(v))
+
+    return t
+
 
 # ------------------------------------------------------------------------------
 def printDictTable(aDict, aHeader=True, aSort=True, aFmtr=None):
-    print(( formatDictTable(aDict, aHeader, aSort, aFmtr) ))
+    rprint(dict_to_table(aDict) )
 # ------------------------------------------------------------------------------
 
 
