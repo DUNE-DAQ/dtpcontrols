@@ -9,9 +9,12 @@ import os
 
 import uhal
 
+from rich import print as rprint
+from rich.table import Table
 from dtpcontrols import core as controls
 
-from dtpcontrols.toolbox import dumpSubRegs, printRegTable, printDictTable, readStreamProcessorStatus, print_dict_table, print_reg_table
+from dtpcontrols.toolbox import dumpSubRegs, printRegTable, printDictTable, readStreamProcessorStatus
+from dtpcontrols.toolbox import dump_sub_regs, dict_to_table, print_dict_table, print_reg_table, read_stream_processor_status
 import optionValidators
 
 #INITIALSE---------------------------------------------------------------------
@@ -44,6 +47,7 @@ def get_connection_manager(conn_file: str):
 extra_autocompl = {'shell_complete': get_devices} if parse_version(click.__version__) >= parse_version('8.1') else {'autocompletion': get_devices} if parse_version(click.__version__) >= parse_version('7.0') else {}
 
 @click.group(context_settings=CONTEXT_SETTINGS, invoke_without_command=True)
+@click.option('-v', '--version', 'show_version', is_flag=True, default=False, help="Print firmware version")
 @click.option('-e', '--exception-stack', 'show_exc_stack', is_flag=True, help="Display full exception stack")
 @click.option('-t', '--timeout', 'timeout', type=int, default=None, help="IPBus timeout")
 @click.option('-l', '--loglevel', 'loglevel', type=click.Choice(['DEBUG', 'INFO', 'WARNING', 'ERROR']), default='WARNING', help="Ipbus logging verbosity")
@@ -51,7 +55,7 @@ extra_autocompl = {'shell_complete': get_devices} if parse_version(click.__versi
 @click.argument('device', **extra_autocompl)
 @click.pass_context
 @click.version_option(version='ultimate')
-def cli(ctx, show_exc_stack, timeout, loglevel, connection, device):
+def cli(ctx, show_version, show_exc_stack, timeout, loglevel, connection, device):
     
     obj = ctx.obj
     
@@ -73,8 +77,9 @@ def cli(ctx, show_exc_stack, timeout, loglevel, connection, device):
     config_info = infoNode.get_firmware_config_info()
     id_info = infoNode.get_firmware_id_info()
 
-    print_dict_table(config_info)
-    print_reg_table(id_info)
+    if show_version:
+        print_dict_table(config_info)
+        print_reg_table(id_info)
     
     obj.mIdInfo = id_info
     obj.mConfigInfo = config_info
@@ -102,13 +107,15 @@ def link(obj, ids):
         obj.mLinkNodes = [obj.podNode.get_link_processor_node(i) for i in ids]
     except Exception as lExc:
         click.Abort('Wibulator {} not found in address table'.format(id))
+
+        
+# ------------------------------------------------------------------------------
 dpr_mux_choices = {
     'reset': (0, 0),
     'playback': (0, 1),
     'sink': (1, 0),
     'passthrough': (1, 1)
 }
-# ------------------------------------------------------------------------------
 @link.command('config')
 @click.option('--dr-on/--dr-off', 'dr_on', help='Enable data-reception block', default=None)
 @click.option('--dpr-mux', 'dpr_mux', type=click.Choice(list(dpr_mux_choices.keys()),), help='Configure DPR mux', default=None)
@@ -206,26 +213,34 @@ def link_hitfinder(obj, pipes, threshold):
 def link_watch(obj, dr, dpr, sp):
 
     for ln in obj.mLinkNodes:
-        print('>> Link Processor', ln.getId())
+
+        rprint()
+        rprint(f"[bold]--- Link Processor {ln.getId()} ---[/bold]")
+        rprint()
+
         strmArrayNode = ln.get_stream_proc_array_node()        
         drNode = ln.get_data_router_node().get_data_reception_node()
         dprNode = ln.get_data_router_node().get_dpr_node()
 
+
+        grid = Table.grid()
+        for _ in range(dr+dpr):
+            grid.add_column()
+
+        row = []
         if dr:
-            print('--- dr ---')
-            regs = controls.get_child_registers(drNode)
-            printDictTable(regs, False)
+            regs = dump_sub_regs(drNode)
+            row += [dict_to_table(regs, title="dr")]
 
         if dpr:
-            print('--- dpr.csr ---')
-            regs = controls.get_child_registers(dprNode.getNode("csr"))
-            printDictTable(regs, False)
+            regs = dump_sub_regs(dprNode.getNode("csr"))
+            row += [dict_to_table(regs, title='dpr.csr')]
+
+        grid.add_row(*row)
+        rprint(grid)
 
         if sp:
-            print(readStreamProcessorStatus(strmArrayNode, obj.mConfigInfo['n_port']))
-
-        # for p in pipes:
-            # strmArrayCsrNode.getNode('ctrl.stream_sel').write(p)
+            rprint(read_stream_processor_status(strmArrayNode, obj.mConfigInfo['n_port'], title="pipelines"))
 
 
 # -----------------------------------------------------------------------------
