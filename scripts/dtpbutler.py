@@ -73,8 +73,8 @@ def cli(ctx, show_exc_stack, timeout, loglevel, connection, device):
     config_info = infoNode.get_firmware_config_info()
     id_info = infoNode.get_firmware_id_info()
 
-    printDictTable(config_info)
-    printRegTable(id_info)
+    print_dict_table(config_info)
+    print_reg_table(id_info)
     
     obj.mIdInfo = id_info
     obj.mConfigInfo = config_info

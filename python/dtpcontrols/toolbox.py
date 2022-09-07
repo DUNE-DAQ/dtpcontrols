@@ -145,9 +145,8 @@ def readSinkStatus(node):
 
 
 # ------------------------------------------------------------------------------
-def printRegTable(aRegs, **kwargs):
-    rprint( dict_to_hextable(aRegs, **kwargs) )
-# ------------------------------------------------------------------------------
+def printRegTable(aRegs, aHeader=True, aSort=True):
+    print(( formatRegTable(aRegs, aHeader, aSort) ))
 
 
 # ------------------------------------------------------------------------------
@@ -164,7 +163,25 @@ def formatRegTable(aRegs, aHeader=True, aSort=True):
         lRegTable.add_row( [str(k), hex(aRegs[k])] )
 
     return lRegTable.draw()
+
 # ------------------------------------------------------------------------------
+def formatDictTable(aDict, aHeader=True, aSort=True, aFmtr=str):
+    lDictTable = Texttable(max_width=0)
+    lDictTable.set_deco(Texttable.VLINES | Texttable.BORDER | Texttable.HEADER)
+    lDictTable.set_chars(['-', '|', '+', '-'])
+    if aHeader:
+        lDictTable.header( ['name', 'value'] )
+
+    for k in (sorted(aDict) if aSort else aDict):
+        v = aDict[k]
+        lDictTable.add_row( [str(k), aFmtr(v) if aFmtr else v])
+
+    return lDictTable.draw()
+
+# ------------------------------------------------------------------------------
+def printDictTable(aDict, aHeader=True, aSort=True, aFmtr=None):
+    print(( formatDictTable(aDict, aHeader, aSort, aFmtr) ))
+
 
 # -----------------------------------------------------------------------------
 def dump_sub_regs(node, names: list = None):
@@ -206,24 +223,18 @@ def dict_to_hextable( vals: dict, **kwargs):
 
 
 # ------------------------------------------------------------------------------
-def printDictTable(aDict, aHeader=True, aSort=True, aFmtr=None):
+def print_reg_table(aRegs, **kwargs):
+    rprint( dict_to_hextable(aRegs, **kwargs) )
+# ------------------------------------------------------------------------------
+
+
+# ------------------------------------------------------------------------------
+def print_dict_table(aDict, aHeader=True, aSort=True, aFmtr=None):
     rprint(dict_to_table(aDict) )
 # ------------------------------------------------------------------------------
 
 
-# ------------------------------------------------------------------------------
-def formatDictTable(aDict, aHeader=True, aSort=True, aFmtr=str):
-    lDictTable = Texttable(max_width=0)
-    lDictTable.set_deco(Texttable.VLINES | Texttable.BORDER | Texttable.HEADER)
-    lDictTable.set_chars(['-', '|', '+', '-'])
-    if aHeader:
-        lDictTable.header( ['name', 'value'] )
 
-    for k in (sorted(aDict) if aSort else aDict):
-        v = aDict[k]
-        lDictTable.add_row( [str(k), aFmtr(v) if aFmtr else v])
-
-    return lDictTable.draw()
 # ------------------------------------------------------------------------------
 
 
