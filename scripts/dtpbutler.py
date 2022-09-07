@@ -11,7 +11,7 @@ import uhal
 
 from dtpcontrols import core as controls
 
-from dtpcontrols.toolbox import dumpSubRegs, printRegTable, printDictTable, readStreamProcessorStatus
+from dtpcontrols.toolbox import dumpSubRegs, printRegTable, printDictTable, readStreamProcessorStatus, print_dict_table, print_reg_table
 import optionValidators
 
 #INITIALSE---------------------------------------------------------------------
