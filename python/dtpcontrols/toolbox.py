@@ -32,7 +32,9 @@ def readTpgStatus(node):
         'psub >> fir ',
         'fir  >> hf',
         'hf   >> hsc',
-        'hsc  >> cr_if'
+        'hsc  >> cr_if',
+        'tpg >> mask',
+        'mask >> filt'
     ]
 
     flag_map = collections.OrderedDict([
@@ -52,7 +54,7 @@ def readTpgStatus(node):
     tpg_table.header(hdr)
     tpg_table.set_deco(Texttable.HEADER | Texttable.BORDER | Texttable.VLINES)
     tpg_table.set_chars(['-', '|', '+', '-'])
-    for k in range(6):
+    for k in range(8):
         lbl = 'p'+str(k)
 
         flags = ''.join([f for f, l in flag_map.items() if probes[i][lbl+'.'+l]])
@@ -74,7 +76,9 @@ def readStreamProcessorStatus(node, nproc):
         'psub >> fir ',
         'fir  >> hf',
         'hf   >> hsc',
-        'hsc  >> cr_if'
+        'hsc  >> cr_if',
+        'tpg >> mask',
+        'mask >> filt'
     ]
 
     flag_map = collections.OrderedDict([
@@ -101,7 +105,7 @@ def readStreamProcessorStatus(node, nproc):
     tpg_table.header(hdr)
     tpg_table.set_deco(Texttable.HEADER | Texttable.BORDER | Texttable.VLINES)
     tpg_table.set_chars(['-', '|', '+', '-'])
-    for k in range(6):
+    for k in range(8):
         lbl = 'p'+str(k)
 
         flags = ''.join([f for f, l in flag_map.items() if probes[i][lbl+'.'+l]])
