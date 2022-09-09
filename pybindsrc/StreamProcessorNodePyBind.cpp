@@ -30,7 +30,10 @@ namespace dunedaq {
 	       &dtpcontrols::StreamProcessorNode::set_channel_mask_all,
 	       py::arg("mask"), py::arg("dispatch") = true)
 	  .def("get_channel_mask_all",
-	       &dtpcontrols::StreamProcessorNode::set_channel_mask_all);	
+	       &dtpcontrols::StreamProcessorNode::set_channel_mask_all)
+	  .def("capture_pedestal",
+	  	   &dtpcontrols::StreamProcessorNode::capture_pedestal,
+		   py::arg("enable"), py::arg("dispatch") = true);
       }
 
     } // namespace python

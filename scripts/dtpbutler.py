@@ -205,6 +205,26 @@ def link_hitfinder(obj, pipes, threshold):
         ln.getClient().dispatch()
 
 # ------------------------------------------------------------------------------
+@link.command('pedsub')
+@click.option('-p', '--pipes', callback=optionValidators.validate_proc_ids, default='all')
+@click.option('--cap-on/--cap-off', 'cp', default=False)
+@click.pass_obj
+def link_pedsub(obj, pipes, cp):
+
+    for ln in obj.mLinkNodes:
+        print('>> Link Processor', ln.getId())
+
+        strmArrayNode = ln.get_stream_proc_array_node()
+        strmNode = strmArrayNode.get_stream_proc_node()
+
+        # capture pedestals
+        for p in pipes:
+            strmArrayNode.stream_select(p)
+            strmNode.capture_pedestal(cp)
+            print(p, 'Capturing pedestal vlaue', cp)
+        ln.getClient().dispatch()
+
+# ------------------------------------------------------------------------------
 @link.command('watch')
 @click.pass_obj
 @click.option('-r/-R', '--show-dr/--hide-dr', 'dr', default=True)
@@ -305,9 +325,10 @@ def wtor_fire(obj, loop):
 # -----------------------------------------------------------------------------
 @cli.command('flowmaster')
 @click.option('--src-sel', type=click.Choice(['gbt', 'wibtor']), help='Input source selection', default=None)
+@click.option('--out-sel', type=click.Choice(['sink', 'cr']), help='Outlflow selection', default=None)
 @click.option('--sink-sel', type=click.Choice(['hits']+['link'+str(i) for i in range(5)]+['link-all']), help='Sink input selection', default=None)
 @click.pass_obj
-def flowmaster(obj, src_sel, sink_sel):
+def flowmaster(obj, src_sel, out_sel, sink_sel):
 
     fmNode = obj.podNode.get_flowmaster_node()
 
@@ -321,6 +342,13 @@ def flowmaster(obj, src_sel, sink_sel):
             fmNode.set_source_wtor()
         else:
             print("Invalid source")
+    if out_sel:
+        if out_sel == 'sink':
+            fmNode.set_outflow(0)
+        elif out_sel == 'cr':
+            fmNode.set_outflow(1)
+        else:
+            print("Invalid sink")
     if sink_sel is not None:
         if sink_sel == 'hits':
             fmNode.set_sink_hits()
