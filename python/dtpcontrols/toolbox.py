@@ -243,7 +243,9 @@ def read_stream_processor_status(node, nproc,  **kwargs):
         'psub >> fir ',
         'fir  >> hf',
         'hf   >> hsc',
-        'hsc  >> cr_if'
+        'hsc  >> cr_if',
+        'tpg >> mask',
+        'mask >> filt'
     ]
 
     flag_map = collections.OrderedDict([
@@ -268,7 +270,7 @@ def read_stream_processor_status(node, nproc,  **kwargs):
     hdr = ['probe']+['{}'.format(k) for k in range(nproc)]
     t = Table(*hdr, **kwargs)
 
-    for k in range(6):
+    for k in range(8):
         lbl = 'p'+str(k)
 
         flags = ''.join([f for f, l in flag_map.items() if probes[i][lbl+'.'+l]])
