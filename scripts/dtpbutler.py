@@ -378,8 +378,20 @@ def cr_if(obj, cr_on, drop_empty):
     if drop_empty is not None:
         crNode.set_drop_empty()
 
-    regs = dump_sub_regs(crNode.getNode("csr"))
-    print_dict_table(regs, title='cr_if.csr')
+    # regs = dump_sub_regs(crNode.getNode("csr"))
+    # print_dict_table(regs, title='cr_if.csr')
+
+    row=[]
+    cr_csr = crNode.getNode('csr')
+    for sn in cr_csr.getNodes(r"[^\.]*"):
+        regs = dump_sub_regs(cr_csr.getNode(sn))
+        row.append(dict_to_table(regs, title=sn))
+
+    g = Table.grid()
+    for i in sn:
+        g.add_column()
+    g.add_row(*row)
+    rprint(g)
 
 # -----------------------------------------------------------------------------
 @cli.command('capture-sink')
