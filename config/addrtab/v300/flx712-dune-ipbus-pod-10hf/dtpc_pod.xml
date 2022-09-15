@@ -1,4 +1,4 @@
-<node id="TOP" class="DTPPodNode">
+<node id="TOP">
   <node id="info" address="0x0" description="information block" fwinfo="endpoint;width=2" module="file://dtpc_info.xml"/>
   <node id="ctrl" address="0x8" description="ctrl/stat register" fwinfo="endpoint;width=3" module="file://dtpc_ctrl.xml"/>
   <node id="flowmaster" address="0x10" description="flow control" fwinfo="endpoint;width=1" module="file://flowmaster.xml"/>

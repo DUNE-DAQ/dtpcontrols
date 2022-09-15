@@ -6,27 +6,25 @@
  * received with this code.
  */
 
-#include "dtpcontrols/InfoNode.hpp"
-
 #include <pybind11/pybind11.h>
 #include <pybind11/stl.h>
+
+#include "dtpcontrols/InfoNode.hpp"
 
 namespace py = pybind11;
 
 namespace dunedaq {
-  namespace dtpcontrols {
-    namespace python {
+namespace dtpcontrols {
+namespace python {
 
-      void register_info_node(py::module& m){ 
+void register_info_node(py::module& m) {
 
-	m.doc() = "c++ implementation of dtpcontrols InfoNode python modules"; // optional module docstring
+  py::class_<dtpcontrols::InfoNode, uhal::Node>(m, "InfoNode")
+      .def(py::init<const uhal::Node&>())
+      .def("get_firmware_config_info", &dtpcontrols::InfoNode::get_firmware_config_info)
+      .def("get_firmware_id_info", &dtpcontrols::InfoNode::get_firmware_id_info);
+}
 
-	py::class_<dtpcontrols::InfoNode, uhal::Node>(m, "InfoNode")
-	  .def(py::init<const uhal::Node&>())
-	  .def("get_firmware_config_info", &dtpcontrols::InfoNode::get_firmware_config_info)
-	  .def("get_firmware_id_info", &dtpcontrols::InfoNode::get_firmware_id_info);
-      }
-
-    } // namespace python
-  } // namespace timing
-} // namespace dunedaq
+}  // namespace python
+}  // namespace dtpcontrols
+}  // namespace dunedaq

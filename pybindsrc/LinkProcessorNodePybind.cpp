@@ -6,26 +6,24 @@
  * received with this code.
  */
 
-#include "dtpcontrols/LinkProcessorNode.hpp"
-
 #include <pybind11/pybind11.h>
+
+#include "dtpcontrols/LinkProcessorNode.hpp"
 
 namespace py = pybind11;
 
 namespace dunedaq {
-  namespace dtpcontrols {
-    namespace python {
+namespace dtpcontrols {
+namespace python {
 
-      void register_link_processor_node(py::module& m){
+void register_link_processor_node(py::module& m) {
 
-	m.doc() = "c++ implementation of dtpcontrols LinkProcessor python modules"; // optional module docstring
+  py::class_<dtpcontrols::LinkProcessorNode, uhal::Node>(m, "LinkProcessorNode")
+      .def(py::init<const uhal::Node&>())
+      .def("get_data_router_node", &dtpcontrols::LinkProcessorNode::get_data_router_node)
+      .def("get_stream_proc_array_node", &dtpcontrols::LinkProcessorNode::get_stream_proc_array_node);
+}
 
-	py::class_<dtpcontrols::LinkProcessorNode, uhal::Node>(m, "LinkProcessorNode")
-	  .def(py::init<const uhal::Node&>())
-	  .def("get_data_router_node", &dtpcontrols::LinkProcessorNode::get_data_router_node)
-	  .def("get_stream_proc_array_node", &dtpcontrols::LinkProcessorNode::get_stream_proc_array_node);
-      }
-
-    } // namespace python
-  } // namespace timing
-} // namespace dunedaq
+}  // namespace python
+}  // namespace dtpcontrols
+}  // namespace dunedaq

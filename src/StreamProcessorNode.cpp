@@ -18,7 +18,10 @@ namespace dunedaq {
     UHAL_REGISTER_DERIVED_NODE(StreamProcessorNode)
 
     StreamProcessorNode::StreamProcessorNode(const uhal::Node& node) : uhal::Node(node),
-      m_n_mon_probes(6) {}
+      m_n_mon_probes(8) {
+        // FIXME
+        // m_n_mon_probes = getNodes("csr\\.mon").size();
+      }
 
     StreamProcessorNode::~StreamProcessorNode(){}
 

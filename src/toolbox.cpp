@@ -8,7 +8,6 @@
 
 // DTP headers
 #include "dtpcontrols/toolbox.hpp"
-#include "dtpcontrols/DTPPodNode.hpp"
 
 // C++ headers
 #include <boost/algorithm/string/predicate.hpp>

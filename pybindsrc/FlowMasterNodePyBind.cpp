@@ -6,36 +6,29 @@
  * received with this code.
  */
 
-#include "dtpcontrols/FlowMasterNode.hpp"
-
 #include <pybind11/detail/common.h>
 #include <pybind11/pybind11.h>
 
+#include "dtpcontrols/FlowMasterNode.hpp"
 
 namespace py = pybind11;
+using namespace pybind11::literals; 
 
 namespace dunedaq {
-  namespace dtpcontrols {
-    namespace python {
+namespace dtpcontrols {
+namespace python {
 
-      void register_flowmaster_node(py::module& m){ 
+void register_flowmaster_node(py::module& m) {
 
-	m.doc() = "c++ implementation of dtpcontrols FlowMaster python modules"; // optional module docstring
+  py::class_<dtpcontrols::FlowMasterNode, uhal::Node>(m, "FlowMasterNode")
+      .def(py::init<const uhal::Node&>())
+      .def("set_source_gbt", &dtpcontrols::FlowMasterNode::set_source_gbt, "dispatch"_a = true)
+      .def("set_source_wtor", &dtpcontrols::FlowMasterNode::set_source_wtor, "dispatch"_a = true)
+      .def("set_sink_hits", &dtpcontrols::FlowMasterNode::set_sink_hits, "dispatch"_a = true)
+      .def("set_sink_link", &dtpcontrols::FlowMasterNode::set_sink_link, "link"_a, "dispatch"_a = true)
+      .def("set_outflow", &dtpcontrols::FlowMasterNode::set_outflow, "enable"_a, "dispatch"_a = true);
+}
 
-	py::class_<dtpcontrols::FlowMasterNode, uhal::Node>(m, "FlowMasterNode")
-	  .def(py::init<const uhal::Node&>())
-	  .def("set_source_gbt", &dtpcontrols::FlowMasterNode::set_source_gbt,
-	       py::arg("dispatch") = true)
-	  .def("set_source_wtor", &dtpcontrols::FlowMasterNode::set_source_wtor,
-	       py::arg("dispatch") = true)
-	  .def("set_sink_hits", &dtpcontrols::FlowMasterNode::set_sink_hits,
-	       py::arg("dispatch") = true)
-	  .def("set_sink_link", &dtpcontrols::FlowMasterNode::set_sink_link,
-	       py::arg("link"), py::arg("dispatch") = true)
-	  .def("set_outflow", &dtpcontrols::FlowMasterNode::set_outflow,
-	  	   py::arg("enable"), py::arg("dispatch") = true);
-      }
-
-    } // namespace python
-  } // namespace timing
-} // namespace dunedaq
+}  // namespace python
+}  // namespace dtpcontrols
+}  // namespace dunedaq

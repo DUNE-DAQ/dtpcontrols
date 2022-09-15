@@ -7,7 +7,6 @@
  */
 
 #include "dtpcontrols/InfoNode.hpp"
-#include "dtpcontrols/DTPPodNode.hpp"
 
 #include "logging/Logging.hpp"
 

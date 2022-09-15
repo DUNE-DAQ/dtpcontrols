@@ -1,0 +1,21 @@
+#include "dtpcontrols/DTPController.hpp"
+
+#include "dtpcontrols/DTPPodNode.hpp"
+
+
+namespace dunedaq {
+namespace dtpcontrols {
+
+DTPController::DTPController(uhal::HwInterface hw) : 
+    m_hw(hw),
+    m_pod(dynamic_cast<const DTPPodNode&>(m_hw.getNode())) {
+}
+
+DTPController::~DTPController() {
+
+}
+
+
+
+}  // namespace dtpcontrols
+}  // namespace dunedaq

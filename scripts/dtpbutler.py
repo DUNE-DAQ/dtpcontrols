@@ -70,10 +70,10 @@ def cli(ctx, show_version, show_exc_stack, timeout, loglevel, connection, device
         hw.setTimeoutPeriod(timeout)
 
     obj.mHW = hw
-    obj.podNode = hw.getNode()
+    obj.podctrl = controls.DTPPodController(hw)
 
     # Extract info from InfoNode
-    infoNode = obj.podNode.get_info_node()
+    infoNode = obj.podctrl.get_info_node()
     config_info = infoNode.get_firmware_config_info()
     id_info = infoNode.get_firmware_id_info()
 
@@ -88,7 +88,7 @@ def cli(ctx, show_version, show_exc_stack, timeout, loglevel, connection, device
 @cli.command('init')
 @click.pass_obj
 def init(obj):
-    obj.podNode.reset()
+    obj.podctrl.reset()
     print("\n RESET DONE!!")
     print("\n Initilisation complete.")
 
@@ -104,7 +104,7 @@ def link(obj, ids):
     """
     obj.mLinkIds = ids
     try:
-        obj.mLinkNodes = [obj.podNode.get_link_processor_node(i) for i in ids]
+        obj.mLinkNodes = [obj.podctrl.get_link_processor_node(i) for i in ids]
     except Exception as lExc:
         click.Abort('Wibulator {} not found in address table'.format(id))
 
@@ -270,7 +270,7 @@ def link_watch(obj, dr, dpr, sp):
 def wtor(obj, ids):
     obj.mWibtorIds = ids
     try:
-        obj.mWibtorNodes = [obj.podNode.get_wibulator_node(i) for i in ids]
+        obj.mWibtorNodes = [obj.podctrl.get_wibulator_node(i) for i in ids]
     except Exception as lExc:
         click.Abort('Wibulator {} not found in address table'.format(id))
         
@@ -325,30 +325,26 @@ def wtor_fire(obj, loop):
 # -----------------------------------------------------------------------------
 @cli.command('flowmaster')
 @click.option('--src-sel', type=click.Choice(['gbt', 'wibtor']), help='Input source selection', default=None)
-@click.option('--out-sel', type=click.Choice(['sink', 'cr']), help='Outlflow selection', default=None)
+@click.option('--out-en', is_flag=True, help='Enable outflow', default=None)
 @click.option('--sink-sel', type=click.Choice(['hits']+['link'+str(i) for i in range(5)]+['link-all']), help='Sink input selection', default=None)
 @click.pass_obj
-def flowmaster(obj, src_sel, out_sel, sink_sel):
+def flowmaster(obj, src_sel, out_en, sink_sel):
 
-    fmNode = obj.podNode.get_flowmaster_node()
+    fmNode = obj.podctrl.get_flowmaster_node()
 
     src_map = {'gbt': 0, 'wibtor': 1}
     sink_map = {'hits': (0, 0) }
     sink_map.update({ 'link'+str(d): (1, d) for d in range(obj.mConfigInfo['n_links']) })
-    if src_sel:
+    if src_sel is not None:
         if src_sel == 'gbt':
             fmNode.set_source_gbt()
         elif src_sel == 'wibtor':
             fmNode.set_source_wtor()
         else:
             print("Invalid source")
-    if out_sel:
-        if out_sel == 'sink':
-            fmNode.set_outflow(0)
-        elif out_sel == 'cr':
-            fmNode.set_outflow(1)
-        else:
-            print("Invalid sink")
+    if out_en is not None:
+        fmNode.set_outflow(out_en)
+
     if sink_sel is not None:
         if sink_sel == 'hits':
             fmNode.set_sink_hits()
@@ -370,16 +366,13 @@ def flowmaster(obj, src_sel, out_sel, sink_sel):
 @click.pass_obj
 def cr_if(obj, cr_on, drop_empty):
 
-    crNode = obj.podNode.get_crif_node()
+    crNode = obj.podctrl.get_crif_node()
     if cr_on is not None:
         crNode.enable()
         crNode.set_drop_empty()
         
     if drop_empty is not None:
         crNode.set_drop_empty()
-
-    # regs = dump_sub_regs(crNode.getNode("csr"))
-    # print_dict_table(regs, title='cr_if.csr')
 
     row=[]
     cr_csr = crNode.getNode('csr')
@@ -401,7 +394,7 @@ def cr_if(obj, cr_on, drop_empty):
 @click.pass_obj
 def capture_sink(obj, path, timeout, drop_idles):
 
-    osNode = obj.podNode.get_output_sink_node()
+    osNode = obj.podctrl.get_output_sink_node()
 
     print('Capturing axis32bsink data')
     osNode.disable()
@@ -439,6 +432,21 @@ def capture_sink(obj, path, timeout, drop_idles):
         for i, (k, d) in enumerate(data):
             lFile.write('0x{1:08x} {0}\n'.format(k, d)) 
             rprint ('%04d' % i, k, '0x%08x' % d)
+
+
+@cli.command('ipy')
+@click.pass_obj
+def ipy(obj):
+
+    import importlib
+    spam_loader = importlib.util.find_spec('IPython')
+    if spam_loader is None:
+        rprint("[red]IPython not found[/red]")
+        return
+
+    import IPython
+    IPython.embed(colors="neutral")
+
 #MAIN-------------------------------------------------------------------------
 
 if __name__ == '__main__':

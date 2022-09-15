@@ -7,29 +7,27 @@
  * received with this code.
  */
 
-#include "dtpcontrols/toolbox.hpp"
-
 #include <pybind11/cast.h>
 #include <pybind11/pybind11.h>
 #include <pybind11/stl.h>
 
+#include "dtpcontrols/toolbox.hpp"
+
 namespace py = pybind11;
+using namespace pybind11::literals; 
 
 namespace dunedaq {
-  namespace dtpcontrols {
-    namespace python {
+namespace dtpcontrols {
+namespace python {
 
-      void register_toolbox(py::module& m){
+void register_toolbox(py::module& m) {
+  m.def("find_connection_file", &dtpcontrols::find_connection_file);
+  m.def("format_36b_to_32b", &dtpcontrols::format_36b_to_32b, "pattern_36b"_a);
+  m.def("format_32b_to_36b", &dtpcontrols::format_32b_to_36b, "pattern_32b"_a);
+  m.def("read_WIB_pattern_from_file", &dtpcontrols::read_WIB_pattern_from_file, "path"_a);
+  m.def("get_child_registers", &dtpcontrols::get_child_registers, "node"_a);
+}
 
-	m.doc() = "c++ implementation of dtpcontrols toolbox python modules"; // optional module docstring
-
-	m.def("find_connection_file", &dtpcontrols::find_connection_file);
-	m.def("format_36b_to_32b", &dtpcontrols::format_36b_to_32b, py::arg("pattern_36b"));
-	m.def("format_32b_to_36b", &dtpcontrols::format_32b_to_36b, py::arg("pattern_32b"));
-	m.def("read_WIB_pattern_from_file", &dtpcontrols::read_WIB_pattern_from_file,py::arg("path"));
-        m.def("get_child_registers", &dtpcontrols::get_child_registers, py::arg("node"));
-        }
-
-    } // namespace python
-  } // namespace timing
-} // namespace dunedaq
+}  // namespace python
+}  // namespace dtpcontrols
+}  // namespace dunedaq

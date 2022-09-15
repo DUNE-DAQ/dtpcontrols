@@ -6,28 +6,25 @@
  * received with this code.
  */
 
-#include "dtpcontrols/DPRNode.hpp"
-
 #include <pybind11/pybind11.h>
 #include <pybind11/stl.h>
 
+#include "dtpcontrols/DPRNode.hpp"
+
 namespace py = pybind11;
+using namespace pybind11::literals; 
 
 namespace dunedaq {
-  namespace dtpcontrols {
-    namespace python {
+namespace dtpcontrols {
+namespace python {
 
-      void register_dpr_node(py::module& m){ 
+void register_dpr_node(py::module& m) {
 
-	m.doc() = "c++ implementation of dtpcontrols DPR python modules"; // optional module docstring
-
-	py::class_<dtpcontrols::DPRNode, uhal::Node>(m, "DPRNode")
-	  .def(py::init<const uhal::Node&>())
-	  .def("set_mux_in", &dtpcontrols::DPRNode::set_mux_in, py::arg("mux_in_choice"),
-	       py::arg("dispatch") = true)
-	  .def("set_mux_out", &dtpcontrols::DPRNode::set_mux_out, py::arg("mux_out_choice"),
-	       py::arg("dispatch") = true);
-      }
-    } // namespace python
-  } // namespace timing
-} // namespace dunedaq
+  py::class_<dtpcontrols::DPRNode, uhal::Node>(m, "DPRNode")
+      .def(py::init<const uhal::Node&>())
+      .def("set_mux_in", &dtpcontrols::DPRNode::set_mux_in, "mux_in_choice"_a, "dispatch"_a = true)
+      .def("set_mux_out", &dtpcontrols::DPRNode::set_mux_out, "mux_out_choice"_a, "dispatch"_a = true);
+}
+}  // namespace python
+}  // namespace dtpcontrols
+}  // namespace dunedaq
