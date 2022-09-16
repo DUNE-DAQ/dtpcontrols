@@ -6,29 +6,25 @@
  * received with this code.
  */
 
+#include "dtpcontrols_wrapper.hpp"
 #include "dtpcontrols/OutputSinkNode.hpp"
 
-#include <pybind11/pybind11.h>
-
 namespace py = pybind11;
-
+using namespace pybind11::literals;
 namespace dunedaq {
-  namespace dtpcontrols {
-    namespace python {
+namespace dtpcontrols {
+namespace python {
 
-      void register_output_sink_node(py::module& m){ 
+void register_output_sink_node(py::module& m) {
+  py::class_<dtpcontrols::OutputSinkNode, uhal::Node>(m, "OutputSinkNode")
+      .def(py::init<const uhal::Node&>())
+      .def("enable", &dtpcontrols::OutputSinkNode::enable, "dispatch"_a = true)
+      .def("disable", &dtpcontrols::OutputSinkNode::disable, "dispatch"_a = true)
+      .def("clear", &dtpcontrols::OutputSinkNode::clear, "dispatch"_a = true)
+      .def("drop_idles", &dtpcontrols::OutputSinkNode::drop_idles, "dispatch"_a = true)
+      .def("keep_idles", &dtpcontrols::OutputSinkNode::keep_idles, "dispatch"_a = true);
+}
 
-	m.doc() = "c++ implementation of dtpcontrols Output Sink python modules"; // optional module docstring
-
-	py::class_<dtpcontrols::OutputSinkNode, uhal::Node>(m, "OutputSinkNode")
-	  .def(py::init<const uhal::Node&>())
-	  .def("enable", &dtpcontrols::OutputSinkNode::enable, py::arg("dispatch") = true)
-	  .def("disable", &dtpcontrols::OutputSinkNode::disable, py::arg("dispatch") = true)
-	  .def("clear", &dtpcontrols::OutputSinkNode::clear, py::arg("dispatch") = true)
-	  .def("drop_idles", &dtpcontrols::OutputSinkNode::drop_idles, py::arg("dispatch") = true)
-	  .def("keep_idles", &dtpcontrols::OutputSinkNode::keep_idles, py::arg("dispatch") = true);
-	  }
-
-    } // namespace python
-  } // namespace timing
-} // namespace dunedaq
+}  // namespace python
+}  // namespace dtpcontrols
+}  // namespace dunedaq

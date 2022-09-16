@@ -21,6 +21,8 @@
             <node id="p3" address="0x3" module="file://dtpc_mon_probe.xml"/>
             <node id="p4" address="0x4" module="file://dtpc_mon_probe.xml"/>
             <node id="p5" address="0x5" module="file://dtpc_mon_probe.xml"/>
+            <node id="p6" address="0x6" module="file://dtpc_mon_probe.xml"/>
+            <node id="p7" address="0x7" module="file://dtpc_mon_probe.xml"/>
         </node>
     </node>
 </node>

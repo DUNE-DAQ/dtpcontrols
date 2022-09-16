@@ -6,31 +6,26 @@
  * received with this code.
  */
 
+#include "dtpcontrols_wrapper.hpp"
 #include "dtpcontrols/DataReceptionNode.hpp"
 
-#include <pybind11/pybind11.h>
-
 namespace py = pybind11;
+using namespace pybind11::literals;
 
 namespace dunedaq {
-  namespace dtpcontrols {
-    namespace python {
+namespace dtpcontrols {
+namespace python {
 
-      void register_data_reception_node(py::module& m){ 
+void register_data_reception_node(py::module& m) {
+  py::class_<dtpcontrols::DataReceptionNode, uhal::Node>(m, "DataReceptionNode")
+      .def(py::init<const uhal::Node&>())
+      .def("enable", &dtpcontrols::DataReceptionNode::enable, "enable"_a, "dispatch"_a = true)
+      .def("reset_input_word_counter", &dtpcontrols::DataReceptionNode::reset_input_word_counter,  "dispatch"_a = true)
+      .def("reset_output_word_counter", &dtpcontrols::DataReceptionNode::reset_output_word_counter, "dispatch"_a = true)
+      .def("error_reset", &dtpcontrols::DataReceptionNode::error_reset, "dispatch"_a = true)
+      .def("reset", &dtpcontrols::DataReceptionNode::reset, "dispatch"_a = true);
+}
 
-	m.doc() = "c++ implementation of dtpcontrols DataReception python modules"; // optional module docstring
-
-	py::class_<dtpcontrols::DataReceptionNode, uhal::Node>(m, "DataReceptionNode")
-	  .def(py::init<const uhal::Node&>())
-	  .def("enable", &dtpcontrols::DataReceptionNode::enable, py::arg("dispatch") = true)
-	  .def("reset_input_word_counter", &dtpcontrols::DataReceptionNode::reset_input_word_counter,
-	       py::arg("dispatch") = true)
-	  .def("reset_output_word_counter", &dtpcontrols::DataReceptionNode::reset_output_word_counter,
-	       py::arg("dispatch") = true)
-	  .def("error_reset", &dtpcontrols::DataReceptionNode::error_reset, py::arg("dispatch") = true)
-	  .def("reset", &dtpcontrols::DataReceptionNode::reset, py::arg("dispatch") = true);
-      }
-
-    } // namespace python
-  } // namespace timing
-} // namespace dunedaq
+}  // namespace python
+}  // namespace dtpcontrols
+}  // namespace dunedaq

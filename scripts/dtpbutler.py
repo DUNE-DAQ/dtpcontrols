@@ -9,16 +9,19 @@ import os
 
 import uhal
 
+from rich import print as rprint
+from rich.table import Table
 from dtpcontrols import core as controls
 
 from dtpcontrols.toolbox import dumpSubRegs, printRegTable, printDictTable, readStreamProcessorStatus
+from dtpcontrols.toolbox import dump_sub_regs, dict_to_table, print_dict_table, print_reg_table, read_stream_processor_status
 import optionValidators
 
 #INITIALSE---------------------------------------------------------------------
 
-class HFObject(object):
+class DTPObject(object):
     def __init__(self):
-        super(HFObject, self).__init__()
+        super(DTPObject, self).__init__()
 
 CONTEXT_SETTINGS = dict(help_option_names=['-h', '--help'])
 
@@ -29,29 +32,54 @@ def get_devices(ctx, args, incomplete):
     #devs = setup.connectionManager(ctx.params['connection']).getDevices()
     return [k for k in devs if incomplete in k]
 
+def get_connection_manager(conn_file: str):
+    from ctypes import cdll
+
+    try:
+        cdll.LoadLibrary("libuhallibs.so")
+        manager = uhal.ConnectionManager(conn_file, ['ipbusflx-2.0'])
+    except OSError:
+        manager = uhal.ConnectionManager(conn_file)
+
+    return manager
+
 #extra_autocompl = {'autocompletion': get_devices} if parse_version(click.__version__) >= parse_version('7.0') else {}
 extra_autocompl = {'shell_complete': get_devices} if parse_version(click.__version__) >= parse_version('8.1') else {'autocompletion': get_devices} if parse_version(click.__version__) >= parse_version('7.0') else {}
 
 @click.group(context_settings=CONTEXT_SETTINGS, invoke_without_command=True)
-@click.option('-e', '--exception-stack', 'aExcStack', is_flag=True, help="Display full exception stack")
+@click.option('-v', '--version', 'show_version', is_flag=True, default=False, help="Print firmware version")
+@click.option('-e', '--exception-stack', 'show_exc_stack', is_flag=True, help="Display full exception stack")
+@click.option('-t', '--timeout', 'timeout', type=int, default=None, help="IPBus timeout")
+@click.option('-l', '--loglevel', 'loglevel', type=click.Choice(['DEBUG', 'INFO', 'WARNING', 'ERROR']), default='WARNING', help="Ipbus logging verbosity")
 @click.option('-c', '--connection', type=click.Path(exists=True), default=controls.find_connection_file()[6:])
 @click.argument('device', **extra_autocompl)
 @click.pass_context
 @click.version_option(version='ultimate')
-def cli(ctx, aExcStack, connection, device):
+def cli(ctx, show_version, show_exc_stack, timeout, loglevel, connection, device):
+    
     obj = ctx.obj
-    obj.mPrintExceptionStack = aExcStack
-    hw = uhal.ConnectionManager("file://"+connection).getDevice(str(device))
-    hw.setTimeoutPeriod(10000)
+    
+    obj.mPrintExceptionStack = show_exc_stack
+
+    if loglevel:
+        uhal.setLogLevelTo(getattr(uhal.LogLevel, loglevel))
+
+    hw = get_connection_manager("file://"+connection).getDevice(str(device))
+
+    if timeout:
+        hw.setTimeoutPeriod(timeout)
+
     obj.mHW = hw
-    obj.podNode = hw.getNode()
+    obj.podctrl = controls.DTPPodController(hw)
+
     # Extract info from InfoNode
-    infoNode = obj.podNode.get_info_node()
+    infoNode = obj.podctrl.get_info_node()
     config_info = infoNode.get_firmware_config_info()
     id_info = infoNode.get_firmware_id_info()
 
-    printDictTable(config_info)
-    printRegTable(id_info)
+    if show_version:
+        print_dict_table(config_info)
+        print_reg_table(id_info)
     
     obj.mIdInfo = id_info
     obj.mConfigInfo = config_info
@@ -60,7 +88,7 @@ def cli(ctx, aExcStack, connection, device):
 @cli.command('init')
 @click.pass_obj
 def init(obj):
-    obj.podNode.reset()
+    obj.podctrl.reset()
     print("\n RESET DONE!!")
     print("\n Initilisation complete.")
 
@@ -76,16 +104,18 @@ def link(obj, ids):
     """
     obj.mLinkIds = ids
     try:
-        obj.mLinkNodes = [obj.podNode.get_link_processor_node(i) for i in ids]
+        obj.mLinkNodes = [obj.podctrl.get_link_processor_node(i) for i in ids]
     except Exception as lExc:
         click.Abort('Wibulator {} not found in address table'.format(id))
+
+        
+# ------------------------------------------------------------------------------
 dpr_mux_choices = {
     'reset': (0, 0),
     'playback': (0, 1),
     'sink': (1, 0),
     'passthrough': (1, 1)
 }
-# ------------------------------------------------------------------------------
 @link.command('config')
 @click.option('--dr-on/--dr-off', 'dr_on', help='Enable data-reception block', default=None)
 @click.option('--dpr-mux', 'dpr_mux', type=click.Choice(list(dpr_mux_choices.keys()),), help='Configure DPR mux', default=None)
@@ -175,6 +205,26 @@ def link_hitfinder(obj, pipes, threshold):
         ln.getClient().dispatch()
 
 # ------------------------------------------------------------------------------
+@link.command('pedsub')
+@click.option('-p', '--pipes', callback=optionValidators.validate_proc_ids, default='all')
+@click.option('--cap-on/--cap-off', 'cp', default=False)
+@click.pass_obj
+def link_pedsub(obj, pipes, cp):
+
+    for ln in obj.mLinkNodes:
+        print('>> Link Processor', ln.getId())
+
+        strmArrayNode = ln.get_stream_proc_array_node()
+        strmNode = strmArrayNode.get_stream_proc_node()
+
+        # capture pedestals
+        for p in pipes:
+            strmArrayNode.stream_select(p)
+            strmNode.capture_pedestal(cp)
+            print(p, 'Capturing pedestal vlaue', cp)
+        ln.getClient().dispatch()
+
+# ------------------------------------------------------------------------------
 @link.command('watch')
 @click.pass_obj
 @click.option('-r/-R', '--show-dr/--hide-dr', 'dr', default=True)
@@ -183,26 +233,34 @@ def link_hitfinder(obj, pipes, threshold):
 def link_watch(obj, dr, dpr, sp):
 
     for ln in obj.mLinkNodes:
-        print('>> Link Processor', ln.getId())
+
+        rprint()
+        rprint(f"[bold]--- Link Processor {ln.getId()} ---[/bold]")
+        rprint()
+
         strmArrayNode = ln.get_stream_proc_array_node()        
         drNode = ln.get_data_router_node().get_data_reception_node()
         dprNode = ln.get_data_router_node().get_dpr_node()
 
+
+        grid = Table.grid()
+        for _ in range(dr+dpr):
+            grid.add_column()
+
+        row = []
         if dr:
-            print('--- dr ---')
-            regs = controls.get_child_registers(drNode)
-            printDictTable(regs, False)
+            regs = dump_sub_regs(drNode)
+            row += [dict_to_table(regs, title="dr")]
 
         if dpr:
-            print('--- dpr.csr ---')
-            regs = controls.get_child_registers(dprNode.getNode("csr"))
-            printDictTable(regs, False)
+            regs = dump_sub_regs(dprNode.getNode("csr"))
+            row += [dict_to_table(regs, title='dpr.csr')]
+
+        grid.add_row(*row)
+        rprint(grid)
 
         if sp:
-            print(readStreamProcessorStatus(strmArrayNode, obj.mConfigInfo['n_port']))
-
-        # for p in pipes:
-            # strmArrayCsrNode.getNode('ctrl.stream_sel').write(p)
+            rprint(read_stream_processor_status(strmArrayNode, obj.mConfigInfo['n_port'], title="pipelines"))
 
 
 # -----------------------------------------------------------------------------
@@ -212,7 +270,7 @@ def link_watch(obj, dr, dpr, sp):
 def wtor(obj, ids):
     obj.mWibtorIds = ids
     try:
-        obj.mWibtorNodes = [obj.podNode.get_wibulator_node(i) for i in ids]
+        obj.mWibtorNodes = [obj.podctrl.get_wibulator_node(i) for i in ids]
     except Exception as lExc:
         click.Abort('Wibulator {} not found in address table'.format(id))
         
@@ -267,22 +325,33 @@ def wtor_fire(obj, loop):
 # -----------------------------------------------------------------------------
 @cli.command('flowmaster')
 @click.option('--src-sel', type=click.Choice(['gbt', 'wibtor']), help='Input source selection', default=None)
+@click.option('--out-mode', type=click.Choice(['drain', 'flow', 'gate']), help='Enable outflow', default=None)
 @click.option('--sink-sel', type=click.Choice(['hits']+['link'+str(i) for i in range(5)]+['link-all']), help='Sink input selection', default=None)
 @click.pass_obj
-def flowmaster(obj, src_sel, sink_sel):
+def flowmaster(obj, src_sel, out_mode, sink_sel):
 
-    fmNode = obj.podNode.get_flowmaster_node()
+    fmNode = obj.podctrl.get_flowmaster_node()
 
     src_map = {'gbt': 0, 'wibtor': 1}
     sink_map = {'hits': (0, 0) }
     sink_map.update({ 'link'+str(d): (1, d) for d in range(obj.mConfigInfo['n_links']) })
-    if src_sel:
+    if src_sel is not None:
         if src_sel == 'gbt':
             fmNode.set_source_gbt()
         elif src_sel == 'wibtor':
             fmNode.set_source_wtor()
         else:
             print("Invalid source")
+
+    if out_mode == 'drain':
+        fmNode.set_outflow(0)
+    elif out_mode == 'flow':
+        fmNode.set_outflow(1)
+    elif out_mode == 'gate':
+        fmNode.set_outflow(2)
+    else:
+            print("Invalid mode")
+
     if sink_sel is not None:
         if sink_sel == 'hits':
             fmNode.set_sink_hits()
@@ -296,6 +365,7 @@ def flowmaster(obj, src_sel, sink_sel):
             if sink_sel[4] in [str(lnk) for lnk in range(obj.mConfigInfo['n_links'])]:
                 fmNode.set_sink_link(int(sink_sel[-1]))
                 fmNode.getClient().dispatch()
+
 # -----------------------------------------------------------------------------
 @cli.command('cr-if')
 @click.option('--on/--off', 'cr_on', help='Enable central-router interface block', default=None)
@@ -303,7 +373,7 @@ def flowmaster(obj, src_sel, sink_sel):
 @click.pass_obj
 def cr_if(obj, cr_on, drop_empty):
 
-    crNode = obj.podNode.get_crif_node()
+    crNode = obj.podctrl.get_crif_node()
     if cr_on is not None:
         crNode.enable()
         crNode.set_drop_empty()
@@ -311,9 +381,17 @@ def cr_if(obj, cr_on, drop_empty):
     if drop_empty is not None:
         crNode.set_drop_empty()
 
-    print('--- cr_if.csr ---')
-    regs = controls.get_child_registers(crNode.getNode("csr"))
-    printRegTable(regs, False)
+    row=[]
+    cr_csr = crNode.getNode('csr')
+    for sn in cr_csr.getNodes(r"[^\.]*"):
+        regs = dump_sub_regs(cr_csr.getNode(sn))
+        row.append(dict_to_table(regs, title=sn))
+
+    g = Table.grid()
+    for i in sn:
+        g.add_column()
+    g.add_row(*row)
+    rprint(g)
 
 # -----------------------------------------------------------------------------
 @cli.command('capture-sink')
@@ -323,7 +401,7 @@ def cr_if(obj, cr_on, drop_empty):
 @click.pass_obj
 def capture_sink(obj, path, timeout, drop_idles):
 
-    osNode = obj.podNode.get_output_sink_node()
+    osNode = obj.podctrl.get_output_sink_node()
 
     print('Capturing axis32bsink data')
     osNode.disable()
@@ -355,13 +433,28 @@ def capture_sink(obj, path, timeout, drop_idles):
     d = osNode.getNode('buf.data').readBlock(2*int(count))
     osNode.getClient().dispatch()
     dd = controls.format_32b_to_36b(d)
-    print("heRE")
+
     data = [((w >> 32) & 0x1, w & 0xffffffff) for w in dd]
     with open(path, 'w') as lFile:
         for i, (k, d) in enumerate(data):
             lFile.write('0x{1:08x} {0}\n'.format(k, d)) 
-            print ('%04d' % i, k, '0x%08x' % d)
+            rprint ('%04d' % i, k, '0x%08x' % d)
+
+
+@cli.command('ipy')
+@click.pass_obj
+def ipy(obj):
+
+    import importlib
+    spam_loader = importlib.util.find_spec('IPython')
+    if spam_loader is None:
+        rprint("[red]IPython not found[/red]")
+        return
+
+    import IPython
+    IPython.embed(colors="neutral")
+
 #MAIN-------------------------------------------------------------------------
 
 if __name__ == '__main__':
-    cli(obj=HFObject(), complete_var='_HFBUTLER_COMPLETE')
+    cli(obj=DTPObject(), complete_var='_DTPBUTLER_COMPLETE')

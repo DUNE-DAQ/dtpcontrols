@@ -6,21 +6,19 @@
  * received with this code.
  */
 
-#include "dtpcontrols/DataReceptionNode.hpp"
-#include "dtpcontrols/ControlNode.hpp"
-#include "dtpcontrols/DTPPodNode.hpp"
-#include "dtpcontrols/toolbox.hpp"
-
-#include "uhal/uhal.hpp"
-#include "logging/Logging.hpp"
-
 #include <iostream>
+
+#include "dtpcontrols/ControlNode.hpp"
+#include "dtpcontrols/DTPPodController.hpp"
+#include "dtpcontrols/DataReceptionNode.hpp"
+#include "dtpcontrols/toolbox.hpp"
+#include "logging/Logging.hpp"
+#include "uhal/uhal.hpp"
 
 using namespace uhal;
 using namespace dunedaq::dtpcontrols;
 
 int main(int argc, char const* argv[]) {
-
   TLOG() << "Test TPG Node structure";
 
   std::string conn_file = find_connection_file();
@@ -34,35 +32,33 @@ int main(int argc, char const* argv[]) {
   if (argc > 2) {
     conn_file = std::string(argv[2]);
   }
-  
+
   TLOG() << "Connections : " << conn_file;
   TLOG() << "Device      : " << device;
 
   //  uhal::setLogLevelTo(uhal::Debug());
   uhal::ConnectionManager cm(conn_file, {"ipbusflx-2.0"});
-  uhal::HwInterface flx = cm.getDevice(device);
+  // uhal::HwInterface flx = cm.getDevice(device);
 
-  auto dtp_pod_node = dynamic_cast<const DTPPodNode*>( &flx.getNode(std::string("")) );
-  
-  auto lInfoNode = dtp_pod_node->get_info_node();
+  auto pod_ctrl = DTPPodController(cm.getDevice(device));
+
+  auto lInfoNode = pod_ctrl.get_info_node();
   TLOG() << lInfoNode.getId();
-  auto lCtrlNode = dtp_pod_node->get_control_node();
+  auto lCtrlNode = pod_ctrl.get_control_node();
   TLOG() << lCtrlNode.getId() << std::endl;
 
-  auto lFlowMasterNode = dtp_pod_node->get_flowmaster_node();
+  auto lFlowMasterNode = pod_ctrl.get_flowmaster_node();
   TLOG() << lFlowMasterNode.getId();
 
-  for (int i=0; i<5; ++i) {
-    auto lWibtorNode = dtp_pod_node->get_wibulator_node(i);
+  for (int i = 0; i < 5; ++i) {
+    auto lWibtorNode = pod_ctrl.get_wibulator_node(i);
     TLOG() << lWibtorNode.getId();
-    auto lLinkProcNode = dtp_pod_node->get_link_processor_node(i);
+    auto lLinkProcNode = pod_ctrl.get_link_processor_node(i);
     TLOG() << lLinkProcNode.getId();
   }
 
-  auto lCrifNode = dtp_pod_node->get_crif_node();
+  auto lCrifNode = pod_ctrl.get_crif_node();
   TLOG() << lCrifNode.getId();
-  auto lOutsinkNode = dtp_pod_node->get_output_sink_node();
+  auto lOutsinkNode = pod_ctrl.get_output_sink_node();
   TLOG() << lOutsinkNode.getId();
-  
 }
-

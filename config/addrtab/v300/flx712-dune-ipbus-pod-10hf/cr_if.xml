@@ -5,7 +5,7 @@
         <node id="drop_empty" mask="0x2"/>
     </node>
 
-    <node id="b0: fifo" address="0x8">
+    <node id="s0_fifo" address="0x8">
 	    <node id="ready" mask="0x1"/>
 	    <node id="valid" mask="0x2"/>
 	    <node id="user" mask="0x4"/>
@@ -14,7 +14,7 @@
 	    <node id="pkt_ctr" mask="0xffff000"/>
 	    <node id="axi_err" mask="0xf0000000"/>
     </node>
-    <node id="b1: frame-manager" address="0x9">
+    <node id="s1_frame-manager" address="0x9">
 	    <node id="ready" mask="0x1"/>
 	    <node id="valid" mask="0x2"/>
 	    <node id="user" mask="0x4"/>
@@ -23,7 +23,7 @@
 	    <node id="pkt_ctr" mask="0xffff000"/>
 	    <node id="axi_err" mask="0xf0000000"/>
     </node>
-    <node id="b2: frame-mempry" address="0xa">
+    <node id="s2_frame-mempry" address="0xa">
 	    <node id="ready" mask="0x1"/>
 	    <node id="valid" mask="0x2"/>
 	    <node id="user" mask="0x4"/>
@@ -32,8 +32,8 @@
 	    <node id="pkt_ctr" mask="0xffff000"/>
 	    <node id="axi_err" mask="0xf0000000"/>
     </node>
-    <node id="b3: crif-out" address="0xb" module="file://dtpc_mon_probe.xml"/>
-    <node id="b4: misc" address="0xc">
+    <node id="s3_crif-out" address="0xb" module="file://dtpc_mon_probe.xml"/>
+    <node id="s4_misc" address="0xc">
         <node id="frame_rd_pt" mask="0xF"/>
         <node id="frame_wr_pt" mask="0xF0"/>
         <node id="fman_sword" mask="0xF00"/>
@@ -44,7 +44,7 @@
         <node id="fifo_empty" mask="0x40000000"/>
         <node id="fifo_full" mask="0x80000000"/>
     </node>
-    <node id="b5: more pkt" address="0xd">
+    <node id="s5_more pkt" address="0xd">
         <node id="cr_state" mask="0xF"/>
     </node>
   </node>

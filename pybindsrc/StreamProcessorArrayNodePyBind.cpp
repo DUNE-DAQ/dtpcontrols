@@ -6,30 +6,24 @@
  * received with this code.
  */
 
+#include "dtpcontrols_wrapper.hpp"
 #include "dtpcontrols/StreamProcessorArrayNode.hpp"
 
-#include <pybind11/pybind11.h>
-
 namespace py = pybind11;
+using namespace pybind11::literals; 
 
 namespace dunedaq {
-  namespace dtpcontrols {
-    namespace python {
+namespace dtpcontrols {
+namespace python {
 
-      void register_stream_processor_array_node(py::module& m){ 
-
-	m.doc() = "c++ implementation of dtpcontrols StreamProcessorArray python modules"; // optional module docstring
-
-	py::class_<dtpcontrols::StreamProcessorArrayNode, uhal::Node>(m, "StreamProcessorArrayNode")
-	  .def(py::init<const uhal::Node &>())
-	  .def("stream_select",
-	       &dtpcontrols::StreamProcessorArrayNode::stream_select,
-	       py::arg("pipe"), py::arg("dispatch") = true)
-	  .def("get_stream_proc_node",
-	       &dtpcontrols::StreamProcessorArrayNode::get_stream_proc_node);
+void register_stream_processor_array_node(py::module& m) {
+  py::class_<StreamProcessorArrayNode, uhal::Node>(m, "StreamProcessorArrayNode")
+      .def(py::init<const uhal::Node&>())
+      .def("stream_select", &StreamProcessorArrayNode::stream_select, "pipe"_a, "dispatch"_a = true)
+      .def("get_stream_proc_node", &StreamProcessorArrayNode::get_stream_proc_node);
 	
       }
 
     } // namespace python
-  } // namespace timing
+    }  // namespace dtpcontrols
 } // namespace dunedaq

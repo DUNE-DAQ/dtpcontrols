@@ -41,6 +41,9 @@ public:
   void set_sink_link(const uint32_t link, bool dispatch=true) const;
   uint32_t get_sink() const;
 
+  void set_outflow(const uint32_t mode, bool dispatch=true) const;
+  bool get_outflow() const;
+
 };
 
 } // namespace dtpcontrols

@@ -6,32 +6,29 @@
  * received with this code.
  */
 
-#include "dtpcontrols/DataReceptionNode.hpp"
-#include "dtpcontrols/ControlNode.hpp"
-#include "dtpcontrols/DTPPodNode.hpp"
-#include "dtpcontrols/toolbox.hpp"
-
-#include "uhal/uhal.hpp"
-#include "logging/Logging.hpp"
-
 #include <iostream>
+
+#include "dtpcontrols/ControlNode.hpp"
+#include "dtpcontrols/DTPPodController.hpp"
+#include "dtpcontrols/DataReceptionNode.hpp"
+#include "dtpcontrols/toolbox.hpp"
+#include "logging/Logging.hpp"
+#include "uhal/uhal.hpp"
 
 using namespace uhal;
 using namespace dunedaq::dtpcontrols;
 
 int main(int argc, char const* argv[]) {
-
-dunedaq::logging::Logging::setup();
+  dunedaq::logging::Logging::setup();
 
   // default options
   std::string conn_file = find_connection_file();
   std::string device("flx-0-p2-hf");
 
-  // get options                                                               
+  // get options
   const std::vector<std::string_view> args(argv + 1, argv + argc);
 
   for (auto it = args.begin(), end = args.end(); it != end; ++it) {
-
     // device name
     if (*it == "-d") {
       device = *(it + 1);
@@ -47,10 +44,9 @@ dunedaq::logging::Logging::setup();
       std::cout << "\nUsage:\n dtpcontrols_test_reset [options]\n\n";
       std::cout << "Options:\n";
       std::cout << "  -c <filename>\tconnection file name\n";
-      std::cout << "  -d <device>\tdevice name\n";      
+      std::cout << "  -d <device>\tdevice name\n";
       exit(0);
     }
-
   }
 
   TLOG() << "FLX-TPG FW reset";
@@ -61,9 +57,6 @@ dunedaq::logging::Logging::setup();
   uhal::ConnectionManager cm(conn_file, {"ipbusflx-2.0"});
   uhal::HwInterface flx = cm.getDevice(device);
 
-DTPPodNode dtp_pod_node (flx.getNode());
-dtp_pod_node.reset();
-
-
+  auto pod_ctrl = DTPPodController(cm.getDevice(device));
+  pod_ctrl.reset();
 }
-

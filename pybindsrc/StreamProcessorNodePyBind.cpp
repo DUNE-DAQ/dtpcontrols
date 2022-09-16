@@ -6,31 +6,27 @@
  * received with this code.
  */
 
+#include "dtpcontrols_wrapper.hpp"
 #include "dtpcontrols/StreamProcessorNode.hpp"
 
-#include <pybind11/pybind11.h>
-
 namespace py = pybind11;
+using namespace pybind11::literals; 
 
 namespace dunedaq {
-  namespace dtpcontrols {
-    namespace python {
+namespace dtpcontrols {
+namespace python {
 
-      void register_stream_processor_node(py::module& m){ 
+void register_stream_processor_node(py::module &m) {
+  py::class_<StreamProcessorNode, uhal::Node>(
+      m, "StreamProcessorNode")
+      .def(py::init<const uhal::Node &>())
+      .def("drop_empty", &StreamProcessorNode::drop_empty, "drop"_a, "dispatch"_a = true)
+      .def("set_threshold", &StreamProcessorNode::set_threshold, "threshold"_a, "dispatch"_a = true)
+      .def("set_channel_mask_all", &StreamProcessorNode::set_channel_mask_all, "mask"_a, "dispatch"_a = true)
+      .def("get_channel_mask_all", &StreamProcessorNode::set_channel_mask_all)
+      .def("capture_pedestal", &StreamProcessorNode::capture_pedestal, "enable"_a, "dispatch"_a = true);
+}
 
-	m.doc() = "c++ implementation of dtpcontrols StreamProcessor python modules"; // optional module docstring
-
-	py::class_<dtpcontrols::StreamProcessorNode, uhal::Node>(m, "StreamProcessorNode")
-	  .def(py::init<const uhal::Node &>())
-	  .def("set_threshold", &dtpcontrols::StreamProcessorNode::set_threshold,
-	       py::arg("threshold"), py::arg("dispatch") = true)
-	  .def("set_channel_mask_all",
-	       &dtpcontrols::StreamProcessorNode::set_channel_mask_all,
-	       py::arg("mask"), py::arg("dispatch") = true)
-	  .def("get_channel_mask_all",
-	       &dtpcontrols::StreamProcessorNode::set_channel_mask_all);	
-      }
-
-    } // namespace python
-  } // namespace timing
-} // namespace dunedaq
+}  // namespace python
+}  // namespace dtpcontrols
+}  // namespace dunedaq

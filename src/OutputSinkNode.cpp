@@ -45,16 +45,16 @@ namespace dunedaq {
     }
  //-----------------------------------------------------------------------------
     void OutputSinkNode::drop_idles(bool dispatch) const {
-      getNode("csr.pattern_kchar").write(0x1);
+     // getNode("csr.pattern_kchar").write(0x1);
       getNode("csr.pattern_data").write(0xbc);
-      getNode("csr.pattern_filter").write(0x1);
+      getNode("csr.ctrl.filter").write(0x1);
       if(dispatch) {getClient().dispatch();}
     }
  //-----------------------------------------------------------------------------
     void OutputSinkNode::keep_idles(bool dispatch) const {
-      getNode("csr.pattern_kchar").write(0x0);
+      //getNode("csr.pattern_kchar").write(0x0);
       getNode("csr.pattern_data").write(0x0);
-      getNode("csr.pattern_filter").write(0x0);
+      getNode("csr.ctrl.filter").write(0x0);
       if(dispatch) {getClient().dispatch();}
     }
  //-----------------------------------------------------------------------------

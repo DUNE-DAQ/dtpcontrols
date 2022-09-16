@@ -2,6 +2,8 @@ import collections
 from .texttable import Texttable
 from . import termui
 import click
+from rich import print as rprint
+from rich.table import Table
 
 
 # -----------------------------------------------------------------------------
@@ -30,7 +32,9 @@ def readTpgStatus(node):
         'psub >> fir ',
         'fir  >> hf',
         'hf   >> hsc',
-        'hsc  >> cr_if'
+        'hsc  >> cr_if',
+        'tpg >> mask',
+        'mask >> filt'
     ]
 
     flag_map = collections.OrderedDict([
@@ -50,7 +54,7 @@ def readTpgStatus(node):
     tpg_table.header(hdr)
     tpg_table.set_deco(Texttable.HEADER | Texttable.BORDER | Texttable.VLINES)
     tpg_table.set_chars(['-', '|', '+', '-'])
-    for k in range(6):
+    for k in range(8):
         lbl = 'p'+str(k)
 
         flags = ''.join([f for f, l in flag_map.items() if probes[i][lbl+'.'+l]])
@@ -72,7 +76,9 @@ def readStreamProcessorStatus(node, nproc):
         'psub >> fir ',
         'fir  >> hf',
         'hf   >> hsc',
-        'hsc  >> cr_if'
+        'hsc  >> cr_if',
+        'tpg >> mask',
+        'mask >> filt'
     ]
 
     flag_map = collections.OrderedDict([
@@ -99,7 +105,7 @@ def readStreamProcessorStatus(node, nproc):
     tpg_table.header(hdr)
     tpg_table.set_deco(Texttable.HEADER | Texttable.BORDER | Texttable.VLINES)
     tpg_table.set_chars(['-', '|', '+', '-'])
-    for k in range(6):
+    for k in range(8):
         lbl = 'p'+str(k)
 
         flags = ''.join([f for f, l in flag_map.items() if probes[i][lbl+'.'+l]])
@@ -145,11 +151,11 @@ def readSinkStatus(node):
 # ------------------------------------------------------------------------------
 def printRegTable(aRegs, aHeader=True, aSort=True):
     print(( formatRegTable(aRegs, aHeader, aSort) ))
-# ------------------------------------------------------------------------------
 
 
 # ------------------------------------------------------------------------------
 def formatRegTable(aRegs, aHeader=True, aSort=True):
+
     lRegTable = Texttable(max_width=0)
     lRegTable.set_deco(Texttable.VLINES | Texttable.BORDER | Texttable.HEADER)
     lRegTable.set_chars(['-', '|', '+', '-'])
@@ -161,14 +167,6 @@ def formatRegTable(aRegs, aHeader=True, aSort=True):
         lRegTable.add_row( [str(k), hex(aRegs[k])] )
 
     return lRegTable.draw()
-# ------------------------------------------------------------------------------
-
-
-# ------------------------------------------------------------------------------
-def printDictTable(aDict, aHeader=True, aSort=True, aFmtr=None):
-    print(( formatDictTable(aDict, aHeader, aSort, aFmtr) ))
-# ------------------------------------------------------------------------------
-
 
 # ------------------------------------------------------------------------------
 def formatDictTable(aDict, aHeader=True, aSort=True, aFmtr=str):
@@ -183,6 +181,105 @@ def formatDictTable(aDict, aHeader=True, aSort=True, aFmtr=str):
         lDictTable.add_row( [str(k), aFmtr(v) if aFmtr else v])
 
     return lDictTable.draw()
+
+# ------------------------------------------------------------------------------
+def printDictTable(aDict, aHeader=True, aSort=True, aFmtr=None):
+    print(( formatDictTable(aDict, aHeader, aSort, aFmtr) ))
+
+
+# -----------------------------------------------------------------------------
+def dump_sub_regs(node, names: list = None):
+
+    if names is None:
+        names = sorted(node.getNodes())
+    regs = collections.OrderedDict()
+    for i in names:
+        regs[i] = node.getNode(i).read()
+    node.getClient().dispatch()
+
+    return {k: hex(v.value()) for k, v in regs.items()}
+
+# -----------------------------------------------------------------------------
+def dump_reg(node):
+    v = node.read()
+    node.getClient().dispatch()
+    return {node.getId(): v.value()}
+
+# -----------------------------------------------------------------------------
+def dict_to_table( vals: dict, **kwargs):
+    t = Table(**kwargs)
+    t.add_column('name')
+    t.add_column('value', style='green')
+    for k,v in vals.items():
+        t.add_row(k,str(v))
+
+    return t
+
+# -----------------------------------------------------------------------------
+def dict_to_hextable( vals: dict, **kwargs):
+    t = Table(**kwargs)
+    t.add_column('name')
+    t.add_column('value', style='green')
+    for k,v in vals.items():
+        t.add_row(k,hex(v))
+
+    return t
+
+# ------------------------------------------------------------------------------
+def print_reg_table(aRegs, **kwargs):
+    rprint( dict_to_hextable(aRegs, **kwargs) )
+
+
+# ------------------------------------------------------------------------------
+def print_dict_table(aDict, **kwargs):
+    rprint(dict_to_table(aDict,  **kwargs) )
+
+# -----------------------------------------------------------------------------
+def read_stream_processor_status(node, nproc,  **kwargs):
+
+    row_names = [
+        'upck >> hsc',
+        'hsc  >> psub',
+        'psub >> fir ',
+        'fir  >> hf',
+        'hf   >> hsc',
+        'hsc  >> mask',
+        'mask >> filt',
+        'filt >> arb'
+    ]
+
+    flag_map = collections.OrderedDict([
+        ('v', 'valid'),
+        ('u', 'user'),
+        ('l', 'last')
+    ])
+
+    strmSelNode = node.getNode('csr.ctrl.stream_sel')
+    strmCapNode = node.getNode('csr.ctrl.cap_ctrs')
+    strmCsrNode = node.getNode('stream_proc.csr')
+    strmCapNode.write(1)
+    strmCapNode.write(0)
+    strmCapNode.getClient().dispatch()
+
+    probes = {}
+    for i in range(nproc):
+        strmSelNode.write(i)
+        node.getClient().dispatch()
+        probes[i] = dumpSubRegs(strmCsrNode.getNode('mon'))
+
+    hdr = ['probe']+['{}'.format(k) for k in range(nproc)]
+    t = Table(*hdr, **kwargs)
+
+    for k in range(8):
+        lbl = 'p'+str(k)
+
+        flags = ''.join([f for f, l in flag_map.items() if probes[i][lbl+'.'+l]])
+
+        row = [lbl+': '+row_names[k]]+['{} [{}] ({}) {}'.format(probes[i][lbl+'.pkt_ctr'], '[green]rdy[/green]' if probes[i][lbl+'.ready'] else '[red]bsy[/red]', flags, probes[i][lbl+'.last_err']) for i in range(4)]
+        t.add_row(*row)
+    return t
+
+
 # ------------------------------------------------------------------------------
 
 
