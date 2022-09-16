@@ -243,9 +243,9 @@ def read_stream_processor_status(node, nproc,  **kwargs):
         'psub >> fir ',
         'fir  >> hf',
         'hf   >> hsc',
-        'hsc  >> cr_if',
-        'tpg >> mask',
-        'mask >> filt'
+        'hsc  >> mask',
+        'mask >> filt',
+        'filt >> arb'
     ]
 
     flag_map = collections.OrderedDict([
