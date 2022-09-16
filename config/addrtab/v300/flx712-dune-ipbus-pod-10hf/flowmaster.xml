@@ -4,7 +4,7 @@
       <node id="gbt_src" mask="0x1"/>
       <node id="sink_src" mask="0x2"/>
       <node id="sink_link" mask="0x1c"/>
-      <node id="out_sel" mask="0x20"/>
+      <node id="out_sel" mask="0x60"/>
     </node>
   </node>
 </node>
