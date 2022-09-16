@@ -325,7 +325,7 @@ def wtor_fire(obj, loop):
 # -----------------------------------------------------------------------------
 @cli.command('flowmaster')
 @click.option('--src-sel', type=click.Choice(['gbt', 'wibtor']), help='Input source selection', default=None)
-@click.option('--out-mode', type=click.Choice(['0', '1', '2']), help='Enable outflow', default=None)
+@click.option('--out-mode', type=click.Choice(['drain', 'flow', 'gate']), help='Enable outflow', default=None)
 @click.option('--sink-sel', type=click.Choice(['hits']+['link'+str(i) for i in range(5)]+['link-all']), help='Sink input selection', default=None)
 @click.pass_obj
 def flowmaster(obj, src_sel, out_mode, sink_sel):
@@ -343,11 +343,11 @@ def flowmaster(obj, src_sel, out_mode, sink_sel):
         else:
             print("Invalid source")
 
-    if out_mode == '0':
+    if out_mode == 'drain':
         fmNode.set_outflow(0)
-    elif out_mode == '1':
+    elif out_mode == 'flow':
         fmNode.set_outflow(1)
-    elif out_mode == '2':
+    elif out_mode == 'gate':
         fmNode.set_outflow(2)
     else:
             print("Invalid mode")
