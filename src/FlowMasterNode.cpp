@@ -52,8 +52,8 @@ namespace dunedaq {
       return tmp.value();
     }
 
-    void FlowMasterNode::set_outflow(uint32_t enable, bool dispatch) const {
-      getNode("csr.ctrl.out_sel").write(enable);
+    void FlowMasterNode::set_outflow(uint32_t mode, bool dispatch) const {
+      getNode("csr.ctrl.out_sel").write(mode);
       if(dispatch) { getClient().dispatch(); }
     }
 

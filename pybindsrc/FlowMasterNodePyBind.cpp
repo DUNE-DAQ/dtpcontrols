@@ -20,13 +20,13 @@ namespace python {
 
 void register_flowmaster_node(py::module& m) {
 
-  py::class_<dtpcontrols::FlowMasterNode, uhal::Node>(m, "FlowMasterNode")
+  py::class_<FlowMasterNode, uhal::Node>(m, "FlowMasterNode")
       .def(py::init<const uhal::Node&>())
-      .def("set_source_gbt", &dtpcontrols::FlowMasterNode::set_source_gbt, "dispatch"_a = true)
-      .def("set_source_wtor", &dtpcontrols::FlowMasterNode::set_source_wtor, "dispatch"_a = true)
-      .def("set_sink_hits", &dtpcontrols::FlowMasterNode::set_sink_hits, "dispatch"_a = true)
-      .def("set_sink_link", &dtpcontrols::FlowMasterNode::set_sink_link, "link"_a, "dispatch"_a = true)
-      .def("set_outflow", &dtpcontrols::FlowMasterNode::set_outflow, "enable"_a, "dispatch"_a = true);
+      .def("set_source_gbt", &FlowMasterNode::set_source_gbt, "dispatch"_a = true)
+      .def("set_source_wtor", &FlowMasterNode::set_source_wtor, "dispatch"_a = true)
+      .def("set_sink_hits", &FlowMasterNode::set_sink_hits, "dispatch"_a = true)
+      .def("set_sink_link", &FlowMasterNode::set_sink_link, "link"_a, "dispatch"_a = true)
+      .def("set_outflow", &FlowMasterNode::set_outflow, "mode"_a, "dispatch"_a = true);
 }
 
 }  // namespace python
