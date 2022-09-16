@@ -6,7 +6,7 @@
  * received with this code.
  */
 
-#include <pybind11/pybind11.h>
+#include "dtpcontrols_wrapper.hpp"
 #include <pybind11/stl.h>
 
 #include "dtpcontrols/WibulatorNode.hpp"

@@ -6,8 +6,7 @@
  * received with this code.
  */
 
-#include <pybind11/pybind11.h>
-
+#include "dtpcontrols_wrapper.hpp"
 #include "dtpcontrols/OutputSinkNode.hpp"
 
 namespace py = pybind11;

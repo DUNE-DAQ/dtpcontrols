@@ -6,8 +6,8 @@
  * received with this code.
  */
 
+#include "dtpcontrols_wrapper.hpp"
 #include <pybind11/detail/common.h>
-#include <pybind11/pybind11.h>
 
 #include "dtpcontrols/FlowMasterNode.hpp"
 
