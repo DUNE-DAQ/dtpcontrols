@@ -18,10 +18,22 @@ namespace python {
 
 void register_link_processor_node(py::module& m) {
 
-  py::class_<dtpcontrols::LinkProcessorNode, uhal::Node>(m, "LinkProcessorNode")
+  py::class_<LinkProcessorNode, uhal::Node>(m, "LinkProcessorNode")
       .def(py::init<const uhal::Node&>())
-      .def("get_data_router_node", &dtpcontrols::LinkProcessorNode::get_data_router_node)
-      .def("get_stream_proc_array_node", &dtpcontrols::LinkProcessorNode::get_stream_proc_array_node);
+      .def("setup", &LinkProcessorNode::setup)
+
+      .def("get_threshold", &LinkProcessorNode::get_threshold)
+      .def("get_channel_mask", &LinkProcessorNode::get_channel_mask)
+      .def("get_channel_mask_all", &LinkProcessorNode::get_channel_mask_all)
+      
+      .def("set_threshold", &LinkProcessorNode::set_threshold)
+      .def("set_channel_mask", &LinkProcessorNode::set_channel_mask)
+      .def("set_channel_mask_all", &LinkProcessorNode::set_channel_mask_all)
+      
+      .def("capture_pedestal", &LinkProcessorNode::capture_pedestal)
+      
+      .def("get_data_router_node", &LinkProcessorNode::get_data_router_node)
+      .def("get_stream_proc_array_node", &LinkProcessorNode::get_stream_proc_array_node);
 }
 
 }  // namespace python

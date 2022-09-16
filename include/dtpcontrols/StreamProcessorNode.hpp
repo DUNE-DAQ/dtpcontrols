@@ -33,7 +33,7 @@ namespace dunedaq {
       int get_n_probes() const;
 
       // set stream to drop empty packets
-      void drop_empty(bool dispatch=true) const;
+      void drop_empty(bool drop, bool dispatch=true) const;
 
       // get the TP threshold (all 64 channels)
       uint32_t get_threshold() const;

@@ -35,8 +35,8 @@ namespace dunedaq {
       return getNode<MonProbeNode>(name);
     }
 
-    void StreamProcessorNode::drop_empty(bool dispatch) const {
-      getNode("csr.ctrl.drop_empty").write(0x1);
+    void StreamProcessorNode::drop_empty(bool drop, bool dispatch) const {
+      getNode("csr.ctrl.drop_empty").write(drop);
       if(dispatch) {getClient().dispatch();}
     }
 
