@@ -135,7 +135,7 @@ def link_config(obj, dr_on, dpr_mux, drop_empty):
         if dr_on is not None:
             print("Configuring data-reception : ", str(dr_on))
             drNode = ln.get_data_router_node().get_data_reception_node()
-            drNode.enable()
+            drNode.enable(True)
 
         if drop_empty is not None:
             strmArrayNode = ln.get_stream_proc_array_node()
@@ -144,7 +144,7 @@ def link_config(obj, dr_on, dpr_mux, drop_empty):
             for i in range(obj.mConfigInfo['n_port']):
                 print("Setting drop empty to {} on stream {} ".format(drop_empty, i))
                 strmArrayNode.stream_select(i)
-                strmNode.drop_empty()
+                strmNode.drop_empty(True)
 
         print('<< Link Processor ', ln.getId())
 
@@ -221,7 +221,7 @@ def link_pedsub(obj, pipes, cp):
         for p in pipes:
             strmArrayNode.stream_select(p)
             strmNode.capture_pedestal(cp)
-            print(p, 'Capturing pedestal vlaue', cp)
+            print(p, 'Capturing pedestal value', cp)
         ln.getClient().dispatch()
 
 # ------------------------------------------------------------------------------
