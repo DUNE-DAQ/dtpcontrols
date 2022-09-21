@@ -135,7 +135,7 @@ def link_config(obj, dr_on, dpr_mux, drop_empty):
         if dr_on is not None:
             print("Configuring data-reception : ", str(dr_on))
             drNode = ln.get_data_router_node().get_data_reception_node()
-            drNode.enable(True)
+            drNode.enable(dr_on)
 
         if drop_empty is not None:
             strmArrayNode = ln.get_stream_proc_array_node()
