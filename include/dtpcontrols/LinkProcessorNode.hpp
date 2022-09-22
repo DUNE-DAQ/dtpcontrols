@@ -33,7 +33,10 @@ public:
   const StreamProcessorArrayNode& get_stream_proc_array_node() const;
 
   // setup all processors
-  void setup(bool enable, bool drop_empty) const;
+  void setup_dr(bool enable=true) const;
+
+  // enable dropipng empty tps
+  void drop_empty(bool drop=true) const;
 
   // convenience methods for accessing stream processors
   void set_threshold(int stream, uint32_t threshold) const;
