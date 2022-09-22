@@ -27,7 +27,7 @@ const StreamProcessorArrayNode& LinkProcessorNode::get_stream_proc_array_node() 
   return getNode<StreamProcessorArrayNode>("stream_procs");
 }
 
-void LinkProcessorNode::setup(bool enable, bool drop_empty) const {
+void LinkProcessorNode::setup_dr(bool enable) const {
   // enable data reception
   auto l_dr_node = get_data_router_node().get_data_reception_node();
   l_dr_node.enable(enable);
@@ -38,12 +38,17 @@ void LinkProcessorNode::setup(bool enable, bool drop_empty) const {
   l_dpr_node.set_mux_in(0x1);
   l_dpr_node.set_mux_out(0x1);
 
+  getClient().dispatch();
+}
+
+void LinkProcessorNode::drop_empty(bool drop) const {
+
   // setup stream processors
   auto l_strm_proc_arr_node = get_stream_proc_array_node();
   for (int s = 0; s != m_n_streams; ++s) {
     l_strm_proc_arr_node.stream_select(static_cast<uint32_t>(s), false);
     auto l_strm_proc_node = l_strm_proc_arr_node.get_stream_proc_node();
-    l_strm_proc_node.drop_empty(drop_empty);
+    l_strm_proc_node.drop_empty(drop);
   }
 
   getClient().dispatch();

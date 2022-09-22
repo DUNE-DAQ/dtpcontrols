@@ -19,7 +19,8 @@ void register_link_processor_node(py::module& m) {
 
   py::class_<LinkProcessorNode, uhal::Node>(m, "LinkProcessorNode")
       .def(py::init<const uhal::Node&>())
-      .def("setup", &LinkProcessorNode::setup)
+      .def("setup_dr", &LinkProcessorNode::setup_dr, "enable"_a = true)
+      .def("drop_empty", &LinkProcessorNode::drop_empty, "drop"_a = true)
 
       .def("get_threshold", &LinkProcessorNode::get_threshold)
       .def("get_channel_mask", &LinkProcessorNode::get_channel_mask)
