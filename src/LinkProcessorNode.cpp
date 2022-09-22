@@ -82,7 +82,9 @@ uint32_t LinkProcessorNode::get_channel_mask(int stream, uint32_t channel) const
   auto l_strm_proc_arr_node = get_stream_proc_array_node();
   l_strm_proc_arr_node.stream_select(strm, false);
   return l_strm_proc_arr_node.get_stream_proc_node().get_channel_mask(channel);
+  
 }
+
 void LinkProcessorNode::set_channel_mask_all(int stream, uint64_t mask) const {
   uint32_t strm = static_cast<uint32_t>(stream);
   auto l_strm_proc_arr_node = get_stream_proc_array_node();
@@ -103,6 +105,8 @@ void LinkProcessorNode::capture_pedestal(int stream, bool enable) const {
   auto l_strm_proc_arr_node = get_stream_proc_array_node();
   l_strm_proc_arr_node.stream_select(strm, false);
   l_strm_proc_arr_node.get_stream_proc_node().capture_pedestal(enable, false);
+  getClient().dispatch();
+
 }
 
 }  // namespace dtpcontrols

@@ -10,6 +10,7 @@
 #include "dtpcontrols/LinkProcessorNode.hpp"
 
 namespace py = pybind11;
+using namespace pybind11::literals; 
 
 namespace dunedaq {
 namespace dtpcontrols {
