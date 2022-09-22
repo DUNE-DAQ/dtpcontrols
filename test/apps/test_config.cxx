@@ -125,8 +125,14 @@ int main(int argc, char const* argv[]) {
     }
   }
 
+  // enable drop empty on each link
+  for (int i = 0; i < n_links; ++i) {
+    pod_ctrl.get_link_processor_node(i).drop_empty(true);
+  }
+
+
   // setup each link
   for (int i = 0; i < n_links; ++i) {
-    pod_ctrl.get_link_processor_node(i).setup(true, true);
+    pod_ctrl.get_link_processor_node(i).setup_dr(true);
   }
 }
