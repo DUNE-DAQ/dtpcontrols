@@ -230,7 +230,8 @@ def link_pedsub(obj, pipes, cp):
 @click.option('-r/-R', '--show-dr/--hide-dr', 'dr', default=True)
 @click.option('-b/-B', '--show-dpr/--hide-dpr', 'dpr', default=True)
 @click.option('-s/-S', '--show-sp/--hide-sp', 'sp', default=True)
-def link_watch(obj, dr, dpr, sp):
+@click.option('-f/-F', '--show-flow/--hide-flow', 'fm', default=True)
+def link_watch(obj, dr, dpr, sp, fm):
 
     for ln in obj.mLinkNodes:
 
@@ -241,6 +242,7 @@ def link_watch(obj, dr, dpr, sp):
         strmArrayNode = ln.get_stream_proc_array_node()        
         drNode = ln.get_data_router_node().get_data_reception_node()
         dprNode = ln.get_data_router_node().get_dpr_node()
+        fmNode = obj.podctrl.get_flowmaster_node()
 
 
         grid = Table.grid()
@@ -256,11 +258,16 @@ def link_watch(obj, dr, dpr, sp):
             regs = dump_sub_regs(dprNode.getNode("csr"))
             row += [dict_to_table(regs, title='dpr.csr')]
 
+        if fm: 
+            regs = dump_sub_regs(fmNode)
+            row += [dict_to_table(regs, title="fm")]
+
         grid.add_row(*row)
         rprint(grid)
 
         if sp:
             rprint(read_stream_processor_status(strmArrayNode, obj.mConfigInfo['n_port'], title="pipelines"))
+
 
 
 # -----------------------------------------------------------------------------

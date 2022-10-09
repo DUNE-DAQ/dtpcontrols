@@ -6,5 +6,8 @@
       <node id="sink_link" mask="0x1c"/>
       <node id="out_sel" mask="0x60"/>
     </node>
+    <node id="stat" address="0x0">
+       <node id="corrupt" mask="0xffffffff"/>
+    </node>
   </node>
 </node>
