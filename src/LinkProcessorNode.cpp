@@ -6,6 +6,9 @@
  * received with this code.
  */
 
+#include <map>
+#include <string>
+
 #include "dtpcontrols/LinkProcessorNode.hpp"
 
 namespace dunedaq {
@@ -13,7 +16,7 @@ namespace dtpcontrols {
 
 UHAL_REGISTER_DERIVED_NODE(LinkProcessorNode)
 
-LinkProcessorNode::LinkProcessorNode(const uhal::Node& node) : uhal::Node(node),
+LinkProcessorNode::LinkProcessorNode(const uhal::Node& node) : uhal::Node(node), 
                                                                m_n_streams(4) {
 }
 
@@ -28,8 +31,22 @@ const StreamProcessorArrayNode& LinkProcessorNode::get_stream_proc_array_node() 
 }
 
 const CentralRouterInterfaceNode& LinkProcessorNode::get_central_router_node(uint i) const {
-  return getNode<CentralRouterInterfaceNode>("cr_if0");
+  
+
+    if (i < 4) {
+    std::string name("cr-if");
+    name += std::to_string(i);
+    return getNode<CentralRouterInterfaceNode>(name);
+    //return node.getNode<CentralRouterInterfaceNode>(name);
+  } else {
+    // replace with ERS exception
+    throw std::out_of_range("Wibulator id out of bounds");
+  }
 }
+
+  //std::string name("cr-if0");
+  //return getNode<CentralRouterInterfaceNode>(name.c_str());
+//}
 
 void LinkProcessorNode::setup_dr(bool enable) const {
   // enable data reception
