@@ -27,6 +27,10 @@ const StreamProcessorArrayNode& LinkProcessorNode::get_stream_proc_array_node() 
   return getNode<StreamProcessorArrayNode>("stream_procs");
 }
 
+const CentralRouterInterfaceNode& LinkProcessorNode::get_central_router_node(uint i) const {
+  return getNode<CentralRouterInterfaceNode>("cr_if0");
+}
+
 void LinkProcessorNode::setup_dr(bool enable) const {
   // enable data reception
   auto l_dr_node = get_data_router_node().get_data_reception_node();

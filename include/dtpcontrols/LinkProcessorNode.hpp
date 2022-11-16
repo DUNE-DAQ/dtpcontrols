@@ -17,6 +17,7 @@
 
 #include "dtpcontrols/DataRouterNode.hpp"
 #include "dtpcontrols/StreamProcessorArrayNode.hpp"
+#include "dtpcontrols/CentralRouterInterfaceNode.hpp"
 
 namespace dunedaq {
 namespace dtpcontrols {
@@ -31,6 +32,7 @@ public:
 
   const DataRouterNode& get_data_router_node() const;
   const StreamProcessorArrayNode& get_stream_proc_array_node() const;
+  const CentralRouterInterfaceNode& get_central_router_node(uint i) const;
 
   // setup all processors
   void setup_dr(bool enable=true) const;
