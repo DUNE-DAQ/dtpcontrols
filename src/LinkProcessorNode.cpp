@@ -40,7 +40,7 @@ const CentralRouterInterfaceNode& LinkProcessorNode::get_central_router_node(uin
     //return node.getNode<CentralRouterInterfaceNode>(name);
   } else {
     // replace with ERS exception
-    throw std::out_of_range("Wibulator id out of bounds");
+    throw std::out_of_range("Link id out of bounds");
   }
 }
 
