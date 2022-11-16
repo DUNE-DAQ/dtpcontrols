@@ -1,0 +1,7 @@
+<node id="dtpc_drouter" fwinfo="endpoint">
+
+  <node id="dr" address="0x0" fwinfo="endpoint" module="file://dtpc_dr.xml"/>
+  <node id="dpr" address="0x10" fwinfo="endpoint" module="file://dtpc_dpr.xml"/>
+  <node id="repacker" address="0x20" fwinfo="endpoint" module="file://dtpc_repacker.xml"/>
+
+</node>

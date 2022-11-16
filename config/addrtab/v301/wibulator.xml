@@ -1,0 +1,15 @@
+<node id="wibulator">
+    <node id="csr" address="0x0" fwinfo="endpoint;width=1">
+        <node id="ctrl" address="0x0" >
+            <node id="mode" mask="0xf"/>
+            <node id="fire" mask="0x10"/>
+            <node id="chain" mask="0x20"/>
+            <node id="max_word" mask="0xffff0000"/>
+        </node>
+        <node id="addr_width" address="0x1"/>
+    </node>
+    <node id="buf" address="0x2" fwinfo="endpoint;width=1">
+        <node id="addr" address="0x0"/>
+        <node id="data" mode="port" size="0x8000" address="0x1"/>
+    </node>
+</node>
