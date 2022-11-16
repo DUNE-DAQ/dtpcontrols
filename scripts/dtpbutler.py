@@ -158,34 +158,36 @@ def cr_if(obj, cr_on, drop_empty):
 
     for ln in obj.mLinkNodes:
         print('>> Link Processor', ln.getId())
-        crifNode = ln.get_central_router_node(1)
+        for i in range(4):
+            crifNode = ln.get_central_router_node(i)
+            print('>> Link Processor', crifNode.getId())
 
-        #crifNode = ln.getNode("cr_if"+str(0)) 
-        
-
-        if cr_on is not None:
-            crifNode.enable()
-            crifNode.set_drop_empty()
-            ln.getClient().dispatch()
-            
-        if drop_empty is not None:
-            crifNode.set_drop_empty()
-            ln.getClient().dispatch()
-
-        
+            #crifNode = ln.getNode("cr_if"+str(0)) 
             
 
-        row=[]
-        cr_csr = crifNode.getNode('csr')
-        for sn in cr_csr.getNodes(r"[^\.]*"):
-            regs = dump_sub_regs(cr_csr.getNode(sn))
-            row.append(dict_to_table(regs, title=sn))
+            if cr_on is not None:
+                crifNode.enable()
+                crifNode.set_drop_empty()
+                ln.getClient().dispatch()
+                
+            if drop_empty is not None:
+                crifNode.set_drop_empty()
+                ln.getClient().dispatch()
 
-        g = Table.grid()
-        for i in sn:
-            g.add_column()
-        g.add_row(*row)
-        rprint(g)
+            
+                
+
+            row=[]
+            cr_csr = crifNode.getNode('csr')
+            for sn in cr_csr.getNodes(r"[^\.]*"):
+                regs = dump_sub_regs(cr_csr.getNode(sn))
+                row.append(dict_to_table(regs, title=sn))
+
+            g = Table.grid()
+            for i in sn:
+                g.add_column()
+            g.add_row(*row)
+            rprint(g)
 
         
 

@@ -34,7 +34,7 @@ const CentralRouterInterfaceNode& LinkProcessorNode::get_central_router_node(uin
   
 
     if (i < 4) {
-    std::string name("cr-if");
+    std::string name("cr_if");
     name += std::to_string(i);
     return getNode<CentralRouterInterfaceNode>(name);
     //return node.getNode<CentralRouterInterfaceNode>(name);
