@@ -1,4 +1,4 @@
-<node id="wb_sink" description="wibulator sink control" fwinfo="endpoint">
+<node id="wb_sink" description="wibulator sink control" fwinfo="endpoint" class="OutputSinkNode">
     <node id="csr" address="0x0" fwinfo="endpoint;width=3">
         <node id="ctrl" address="0x0">
 	        <node id="en" mask="0x1"/>

@@ -1,4 +1,4 @@
-<node id="info" description="PDTS master global registers" fwinfo="endpoint">
+<node id="info" description="PDTS master global registers" fwinfo="endpoint" class="InfoNode">
     <node id="id" address="0x0" description="ID register" fwinfo="endpoint;width=2">
         <node id="magic" address="0x0"/>
         <node id="revision" address="0x1">

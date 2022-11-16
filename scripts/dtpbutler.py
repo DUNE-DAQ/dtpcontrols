@@ -70,6 +70,7 @@ def cli(ctx, show_version, show_exc_stack, timeout, loglevel, connection, device
         hw.setTimeoutPeriod(timeout)
 
     obj.mHW = hw
+    print(type(hw))
     obj.podctrl = controls.DTPPodController(hw)
 
     # Extract info from InfoNode
