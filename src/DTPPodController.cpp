@@ -105,6 +105,7 @@ const WibulatorNode& DTPPodController::get_wibulator_node(uint i) const {
   }
 }
 
+//! this is depreciated for newer firmware versions which contain a cr-if per stream
 const CentralRouterInterfaceNode& DTPPodController::get_crif_node() const {
   return m_pod.getNode<CentralRouterInterfaceNode>("cr_if");
 }

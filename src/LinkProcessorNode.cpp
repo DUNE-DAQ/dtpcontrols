@@ -31,22 +31,15 @@ const StreamProcessorArrayNode& LinkProcessorNode::get_stream_proc_array_node() 
 }
 
 const CentralRouterInterfaceNode& LinkProcessorNode::get_central_router_node(uint i) const {
-  
-
-    if (i < 4) {
+  if (i < 4) {
     std::string name("cr_if");
     name += std::to_string(i);
     return getNode<CentralRouterInterfaceNode>(name);
-    //return node.getNode<CentralRouterInterfaceNode>(name);
   } else {
     // replace with ERS exception
     throw std::out_of_range("Link id out of bounds");
   }
 }
-
-  //std::string name("cr-if0");
-  //return getNode<CentralRouterInterfaceNode>(name.c_str());
-//}
 
 void LinkProcessorNode::setup_dr(bool enable) const {
   // enable data reception
