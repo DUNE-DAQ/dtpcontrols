@@ -23,168 +23,168 @@ def dumpReg(node):
     return {node.getId(): v.value()}
 
 
-# -----------------------------------------------------------------------------
-def readTpgStatus(node):
+# # -----------------------------------------------------------------------------
+# def readTpgStatus(node):
 
-    row_names = [
-        'upck >> hsc',
-        'hsc  >> psub',
-        'psub >> fir ',
-        'fir  >> hf',
-        'hf   >> hsc',
-        'hsc  >> cr_if',
-        'tpg >> mask',
-        'mask >> filt'
-    ]
+#     row_names = [
+#         'upck >> hsc',
+#         'hsc  >> psub',
+#         'psub >> fir ',
+#         'fir  >> hf',
+#         'hf   >> hsc',
+#         'hsc  >> cr_if',
+#         'tpg >> mask',
+#         'mask >> filt'
+#     ]
 
-    flag_map = collections.OrderedDict([
-        ('v', 'valid'),
-        ('u', 'user'),
-        ('l', 'last')
-    ])
+#     flag_map = collections.OrderedDict([
+#         ('v', 'valid'),
+#         ('u', 'user'),
+#         ('l', 'last')
+#     ])
 
-    probes = {}
-    for i in range(4):
-        node.getNode('sel.chain').write(i)
-        node.getClient().dispatch()
-        probes[i] = dumpSubRegs(node.getNode('csr.mon'))
+#     probes = {}
+#     for i in range(4):
+#         node.getNode('sel.chain').write(i)
+#         node.getClient().dispatch()
+#         probes[i] = dumpSubRegs(node.getNode('csr.mon'))
 
-    hdr = ['probe']+['{}'.format(k) for k in range(4)]
-    tpg_table = Texttable(max_width=0)
-    tpg_table.header(hdr)
-    tpg_table.set_deco(Texttable.HEADER | Texttable.BORDER | Texttable.VLINES)
-    tpg_table.set_chars(['-', '|', '+', '-'])
-    for k in range(8):
-        lbl = 'p'+str(k)
+#     hdr = ['probe']+['{}'.format(k) for k in range(4)]
+#     tpg_table = Texttable(max_width=0)
+#     tpg_table.header(hdr)
+#     tpg_table.set_deco(Texttable.HEADER | Texttable.BORDER | Texttable.VLINES)
+#     tpg_table.set_chars(['-', '|', '+', '-'])
+#     for k in range(8):
+#         lbl = 'p'+str(k)
 
-        flags = ''.join([f for f, l in flag_map.items() if probes[i][lbl+'.'+l]])
+#         flags = ''.join([f for f, l in flag_map.items() if probes[i][lbl+'.'+l]])
 
-        row = [lbl+': '+row_names[k]]+['{} [{}] ({}) {}'.format(probes[i][lbl+'.pkt_ctr'], 'rdy' if probes[i][lbl+'.ready'] else 'bsy', flags, probes[i][lbl+'.last_err']) for i in range(4)]
-        tpg_table.add_row(row)
-    tbl = tpg_table.draw()
-    tbl = tbl.replace('[rdy]', '['+termui.kGreen+'rdy'+termui.kReset+']')
-    tbl = tbl.replace('[bsy]', '['+termui.kRed+'bsy'+termui.kReset+']')
-    return tbl
-
-
-# -----------------------------------------------------------------------------
-def readStreamProcessorStatus(node, nproc):
-
-    row_names = [
-        'upck >> hsc',
-        'hsc  >> psub',
-        'psub >> fir ',
-        'fir  >> hf',
-        'hf   >> hsc',
-        'hsc  >> cr_if',
-        'tpg >> mask',
-        'mask >> filt'
-    ]
-
-    flag_map = collections.OrderedDict([
-        ('v', 'valid'),
-        ('u', 'user'),
-        ('l', 'last')
-    ])
-
-    strmSelNode = node.getNode('csr.ctrl.stream_sel')
-    strmCapNode = node.getNode('csr.ctrl.cap_ctrs')
-    strmCsrNode = node.getNode('stream_proc.csr')
-    strmCapNode.write(1)
-    strmCapNode.write(0)
-    strmCapNode.getClient().dispatch()
-
-    probes = {}
-    for i in range(nproc):
-        strmSelNode.write(i)
-        node.getClient().dispatch()
-        probes[i] = dumpSubRegs(strmCsrNode.getNode('mon'))
-
-    hdr = ['probe']+['{}'.format(k) for k in range(nproc)]
-    tpg_table = Texttable(max_width=0)
-    tpg_table.header(hdr)
-    tpg_table.set_deco(Texttable.HEADER | Texttable.BORDER | Texttable.VLINES)
-    tpg_table.set_chars(['-', '|', '+', '-'])
-    for k in range(8):
-        lbl = 'p'+str(k)
-
-        flags = ''.join([f for f, l in flag_map.items() if probes[i][lbl+'.'+l]])
-
-        row = [lbl+': '+row_names[k]]+['{} [{}] ({}) {}'.format(probes[i][lbl+'.pkt_ctr'], 'rdy' if probes[i][lbl+'.ready'] else 'bsy', flags, probes[i][lbl+'.last_err']) for i in range(4)]
-        tpg_table.add_row(row)
-    tbl = tpg_table.draw()
-    tbl = tbl.replace('[rdy]', '['+termui.kGreen+'rdy'+termui.kReset+']')
-    tbl = tbl.replace('[bsy]', '['+termui.kRed+'bsy'+termui.kReset+']')
-    return tbl
+#         row = [lbl+': '+row_names[k]]+['{} [{}] ({}) {}'.format(probes[i][lbl+'.pkt_ctr'], 'rdy' if probes[i][lbl+'.ready'] else 'bsy', flags, probes[i][lbl+'.last_err']) for i in range(4)]
+#         tpg_table.add_row(row)
+#     tbl = tpg_table.draw()
+#     tbl = tbl.replace('[rdy]', '['+termui.kGreen+'rdy'+termui.kReset+']')
+#     tbl = tbl.replace('[bsy]', '['+termui.kRed+'bsy'+termui.kReset+']')
+#     return tbl
 
 
-# -----------------------------------------------------------------------------
-def readSinkStatus(node):
+# # -----------------------------------------------------------------------------
+# def readStreamProcessorStatus(node, nproc):
 
-    reg_map = collections.OrderedDict([
-        ('en', 'ctrl.en'),
-        ('fifo_mode', 'ctrl.fifo_mode'),
-        ('rdy_mode', 'ctrl.rdy_mode'),
-        ('empty', 'stat.empty'),
-        ('err', 'stat.err'),
-        ('full', 'stat.full'),
-        ('count', 'count')
-    ])
+#     row_names = [
+#         'upck >> hsc',
+#         'hsc  >> psub',
+#         'psub >> fir ',
+#         'fir  >> hf',
+#         'hf   >> hsc',
+#         'hsc  >> cr_if',
+#         'tpg >> mask',
+#         'mask >> filt'
+#     ]
 
-    sinks = {}
-    for i in range(4):
-        sinks[i] = dumpSubRegs(node.getNode('sink'+str(i)+'.csr'))
-        sinks[i].update(dumpReg(node.getNode('sink'+str(i)+'.buf.count')))
+#     flag_map = collections.OrderedDict([
+#         ('v', 'valid'),
+#         ('u', 'user'),
+#         ('l', 'last')
+#     ])
 
-    hdr = ['reg']+['{}'.format(k) for k in range(4)]
-    sink_table = Texttable(max_width=0)
-    sink_table.header(hdr)
-    sink_table.set_deco(Texttable.HEADER | Texttable.BORDER | Texttable.VLINES)
-    sink_table.set_chars(['-', '|', '+', '-'])
-    for k, l in reg_map.items():
-        row = [k]+[sinks[i][l] for i in range(4)]
-        sink_table.add_row(row)
+#     strmSelNode = node.getNode('csr.ctrl.stream_sel')
+#     strmCapNode = node.getNode('csr.ctrl.cap_ctrs')
+#     strmCsrNode = node.getNode('stream_proc.csr')
+#     strmCapNode.write(1)
+#     strmCapNode.write(0)
+#     strmCapNode.getClient().dispatch()
 
-    return sink_table.draw()
+#     probes = {}
+#     for i in range(nproc):
+#         strmSelNode.write(i)
+#         node.getClient().dispatch()
+#         probes[i] = dumpSubRegs(strmCsrNode.getNode('mon'))
+
+#     hdr = ['probe']+['{}'.format(k) for k in range(nproc)]
+#     tpg_table = Texttable(max_width=0)
+#     tpg_table.header(hdr)
+#     tpg_table.set_deco(Texttable.HEADER | Texttable.BORDER | Texttable.VLINES)
+#     tpg_table.set_chars(['-', '|', '+', '-'])
+#     for k in range(8):
+#         lbl = 'p'+str(k)
+
+#         flags = ''.join([f for f, l in flag_map.items() if probes[i][lbl+'.'+l]])
+
+#         row = [lbl+': '+row_names[k]]+['{} [{}] ({}) {}'.format(probes[i][lbl+'.pkt_ctr'], 'rdy' if probes[i][lbl+'.ready'] else 'bsy', flags, probes[i][lbl+'.last_err']) for i in range(4)]
+#         tpg_table.add_row(row)
+#     tbl = tpg_table.draw()
+#     tbl = tbl.replace('[rdy]', '['+termui.kGreen+'rdy'+termui.kReset+']')
+#     tbl = tbl.replace('[bsy]', '['+termui.kRed+'bsy'+termui.kReset+']')
+#     return tbl
 
 
-# ------------------------------------------------------------------------------
-def printRegTable(aRegs, aHeader=True, aSort=True):
-    print(( formatRegTable(aRegs, aHeader, aSort) ))
+# # -----------------------------------------------------------------------------
+# def readSinkStatus(node):
+
+#     reg_map = collections.OrderedDict([
+#         ('en', 'ctrl.en'),
+#         ('fifo_mode', 'ctrl.fifo_mode'),
+#         ('rdy_mode', 'ctrl.rdy_mode'),
+#         ('empty', 'stat.empty'),
+#         ('err', 'stat.err'),
+#         ('full', 'stat.full'),
+#         ('count', 'count')
+#     ])
+
+#     sinks = {}
+#     for i in range(4):
+#         sinks[i] = dumpSubRegs(node.getNode('sink'+str(i)+'.csr'))
+#         sinks[i].update(dumpReg(node.getNode('sink'+str(i)+'.buf.count')))
+
+#     hdr = ['reg']+['{}'.format(k) for k in range(4)]
+#     sink_table = Texttable(max_width=0)
+#     sink_table.header(hdr)
+#     sink_table.set_deco(Texttable.HEADER | Texttable.BORDER | Texttable.VLINES)
+#     sink_table.set_chars(['-', '|', '+', '-'])
+#     for k, l in reg_map.items():
+#         row = [k]+[sinks[i][l] for i in range(4)]
+#         sink_table.add_row(row)
+
+#     return sink_table.draw()
 
 
-# ------------------------------------------------------------------------------
-def formatRegTable(aRegs, aHeader=True, aSort=True):
+# # ------------------------------------------------------------------------------
+# def printRegTable(aRegs, aHeader=True, aSort=True):
+#     print(( formatRegTable(aRegs, aHeader, aSort) ))
 
-    lRegTable = Texttable(max_width=0)
-    lRegTable.set_deco(Texttable.VLINES | Texttable.BORDER | Texttable.HEADER)
-    lRegTable.set_chars(['-', '|', '+', '-'])
-    if aHeader:
-        lRegTable.header( ['name', 'value'] )
 
-    lRegs = sorted(aRegs) if aSort else aRegs
-    for k in lRegs:
-        lRegTable.add_row( [str(k), hex(aRegs[k])] )
+# # ------------------------------------------------------------------------------
+# def formatRegTable(aRegs, aHeader=True, aSort=True):
 
-    return lRegTable.draw()
+#     lRegTable = Texttable(max_width=0)
+#     lRegTable.set_deco(Texttable.VLINES | Texttable.BORDER | Texttable.HEADER)
+#     lRegTable.set_chars(['-', '|', '+', '-'])
+#     if aHeader:
+#         lRegTable.header( ['name', 'value'] )
 
-# ------------------------------------------------------------------------------
-def formatDictTable(aDict, aHeader=True, aSort=True, aFmtr=str):
-    lDictTable = Texttable(max_width=0)
-    lDictTable.set_deco(Texttable.VLINES | Texttable.BORDER | Texttable.HEADER)
-    lDictTable.set_chars(['-', '|', '+', '-'])
-    if aHeader:
-        lDictTable.header( ['name', 'value'] )
+#     lRegs = sorted(aRegs) if aSort else aRegs
+#     for k in lRegs:
+#         lRegTable.add_row( [str(k), hex(aRegs[k])] )
 
-    for k in (sorted(aDict) if aSort else aDict):
-        v = aDict[k]
-        lDictTable.add_row( [str(k), aFmtr(v) if aFmtr else v])
+#     return lRegTable.draw()
 
-    return lDictTable.draw()
+# # ------------------------------------------------------------------------------
+# def formatDictTable(aDict, aHeader=True, aSort=True, aFmtr=str):
+#     lDictTable = Texttable(max_width=0)
+#     lDictTable.set_deco(Texttable.VLINES | Texttable.BORDER | Texttable.HEADER)
+#     lDictTable.set_chars(['-', '|', '+', '-'])
+#     if aHeader:
+#         lDictTable.header( ['name', 'value'] )
 
-# ------------------------------------------------------------------------------
-def printDictTable(aDict, aHeader=True, aSort=True, aFmtr=None):
-    print(( formatDictTable(aDict, aHeader, aSort, aFmtr) ))
+#     for k in (sorted(aDict) if aSort else aDict):
+#         v = aDict[k]
+#         lDictTable.add_row( [str(k), aFmtr(v) if aFmtr else v])
+
+#     return lDictTable.draw()
+
+# # ------------------------------------------------------------------------------
+# def printDictTable(aDict, aHeader=True, aSort=True, aFmtr=None):
+#     print(( formatDictTable(aDict, aHeader, aSort, aFmtr) ))
 
 
 # -----------------------------------------------------------------------------
@@ -242,7 +242,8 @@ def read_stream_processor_status(node, nproc,  **kwargs):
         'hsc  >> psub',
         'psub >> fir ',
         'fir  >> hf',
-        'hf   >> hsc',
+        'hf   >> meta',
+        'meta >> hsc',
         'hsc  >> mask',
         'mask >> filt',
         'filt >> arb'
@@ -267,15 +268,16 @@ def read_stream_processor_status(node, nproc,  **kwargs):
         node.getClient().dispatch()
         probes[i] = dumpSubRegs(strmCsrNode.getNode('mon'))
 
-    hdr = ['probe']+['{}'.format(k) for k in range(nproc)]
+
+    hdr = ['probe']+[f'{k}' for k in range(nproc)]
     t = Table(*hdr, **kwargs)
 
-    for k in range(8):
-        lbl = 'p'+str(k)
+    for k in range(9):
+        lbl = f'p{k}'
 
         flags = ''.join([f for f, l in flag_map.items() if probes[i][lbl+'.'+l]])
 
-        row = [lbl+': '+row_names[k]]+['{} [{}] ({}) {}'.format(probes[i][lbl+'.pkt_ctr'], '[green]rdy[/green]' if probes[i][lbl+'.ready'] else '[red]bsy[/red]', flags, probes[i][lbl+'.last_err']) for i in range(4)]
+        row = [f"{lbl}: {row_names[k]}"]+['{} [{}] ({}) {}'.format(probes[i][lbl+'.pkt_ctr'], '[green]rdy[/green]' if probes[i][lbl+'.ready'] else '[red]bsy[/red]', flags, probes[i][lbl+'.last_err']) for i in range(4)]
         t.add_row(*row)
     return t
 

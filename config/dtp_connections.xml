@@ -11,4 +11,6 @@
   <connection id="flx-2-p2-hf-v210"  uri="ipbusflx-2.0:///dev/flx2" address_table="file://addrtab/v210/flx712-dune-ipbus-pod-10hf/dtpc_pod.xml" />
   <connection id="flx-3-p2-hf-v210"  uri="ipbusflx-2.0:///dev/flx3" address_table="file://addrtab/v210/flx712-dune-ipbus-pod-10hf/dtpc_pod.xml" />
   <connection id="U-SIMUDP-v210" uri="ipbusudp-2.0://localhost:50001" address_table="file://addrtab/v210/flx712-dune-ipbus-pod-10hf/dtpc_pod.xml" />
+
+  <connection id="U-SIMUDP-32bp" uri="ipbusudp-2.0://localhost:50001" address_table="file://addrtab/32b_pipes/dtpc_pod.xml" />
 </connections>

@@ -13,7 +13,8 @@ from rich import print as rprint
 from rich.table import Table
 from dtpcontrols import core as controls
 
-from dtpcontrols.toolbox import dumpSubRegs, printRegTable, printDictTable, readStreamProcessorStatus
+# from dtpcontrols.toolbox import dumpSubRegs, printRegTable, printDictTable, readStreamProcessorStatus
+
 from dtpcontrols.toolbox import dump_sub_regs, dict_to_table, print_dict_table, print_reg_table, read_stream_processor_status
 import optionValidators
 
@@ -70,7 +71,6 @@ def cli(ctx, show_version, show_exc_stack, timeout, loglevel, connection, device
         hw.setTimeoutPeriod(timeout)
 
     obj.mHW = hw
-    print(type(hw))
     obj.podctrl = controls.DTPPodController(hw)
 
     # Extract info from InfoNode
@@ -286,7 +286,6 @@ def link_watch(obj, dr, dpr, sp):
         strmArrayNode = ln.get_stream_proc_array_node()        
         drNode = ln.get_data_router_node().get_data_reception_node()
         dprNode = ln.get_data_router_node().get_dpr_node()
-
 
         grid = Table.grid()
         for _ in range(dr+dpr):

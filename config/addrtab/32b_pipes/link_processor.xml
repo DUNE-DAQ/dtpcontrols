@@ -1,0 +1,5 @@
+<node id="linkproc" description="Link processor" fwinfo="endpoint" class="LinkProcessorNode">
+    <node id="drtr" address="0x0" fwinfo="endpoint;width=6" module="file://dtpc_drouter.xml"/>
+    <node id="stream_procs" address="0x40" fwinfo="endpoint;width=6" module="file://stream_processor_array.xml"/>
+    <node id="rate_mon" address="0x80" fwinfo="endpoint;width=2" module="file://dtpc_pkt_rate_mon.xml"/>
+</node>
