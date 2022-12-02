@@ -1,0 +1,20 @@
+<node id="TOP">
+  <node id="info" address="0x0" description="information block" fwinfo="endpoint;width=2" module="file://dtpc_info.xml"/>
+  <node id="ctrl" address="0x8" description="ctrl/stat register" fwinfo="endpoint;width=3" module="file://dtpc_ctrl.xml"/>
+  <node id="flowmaster" address="0x10" description="flow control" fwinfo="endpoint;width=1" module="file://flowmaster.xml"/>
+
+  <node id="wibtor0" address="0x110" description="wibulator controls" fwinfo="endpoint;width=4" module="file://wibulator.xml"/>
+  <node id="wibtor1" address="0x120" description="wibulator controls" fwinfo="endpoint;width=4" module="file://wibulator.xml"/>
+  <node id="wibtor2" address="0x130" description="wibulator controls" fwinfo="endpoint;width=4" module="file://wibulator.xml"/>
+  <node id="wibtor3" address="0x140" description="wibulator controls" fwinfo="endpoint;width=4" module="file://wibulator.xml"/>
+  <node id="wibtor4" address="0x150" description="wibulator controls" fwinfo="endpoint;width=4" module="file://wibulator.xml"/>
+  
+  <node id="linkproc0" address="0x10000" description="Link processor" fwinfo="endpoint;width=10" module="file://link_processor.xml"/>
+  <node id="linkproc1" address="0x11000" description="Link processor" fwinfo="endpoint;width=10" module="file://link_processor.xml"/>
+  <node id="linkproc2" address="0x12000" description="Link processor" fwinfo="endpoint;width=10" module="file://link_processor.xml"/>
+  <node id="linkproc3" address="0x13000" description="Link processor" fwinfo="endpoint;width=10" module="file://link_processor.xml"/>
+  <node id="linkproc4" address="0x14000" description="Link processor" fwinfo="endpoint;width=10" module="file://link_processor.xml"/>
+  
+  <node id="cr_if" address="0x80" fwinfo="endpoint;width=4" module="file://cr_if.xml"/>
+  <node id="outsink" address="0x90" description="output controls" fwinfo="endpoint;width=4" module="file://sink_snapshot.xml"/> 
+</node>
