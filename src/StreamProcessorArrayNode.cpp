@@ -9,22 +9,31 @@
 #include "dtpcontrols/StreamProcessorArrayNode.hpp"
 
 namespace dunedaq {
-  namespace dtpcontrols {
+namespace dtpcontrols {
 
-    UHAL_REGISTER_DERIVED_NODE(StreamProcessorArrayNode)
+UHAL_REGISTER_DERIVED_NODE(StreamProcessorArrayNode)
 
-    StreamProcessorArrayNode::StreamProcessorArrayNode(const uhal::Node& node) : uhal::Node(node) {}
+StreamProcessorArrayNode::StreamProcessorArrayNode(const uhal::Node& node)
+  : uhal::Node(node)
+{
+}
 
-    StreamProcessorArrayNode::~StreamProcessorArrayNode(){}
+StreamProcessorArrayNode::~StreamProcessorArrayNode() {}
 
-    const StreamProcessorNode& StreamProcessorArrayNode::get_stream_proc_node(void) const {
-      return getNode<StreamProcessorNode>("stream_proc");
-    }
+const StreamProcessorNode&
+StreamProcessorArrayNode::get_stream_proc_node(void) const
+{
+  return getNode<StreamProcessorNode>("stream_proc");
+}
 
-    void StreamProcessorArrayNode::stream_select(const uint32_t pipe, bool dispatch) const {
-      getNode("csr.ctrl.stream_sel").write(pipe);
-      if(dispatch) {getClient().dispatch();}  
-    }
+void
+StreamProcessorArrayNode::stream_select(const uint32_t pipe, bool dispatch) const
+{
+  getNode("csr.ctrl.stream_sel").write(pipe);
+  if (dispatch) {
+    getClient().dispatch();
+  }
+}
 
-  } // namespace dtpcontrols
+} // namespace dtpcontrols
 } // namespace dunedaq

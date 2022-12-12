@@ -22,7 +22,9 @@
 using namespace uhal;
 using namespace dunedaq::dtpcontrols;
 
-int main(int argc, char const* argv[]) {
+int
+main(int argc, char const* argv[])
+{
   TLOG() << "FLX-TPG FW monitor";
 
   // default options
@@ -37,12 +39,12 @@ int main(int argc, char const* argv[]) {
   const std::vector<std::string_view> args(argv + 1, argv + argc);
   for (auto it = args.begin(), end = args.end(); it != end; ++it) {
     // device name
-    if (*it == "-d") {  // || *it = "--device") {
+    if (*it == "-d") { // || *it = "--device") {
       device = *(it + 1);
     }
 
     // connection file
-    if (*it == "-c") {  // || *it == "--connection") {
+    if (*it == "-c") { // || *it == "--connection") {
       conn_file = *(it + 1);
     }
 
@@ -52,17 +54,17 @@ int main(int argc, char const* argv[]) {
     }
 
     // link
-    if (*it == "-l") {  // ||*it =="--disable") {
+    if (*it == "-l") { // ||*it =="--disable") {
       n_links = std::stoi(std::string(*(it + 1)));
     }
 
     // pipe
-    if (*it == "-p") {  // ||*it =="--disable") {
+    if (*it == "-p") { // ||*it =="--disable") {
       n_pipes = std::stoi(std::string(*(it + 1)));
     }
 
     // period between reads
-    if (*it == "-s") {  // ||*it =="--disable") {
+    if (*it == "-s") { // ||*it =="--disable") {
       period = std::stoi(std::string(*(it + 1)));
     }
 
@@ -89,7 +91,7 @@ int main(int argc, char const* argv[]) {
   TLOG() << "Connections : " << conn_file;
   TLOG() << "Device      : " << device;
 
-  uhal::ConnectionManager cm(conn_file, {"ipbusflx-2.0"});
+  uhal::ConnectionManager cm(conn_file, { "ipbusflx-2.0" });
   // uhal::HwInterface flx = cm.getDevice(device);
 
   // get the TP node
@@ -104,7 +106,7 @@ int main(int argc, char const* argv[]) {
     for (int i_link = 0; i_link < n_links; ++i_link) {
       out << "Link processor : " << i_link << std::endl;
 
-      std::vector<std::vector<MonProbeNodeInfo> > infos;
+      std::vector<std::vector<MonProbeNodeInfo>> infos;
 
       // loop over pipes
       for (int i_pipe = 0; i_pipe < n_pipes; ++i_pipe) {

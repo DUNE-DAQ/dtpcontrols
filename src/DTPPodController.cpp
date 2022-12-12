@@ -15,9 +15,10 @@
 namespace dunedaq {
 namespace dtpcontrols {
 
-DTPPodController::DTPPodController(uhal::HwInterface hw) : 
-  m_hw(hw),
-  m_pod(m_hw.getNode()) {
+DTPPodController::DTPPodController(uhal::HwInterface hw)
+  : m_hw(hw)
+  , m_pod(m_hw.getNode())
+{
 
   TLOG_DEBUG(1) << "DTPPodController built ";
 
@@ -26,8 +27,9 @@ DTPPodController::DTPPodController(uhal::HwInterface hw) :
 
 DTPPodController::~DTPPodController() {}
 
-
-void DTPPodController::load_fw_info() {
+void
+DTPPodController::load_fw_info()
+{
   auto m_fw_info = get_info_node().get_firmware_config_info();
   m_n_links = m_fw_info["n_links"];
   m_n_streams = m_fw_info["n_port"];
@@ -38,53 +40,75 @@ void DTPPodController::load_fw_info() {
   m_outsink_width = m_fw_info["outsink_width"];
 }
 
-uint DTPPodController::get_n_links() const {
+uint
+DTPPodController::get_n_links() const
+{
   return m_n_links;
 }
 
-uint DTPPodController::get_n_streams() const {
+uint
+DTPPodController::get_n_streams() const
+{
   return m_n_streams;
 }
 
-uint DTPPodController::get_n_mux() const {
+uint
+DTPPodController::get_n_mux() const
+{
   return m_n_mux;
 }
 
-uint DTPPodController::get_wibtors_width() const {
+uint
+DTPPodController::get_wibtors_width() const
+{
   return m_wibtors_width;
 }
 
-uint DTPPodController::get_outsink_width() const {
+uint
+DTPPodController::get_outsink_width() const
+{
   return m_outsink_width;
 }
 
-bool DTPPodController::get_wibtors_en() const {
+bool
+DTPPodController::get_wibtors_en() const
+{
   return m_wibtors_en;
 }
 
-bool DTPPodController::get_outsink_en() const {
+bool
+DTPPodController::get_outsink_en() const
+{
   return m_outsink_en;
 }
 
-
-
-const uhal::Node& DTPPodController::get_node() const {
+const uhal::Node&
+DTPPodController::get_node() const
+{
   return m_pod;
 }
 
-const InfoNode& DTPPodController::get_info_node() const {
+const InfoNode&
+DTPPodController::get_info_node() const
+{
   return m_pod.getNode<InfoNode>("info");
 }
 
-const ControlNode& DTPPodController::get_control_node() const {
+const ControlNode&
+DTPPodController::get_control_node() const
+{
   return m_pod.getNode<ControlNode>("ctrl");
 }
 
-const FlowMasterNode& DTPPodController::get_flowmaster_node() const {
+const FlowMasterNode&
+DTPPodController::get_flowmaster_node() const
+{
   return m_pod.getNode<FlowMasterNode>("flowmaster");
 }
 
-const LinkProcessorNode& DTPPodController::get_link_processor_node(uint i) const {
+const LinkProcessorNode&
+DTPPodController::get_link_processor_node(uint i) const
+{
   if (i < get_n_links()) {
     std::string name("linkproc");
     name += std::to_string(i);
@@ -94,7 +118,9 @@ const LinkProcessorNode& DTPPodController::get_link_processor_node(uint i) const
   }
 }
 
-const WibulatorNode& DTPPodController::get_wibulator_node(uint i) const {
+const WibulatorNode&
+DTPPodController::get_wibulator_node(uint i) const
+{
   if (i < get_n_links()) {
     std::string name("wibtor");
     name += std::to_string(i);
@@ -105,15 +131,21 @@ const WibulatorNode& DTPPodController::get_wibulator_node(uint i) const {
   }
 }
 
-const CentralRouterInterfaceNode& DTPPodController::get_crif_node() const {
+const CentralRouterInterfaceNode&
+DTPPodController::get_crif_node() const
+{
   return m_pod.getNode<CentralRouterInterfaceNode>("cr_if");
 }
 
-const OutputSinkNode& DTPPodController::get_output_sink_node() const {
+const OutputSinkNode&
+DTPPodController::get_output_sink_node() const
+{
   return m_pod.getNode<OutputSinkNode>("outsink");
 }
 
-void DTPPodController::reset() const {
+void
+DTPPodController::reset() const
+{
   auto ctrl_node = get_control_node();
   ctrl_node.soft_reset(true);
   ctrl_node.master_reset(true);
@@ -125,9 +157,14 @@ lDataReceptionNode.reset(true);
 } */
 }
 
-void DTPPodController::reset_counters() const {}
+void
+DTPPodController::reset_counters() const
+{
+}
 
-void DTPPodController::set_threshold_all(uint threshold) const {
+void
+DTPPodController::set_threshold_all(uint threshold) const
+{
   for (uint i_link = 0; i_link != get_n_links(); ++i_link) {
     for (uint i_stream = 0; i_stream != get_n_streams(); ++i_stream) {
       uint32_t il = static_cast<uint32_t>(i_link);
@@ -141,7 +178,9 @@ void DTPPodController::set_threshold_all(uint threshold) const {
   m_pod.getClient().dispatch();
 }
 
-std::vector<MonProbeNodeInfo> DTPPodController::get_mon_probe_info(uint link, uint stream) const {
+std::vector<MonProbeNodeInfo>
+DTPPodController::get_mon_probe_info(uint link, uint stream) const
+{
   std::vector<MonProbeNodeInfo> tmp;
 
   auto l_sa_node = get_link_processor_node(link).get_stream_proc_array_node();
@@ -160,8 +199,7 @@ std::vector<MonProbeNodeInfo> DTPPodController::get_mon_probe_info(uint link, ui
 
   for (uint i_probe = 0; i_probe != n_probes; ++i_probe) {
     uint32_t ip = static_cast<uint32_t>(i_probe);
-    MonProbeNodeInfo info =
-        l_sa_node.get_stream_proc_node().get_mon_probe_node(ip).get_info();
+    MonProbeNodeInfo info = l_sa_node.get_stream_proc_node().get_mon_probe_node(ip).get_info();
 
     info.link = link;
     info.stream = stream;
@@ -173,5 +211,5 @@ std::vector<MonProbeNodeInfo> DTPPodController::get_mon_probe_info(uint link, ui
   return tmp;
 }
 
-}  // namespace dtpcontrols
-}  // namespace dunedaq
+} // namespace dtpcontrols
+} // namespace dunedaq

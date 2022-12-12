@@ -14,8 +14,8 @@
 // dtpcontrols Headers
 
 // uHal Headers
-#include "uhal/DerivedNode.hpp"
 #include "ers/Issue.hpp"
+#include "uhal/DerivedNode.hpp"
 
 // C++ Headers
 #include <chrono>
@@ -30,7 +30,7 @@ namespace dtpcontrols {
 class ExampleNode : public uhal::Node
 {
 
-UHAL_DERIVEDNODE(ExampleNode)
+  UHAL_DERIVEDNODE(ExampleNode)
 
 public:
   explicit ExampleNode(const uhal::Node& node);

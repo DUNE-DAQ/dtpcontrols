@@ -18,32 +18,32 @@
 
 #include "uhal/DerivedNode.hpp"
 
-#include <vector>
 #include <map>
 #include <string>
+#include <vector>
 
 namespace dunedaq {
 namespace dtpcontrols {
 
-class FlowMasterNode : public uhal::Node {
+class FlowMasterNode : public uhal::Node
+{
 
   UHAL_DERIVEDNODE(FlowMasterNode)
-  
+
 public:
   explicit FlowMasterNode(const uhal::Node& node);
   virtual ~FlowMasterNode();
 
-  void set_source_gbt(bool dispatch=true) const;
-  void set_source_wtor(bool dispatch=true) const;
+  void set_source_gbt(bool dispatch = true) const;
+  void set_source_wtor(bool dispatch = true) const;
   uint32_t get_source() const;
 
-  void set_sink_hits(bool dispatch=true) const;
-  void set_sink_link(const uint32_t link, bool dispatch=true) const;
+  void set_sink_hits(bool dispatch = true) const;
+  void set_sink_link(const uint32_t link, bool dispatch = true) const;
   uint32_t get_sink() const;
 
-  void set_outflow(const uint32_t mode, bool dispatch=true) const;
+  void set_outflow(const uint32_t mode, bool dispatch = true) const;
   bool get_outflow() const;
-
 };
 
 } // namespace dtpcontrols
