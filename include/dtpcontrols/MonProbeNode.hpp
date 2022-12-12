@@ -1,7 +1,7 @@
 /**
  * @file MonProbeNode.hpp
  *
- * MonProbeNode is a class derived from
+ * MonProbeNode is a class derived from 
  * Its purpose is to control and read status of the data-
  * reception firmware, within DTP-firmware which is part of DUNE DAQ.
  *
@@ -20,16 +20,17 @@
 namespace dunedaq {
 namespace dtpcontrols {
 
-class MonProbeNode : public uhal::Node
-{
+class MonProbeNode : public uhal::Node {
 
   UHAL_DERIVEDNODE(MonProbeNode)
-
+  
+  
 public:
   explicit MonProbeNode(const uhal::Node& node);
   virtual ~MonProbeNode();
 
   const MonProbeNodeInfo get_info() const; // retrieve monitor info from firmware
+
 };
 
 } // namespace dtpcontrols

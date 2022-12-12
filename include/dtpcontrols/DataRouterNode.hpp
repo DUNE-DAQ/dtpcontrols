@@ -14,23 +14,23 @@
 
 #include "uhal/DerivedNode.hpp"
 
-#include "dtpcontrols/DPRNode.hpp"
 #include "dtpcontrols/DataReceptionNode.hpp"
+#include "dtpcontrols/DPRNode.hpp"
 
 namespace dunedaq {
 namespace dtpcontrols {
 
-class DataRouterNode : public uhal::Node
-{
+class DataRouterNode : public uhal::Node {
 
   UHAL_DERIVEDNODE(DataRouterNode)
-
+  
 public:
   explicit DataRouterNode(const uhal::Node& node);
   virtual ~DataRouterNode();
 
   const DataReceptionNode& get_data_reception_node(void) const;
   const DPRNode& get_dpr_node(void) const;
+
 };
 
 } // namespace dtpcontrols

@@ -12,22 +12,20 @@
 #include "dtpcontrols/WibulatorNode.hpp"
 
 namespace py = pybind11;
-using namespace pybind11::literals;
+using namespace pybind11::literals; 
 
 namespace dunedaq {
 namespace dtpcontrols {
 namespace python {
 
-void
-register_wibulator_node(py::module& m)
-{
+void register_wibulator_node(py::module& m) {
   py::class_<dtpcontrols::WibulatorNode, uhal::Node>(m, "WibulatorNode")
-    .def(py::init<const uhal::Node&>())
-    .def("write_pattern", &dtpcontrols::WibulatorNode::write_pattern, "pattern"_a)
-    .def("read_pattern", &dtpcontrols::WibulatorNode::read_pattern)
-    .def("fire", &dtpcontrols::WibulatorNode::fire)
-    .def("get_size", &dtpcontrols::WibulatorNode::get_size);
+      .def(py::init<const uhal::Node&>())
+      .def("write_pattern", &dtpcontrols::WibulatorNode::write_pattern, "pattern"_a)
+      .def("read_pattern", &dtpcontrols::WibulatorNode::read_pattern)
+      .def("fire", &dtpcontrols::WibulatorNode::fire)
+      .def("get_size", &dtpcontrols::WibulatorNode::get_size);
 }
-} // namespace python
-} // namespace dtpcontrols
-} // namespace dunedaq
+}  // namespace python
+}  // namespace dtpcontrols
+}  // namespace dunedaq

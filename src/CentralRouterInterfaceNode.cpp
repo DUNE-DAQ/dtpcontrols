@@ -9,42 +9,29 @@
 #include "dtpcontrols/CentralRouterInterfaceNode.hpp"
 
 namespace dunedaq {
-namespace dtpcontrols {
+  namespace dtpcontrols {
+    
+    UHAL_REGISTER_DERIVED_NODE(CentralRouterInterfaceNode)
+    
+    CentralRouterInterfaceNode::CentralRouterInterfaceNode(const uhal::Node &node) : uhal::Node(node) {}
+    
+    CentralRouterInterfaceNode::~CentralRouterInterfaceNode() {}
+    
+    void CentralRouterInterfaceNode::enable(bool dispatch) const {
+      getNode("csr.ctrl.en").write(0x1);
+      if(dispatch) {getClient().dispatch();}
+    }    
 
-UHAL_REGISTER_DERIVED_NODE(CentralRouterInterfaceNode)
+    void CentralRouterInterfaceNode::set_drop_empty(bool dispatch) const {
+      getNode("csr.ctrl.drop_empty").write(0x1);
+      if(dispatch) {getClient().dispatch();}
+    }
+    
+    uint32_t CentralRouterInterfaceNode::get_drop_empty() const {
+      uhal::ValWord<uint32_t> tmp = getNode("csr.ctrl.drop_empty").read();
+      getClient().dispatch();
+      return tmp.value();
+    }
 
-CentralRouterInterfaceNode::CentralRouterInterfaceNode(const uhal::Node& node)
-  : uhal::Node(node)
-{
-}
-
-CentralRouterInterfaceNode::~CentralRouterInterfaceNode() {}
-
-void
-CentralRouterInterfaceNode::enable(bool dispatch) const
-{
-  getNode("csr.ctrl.en").write(0x1);
-  if (dispatch) {
-    getClient().dispatch();
-  }
-}
-
-void
-CentralRouterInterfaceNode::set_drop_empty(bool dispatch) const
-{
-  getNode("csr.ctrl.drop_empty").write(0x1);
-  if (dispatch) {
-    getClient().dispatch();
-  }
-}
-
-uint32_t
-CentralRouterInterfaceNode::get_drop_empty() const
-{
-  uhal::ValWord<uint32_t> tmp = getNode("csr.ctrl.drop_empty").read();
-  getClient().dispatch();
-  return tmp.value();
-}
-
-} // namespace dtpcontrols
+  } // namespace dtpcontrols
 } // namespace dunedaq

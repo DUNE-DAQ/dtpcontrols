@@ -17,16 +17,14 @@ namespace dunedaq {
 namespace dtpcontrols {
 namespace python {
 
-void
-register_info_node(py::module& m)
-{
+void register_info_node(py::module& m) {
 
   py::class_<dtpcontrols::InfoNode, uhal::Node>(m, "InfoNode")
-    .def(py::init<const uhal::Node&>())
-    .def("get_firmware_config_info", &dtpcontrols::InfoNode::get_firmware_config_info)
-    .def("get_firmware_id_info", &dtpcontrols::InfoNode::get_firmware_id_info);
+      .def(py::init<const uhal::Node&>())
+      .def("get_firmware_config_info", &dtpcontrols::InfoNode::get_firmware_config_info)
+      .def("get_firmware_id_info", &dtpcontrols::InfoNode::get_firmware_id_info);
 }
 
-} // namespace python
-} // namespace dtpcontrols
-} // namespace dunedaq
+}  // namespace python
+}  // namespace dtpcontrols
+}  // namespace dunedaq

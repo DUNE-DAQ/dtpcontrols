@@ -18,9 +18,7 @@
 using namespace uhal;
 using namespace dunedaq::dtpcontrols;
 
-int
-main(int argc, char const* argv[])
-{
+int main(int argc, char const* argv[]) {
   TLOG() << "Test TPG Node structure";
 
   std::string conn_file = find_connection_file();
@@ -39,7 +37,7 @@ main(int argc, char const* argv[])
   TLOG() << "Device      : " << device;
 
   //  uhal::setLogLevelTo(uhal::Debug());
-  uhal::ConnectionManager cm(conn_file, { "ipbusflx-2.0" });
+  uhal::ConnectionManager cm(conn_file, {"ipbusflx-2.0"});
   // uhal::HwInterface flx = cm.getDevice(device);
 
   auto pod_ctrl = DTPPodController(cm.getDevice(device));

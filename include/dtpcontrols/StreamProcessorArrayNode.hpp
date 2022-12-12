@@ -1,7 +1,7 @@
 /**
  * @file StreamProcessorArrayNode.hpp
  *
- * StreamProcessorArrayNode is a class derived from
+ * StreamProcessorArrayNode is a class derived from 
  * Its purpose is to control and read status of the stream-
  * processor firmware, within DTP-firmware which is part of DUNE DAQ.
  *
@@ -18,23 +18,23 @@
 #include "dtpcontrols/StreamProcessorNode.hpp"
 
 namespace dunedaq {
-namespace dtpcontrols {
+  namespace dtpcontrols {
 
-class StreamProcessorArrayNode : public uhal::Node
-{
+    class StreamProcessorArrayNode : public uhal::Node {
 
-  UHAL_DERIVEDNODE(StreamProcessorArrayNode)
+      UHAL_DERIVEDNODE(StreamProcessorArrayNode)
+  
+      public:
+      explicit StreamProcessorArrayNode(const uhal::Node& node);
+      virtual ~StreamProcessorArrayNode();
 
-public:
-  explicit StreamProcessorArrayNode(const uhal::Node& node);
-  virtual ~StreamProcessorArrayNode();
+      const StreamProcessorNode& get_stream_proc_node() const;
 
-  const StreamProcessorNode& get_stream_proc_node() const;
+      void stream_select(const uint32_t pipe, bool dispatch=true) const;
 
-  void stream_select(const uint32_t pipe, bool dispatch = true) const;
-};
+    };
 
-} // namespace dtpcontrols
+  } // namespace dtpcontrols
 } // namespace dunedaq
 
 #endif // DTPCONTROLS_INCLUDE_DTPCONTROLS_STREAMPROCESSORARRAYNODE_HPP_

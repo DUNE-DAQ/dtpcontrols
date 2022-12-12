@@ -11,8 +11,8 @@
 #ifndef DTPCONTROLS_INCLUDE_DTPCONTROLS_MONPROBENODEINFO_HPP_
 #define DTPCONTROLS_INCLUDE_DTPCONTROLS_MONPROBENODEINFO_HPP_
 
-struct MonProbeNodeInfo
-{
+
+struct MonProbeNodeInfo {
 
   int link;
   int stream;
@@ -24,6 +24,7 @@ struct MonProbeNodeInfo
   int last_err;
   int pkt_ctr;
   int axi_err;
+
 };
 
 #endif //  DTPCONTROLS_INCLUDE_DTPCONTROLS_MONPROBENODEINFO_HPP_

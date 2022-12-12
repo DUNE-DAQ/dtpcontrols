@@ -21,8 +21,7 @@
 namespace dunedaq {
 namespace dtpcontrols {
 
-class LinkProcessorNode : public uhal::Node
-{
+class LinkProcessorNode : public uhal::Node {
 
   UHAL_DERIVEDNODE(LinkProcessorNode)
 
@@ -34,10 +33,10 @@ public:
   const StreamProcessorArrayNode& get_stream_proc_array_node() const;
 
   // setup all processors
-  void setup_dr(bool enable = true) const;
+  void setup_dr(bool enable=true) const;
 
   // enable dropipng empty tps
-  void drop_empty(bool drop = true) const;
+  void drop_empty(bool drop=true) const;
 
   // convenience methods for accessing stream processors
   void set_threshold(int stream, uint32_t threshold) const;
@@ -53,9 +52,13 @@ public:
 
 private:
   int m_n_streams;
+
 };
+
+
 
 } // namespace dtpcontrols
 } // namespace dunedaq
 
-#endif // DTPCONTROLS_INCLUDE_DTPCONTROLS_LINKPROCESSORNODE_HPP_
+
+#endif //DTPCONTROLS_INCLUDE_DTPCONTROLS_LINKPROCESSORNODE_HPP_
