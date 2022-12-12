@@ -18,22 +18,22 @@
 #include <string>
 
 namespace dunedaq {
-  namespace dtpcontrols {
-    
-    class DPRNode : public uhal::Node {
-      
-      UHAL_DERIVEDNODE(DPRNode)
-      
-      public:
-      explicit DPRNode(const uhal::Node& node);
-      virtual ~DPRNode();
-      
-      void set_mux_in(uint32_t mode, bool dispatch=true) const;
-      void set_mux_out(uint32_t mode, bool dispatch=true) const;
+namespace dtpcontrols {
 
-    };
-    
-  } // namespace dtpcontrols
+class DPRNode : public uhal::Node
+{
+
+  UHAL_DERIVEDNODE(DPRNode)
+
+public:
+  explicit DPRNode(const uhal::Node& node);
+  virtual ~DPRNode();
+
+  void set_mux_in(uint32_t mode, bool dispatch = true) const;
+  void set_mux_out(uint32_t mode, bool dispatch = true) const;
+};
+
+} // namespace dtpcontrols
 } // namespace dunedaq
 
 #endif // DTPCONTROLS_INCLUDE_DTPCONTROLS_DPRNODE_HPP_

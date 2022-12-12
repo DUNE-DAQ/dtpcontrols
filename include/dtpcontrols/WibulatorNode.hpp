@@ -16,33 +16,34 @@
 
 // uHal Headers
 
-#include "uhal/DerivedNode.hpp"
 #include "ers/Issue.hpp"
+#include "uhal/DerivedNode.hpp"
 
 // C++ Headers
-#include <vector>
 #include <fstream>
+#include <vector>
 
 namespace dunedaq {
-  namespace dtpcontrols {
+namespace dtpcontrols {
 
-    class WibulatorNode : public uhal::Node {
+class WibulatorNode : public uhal::Node
+{
 
-      UHAL_DERIVEDNODE(WibulatorNode)
-      
-      public:
-      explicit WibulatorNode(const uhal::Node& node);
-      virtual ~WibulatorNode();
+  UHAL_DERIVEDNODE(WibulatorNode)
 
-      void write_pattern(std::vector<std::uint64_t>) const;
-      std::vector<uint64_t> read_pattern() const;
-      void fire() const;
-      void set_fire(const uint32_t& fire_value, bool dispatch=true) const;
-      uhal::ValWord<uint32_t> get_address_width(bool dispatch=true) const;
-      uhal::ValWord<uint32_t> get_size(void) const;      
-    };
+public:
+  explicit WibulatorNode(const uhal::Node& node);
+  virtual ~WibulatorNode();
 
-  } // namespace dtpcontrols
+  void write_pattern(std::vector<std::uint64_t>) const;
+  std::vector<uint64_t> read_pattern() const;
+  void fire() const;
+  void set_fire(const uint32_t& fire_value, bool dispatch = true) const;
+  uhal::ValWord<uint32_t> get_address_width(bool dispatch = true) const;
+  uhal::ValWord<uint32_t> get_size(void) const;
+};
+
+} // namespace dtpcontrols
 } // namespace dunedaq
 
 #endif // DTPCONTROLS_INCLUDE_DTPCONTROLS_WIBULATORNODE_HPP_

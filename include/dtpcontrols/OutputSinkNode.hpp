@@ -14,34 +14,33 @@
 // dtpcontrols Headers
 
 // uHal Headers
-#include "uhal/DerivedNode.hpp"
 #include "ers/Issue.hpp"
+#include "uhal/DerivedNode.hpp"
 
 // C++ Headers
 
-
 namespace dunedaq {
-  namespace dtpcontrols {
-    /**
-     * @brief      OutputSink firmware node
-     */
-    class OutputSinkNode : public uhal::Node
-    {
+namespace dtpcontrols {
+/**
+ * @brief      OutputSink firmware node
+ */
+class OutputSinkNode : public uhal::Node
+{
 
-      UHAL_DERIVEDNODE(OutputSinkNode)
+  UHAL_DERIVEDNODE(OutputSinkNode)
 
-      public:
-      explicit OutputSinkNode(const uhal::Node& node);
-      virtual ~OutputSinkNode();
+public:
+  explicit OutputSinkNode(const uhal::Node& node);
+  virtual ~OutputSinkNode();
 
-      void enable(bool dispatch) const;
-      void disable(bool dispatch) const;
-      void clear(bool dispatch) const;
-      void drop_idles(bool dispatch) const;
-      void keep_idles(bool dispatch) const;      
-    };
+  void enable(bool dispatch) const;
+  void disable(bool dispatch) const;
+  void clear(bool dispatch) const;
+  void drop_idles(bool dispatch) const;
+  void keep_idles(bool dispatch) const;
+};
 
-  } // namespace dtpcontrols
+} // namespace dtpcontrols
 } // namespace dunedaq
 
 #endif // DTPCONTROLS_INCLUDE_DTPCONTROLS_OUTPUTSINKNODE_HPP_

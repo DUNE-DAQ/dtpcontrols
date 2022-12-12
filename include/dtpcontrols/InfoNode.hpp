@@ -14,34 +14,33 @@
 // dtpcontrols Headers
 
 // uHal Headers
-#include "uhal/DerivedNode.hpp"
 #include "ers/Issue.hpp"
+#include "uhal/DerivedNode.hpp"
 
 // C++ Headers
 
 namespace dunedaq {
-  namespace dtpcontrols {
-    /**
-     * @brief      Info firmware node
-     */
-    class InfoNode : public uhal::Node
-    {
+namespace dtpcontrols {
+/**
+ * @brief      Info firmware node
+ */
+class InfoNode : public uhal::Node
+{
 
-      UHAL_DERIVEDNODE(InfoNode)
+  UHAL_DERIVEDNODE(InfoNode)
 
-      public:
-      explicit InfoNode(const uhal::Node& node);
-      virtual ~InfoNode();
+public:
+  explicit InfoNode(const uhal::Node& node);
+  virtual ~InfoNode();
 
-      // read firmware config info
-      std::map<std::string, uint32_t> get_firmware_config_info() const;
+  // read firmware config info
+  std::map<std::string, uint32_t> get_firmware_config_info() const;
 
-      // read firmware id info
-      std::map<std::string, uint32_t> get_firmware_id_info() const;
-      
-    };
+  // read firmware id info
+  std::map<std::string, uint32_t> get_firmware_id_info() const;
+};
 
-  } // namespace dtpcontrols
+} // namespace dtpcontrols
 } // namespace dunedaq
 
 #endif // DTPCONTROLS_INCLUDE_DTPCONTROLS_INFONODE_HPP_

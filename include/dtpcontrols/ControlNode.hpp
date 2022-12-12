@@ -18,17 +18,18 @@
 namespace dunedaq {
 namespace dtpcontrols {
 
-class ControlNode : public uhal::Node {
+class ControlNode : public uhal::Node
+{
 
   UHAL_DERIVEDNODE(ControlNode)
-  
+
 public:
   explicit ControlNode(const uhal::Node& node);
   virtual ~ControlNode();
 
-  void nuke(bool dispatch=true);
-  void soft_reset(bool dispatch=true);
-  void master_reset(bool dispatch=true);
+  void nuke(bool dispatch = true);
+  void soft_reset(bool dispatch = true);
+  void master_reset(bool dispatch = true);
 };
 
 } // namespace dtpcontrols

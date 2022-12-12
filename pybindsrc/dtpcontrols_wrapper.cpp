@@ -19,26 +19,40 @@ namespace dunedaq {
 namespace dtpcontrols {
 namespace python {
 
-extern void register_central_router_interface_node(py::module&);
-extern void register_control_node(py::module& m);
-extern void register_data_reception_node(py::module& m);
-extern void register_flowmaster_node(py::module& m);
-extern void register_stream_processor_array_node(py::module& m);
-extern void register_stream_processor_node(py::module& m);
-extern void register_wibulator_node(py::module& m);
-extern void register_link_processor_node(py::module& m);
-extern void register_toolbox(py::module& m);
-extern void register_info_node(py::module& m);
-extern void register_data_router_node(py::module& m);
-extern void register_dpr_node(py::module& m);
-extern void register_output_sink_node(py::module& m);
+extern void
+register_central_router_interface_node(py::module&);
+extern void
+register_control_node(py::module& m);
+extern void
+register_data_reception_node(py::module& m);
+extern void
+register_flowmaster_node(py::module& m);
+extern void
+register_stream_processor_array_node(py::module& m);
+extern void
+register_stream_processor_node(py::module& m);
+extern void
+register_wibulator_node(py::module& m);
+extern void
+register_link_processor_node(py::module& m);
+extern void
+register_toolbox(py::module& m);
+extern void
+register_info_node(py::module& m);
+extern void
+register_data_router_node(py::module& m);
+extern void
+register_dpr_node(py::module& m);
+extern void
+register_output_sink_node(py::module& m);
 
-extern void register_dtppodcontroller(py::module& m);
+extern void
+register_dtppodcontroller(py::module& m);
 
-PYBIND11_MODULE(_daq_dtpcontrols_py, top_module) {
-  top_module.doc() =
-      "c++ implementation of dtpcontrols python modules";  // optional module
-                                                           // docstring
+PYBIND11_MODULE(_daq_dtpcontrols_py, top_module)
+{
+  top_module.doc() = "c++ implementation of dtpcontrols python modules"; // optional module
+                                                                         // docstring
 
   py::module_ core_module = top_module.def_submodule("core");
 
@@ -59,6 +73,6 @@ PYBIND11_MODULE(_daq_dtpcontrols_py, top_module) {
   dtpcontrols::python::register_dtppodcontroller(core_module);
 }
 
-}  // namespace python
-}  // namespace dtpcontrols
-}  // namespace dunedaq
+} // namespace python
+} // namespace dtpcontrols
+} // namespace dunedaq

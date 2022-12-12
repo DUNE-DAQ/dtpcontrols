@@ -1,7 +1,7 @@
 /**
  * @file StreamProcessorNode.hpp
  *
- * StreamProcessorNode is a class derived from 
+ * StreamProcessorNode is a class derived from
  * Its purpose is to control and read status of the stream-
  * processor firmware, within DTP-firmware which is part of DUNE DAQ.
  *
@@ -18,50 +18,50 @@
 #include "uhal/DerivedNode.hpp"
 
 namespace dunedaq {
-  namespace dtpcontrols {
+namespace dtpcontrols {
 
-    class StreamProcessorNode : public uhal::Node {
+class StreamProcessorNode : public uhal::Node
+{
 
-      UHAL_DERIVEDNODE(StreamProcessorNode)
-  
-      public:
-      explicit StreamProcessorNode(const uhal::Node& node);
-      virtual ~StreamProcessorNode();
+  UHAL_DERIVEDNODE(StreamProcessorNode)
 
-      const MonProbeNode& get_mon_probe_node(uint32_t i) const;
+public:
+  explicit StreamProcessorNode(const uhal::Node& node);
+  virtual ~StreamProcessorNode();
 
-      int get_n_probes() const;
+  const MonProbeNode& get_mon_probe_node(uint32_t i) const;
 
-      // set stream to drop empty packets
-      void drop_empty(bool drop, bool dispatch=true) const;
+  int get_n_probes() const;
 
-      // get the TP threshold (all 64 channels)
-      uint32_t get_threshold() const;
+  // set stream to drop empty packets
+  void drop_empty(bool drop, bool dispatch = true) const;
 
-      // set the TP threshold (all 64 channels)
-      void set_threshold(const uint32_t threshold, bool dispatch=true) const;
+  // get the TP threshold (all 64 channels)
+  uint32_t get_threshold() const;
 
-      // get the channel mask (all 64 channels)
-      uint64_t get_channel_mask_all() const;
+  // set the TP threshold (all 64 channels)
+  void set_threshold(const uint32_t threshold, bool dispatch = true) const;
 
-      // set the mask for all channels (all 64 channels)
-      void set_channel_mask_all(uint64_t mask, bool dispatch=true) const;
+  // get the channel mask (all 64 channels)
+  uint64_t get_channel_mask_all() const;
 
-      // set mask one channel
-      void set_channel_mask(int channel, int mask) const;
+  // set the mask for all channels (all 64 channels)
+  void set_channel_mask_all(uint64_t mask, bool dispatch = true) const;
 
-      // get mask for one channel
-      uint32_t get_channel_mask(int channel) const;
+  // set mask one channel
+  void set_channel_mask(int channel, int mask) const;
 
-      // capture pedestal
-      void capture_pedestal(bool enable, bool dispatch) const;
+  // get mask for one channel
+  uint32_t get_channel_mask(int channel) const;
 
-    private:
-      uint32_t m_n_mon_probes;
+  // capture pedestal
+  void capture_pedestal(bool enable, bool dispatch) const;
 
-    };
+private:
+  uint32_t m_n_mon_probes;
+};
 
-  } // namespace dtpcontrols
+} // namespace dtpcontrols
 } // namespace dunedaq
 
 #endif // DTPCONTROLS_INCLUDE_DTPCONTROLS_STREAMPROCESSORNODE_HPP_
