@@ -14,21 +14,19 @@
 #include "dtpcontrols/DPRNode.hpp"
 
 namespace py = pybind11;
-using namespace pybind11::literals;
+using namespace pybind11::literals; 
 
 namespace dunedaq {
 namespace dtpcontrols {
 namespace python {
 
-void
-register_dpr_node(py::module& m)
-{
+void register_dpr_node(py::module& m) {
 
   py::class_<dtpcontrols::DPRNode, uhal::Node>(m, "DPRNode")
-    .def(py::init<const uhal::Node&>())
-    .def("set_mux_in", &dtpcontrols::DPRNode::set_mux_in, "mux_in_choice"_a, "dispatch"_a = true)
-    .def("set_mux_out", &dtpcontrols::DPRNode::set_mux_out, "mux_out_choice"_a, "dispatch"_a = true);
+      .def(py::init<const uhal::Node&>())
+      .def("set_mux_in", &dtpcontrols::DPRNode::set_mux_in, "mux_in_choice"_a, "dispatch"_a = true)
+      .def("set_mux_out", &dtpcontrols::DPRNode::set_mux_out, "mux_out_choice"_a, "dispatch"_a = true);
 }
-} // namespace python
-} // namespace dtpcontrols
-} // namespace dunedaq
+}  // namespace python
+}  // namespace dtpcontrols
+}  // namespace dunedaq

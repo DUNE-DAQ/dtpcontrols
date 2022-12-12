@@ -33,9 +33,8 @@
 namespace dunedaq {
 namespace dtpcontrols {
 
-class DTPPodController
-{
-public:
+class DTPPodController {
+ public:
   explicit DTPPodController(uhal::HwInterface);
   virtual ~DTPPodController();
 
@@ -78,7 +77,7 @@ public:
   // get mon probe info
   std::vector<MonProbeNodeInfo> get_mon_probe_info(uint link, uint pipe) const;
 
-private:
+ private:
   void load_fw_info();
 
   // firware config info this build contains
@@ -96,7 +95,7 @@ private:
   bool m_outsink_en = false;
 };
 
-} // namespace dtpcontrols
-} // namespace dunedaq
+}  // namespace dtpcontrols
+}  // namespace dunedaq
 
-#endif // DTPCONTROLS_INCLUDE_DTPCONTROLS_DTPPODCONTROLLER_HPP_
+#endif  // DTPCONTROLS_INCLUDE_DTPCONTROLS_DTPPODCONTROLLER_HPP_

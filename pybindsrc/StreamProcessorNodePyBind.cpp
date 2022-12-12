@@ -6,28 +6,27 @@
  * received with this code.
  */
 
-#include "dtpcontrols/StreamProcessorNode.hpp"
 #include "dtpcontrols_wrapper.hpp"
+#include "dtpcontrols/StreamProcessorNode.hpp"
 
 namespace py = pybind11;
-using namespace pybind11::literals;
+using namespace pybind11::literals; 
 
 namespace dunedaq {
 namespace dtpcontrols {
 namespace python {
 
-void
-register_stream_processor_node(py::module& m)
-{
-  py::class_<StreamProcessorNode, uhal::Node>(m, "StreamProcessorNode")
-    .def(py::init<const uhal::Node&>())
-    .def("drop_empty", &StreamProcessorNode::drop_empty, "drop"_a, "dispatch"_a = true)
-    .def("set_threshold", &StreamProcessorNode::set_threshold, "threshold"_a, "dispatch"_a = true)
-    .def("set_channel_mask_all", &StreamProcessorNode::set_channel_mask_all, "mask"_a, "dispatch"_a = true)
-    .def("get_channel_mask_all", &StreamProcessorNode::set_channel_mask_all)
-    .def("capture_pedestal", &StreamProcessorNode::capture_pedestal, "enable"_a, "dispatch"_a = true);
+void register_stream_processor_node(py::module &m) {
+  py::class_<StreamProcessorNode, uhal::Node>(
+      m, "StreamProcessorNode")
+      .def(py::init<const uhal::Node &>())
+      .def("drop_empty", &StreamProcessorNode::drop_empty, "drop"_a, "dispatch"_a = true)
+      .def("set_threshold", &StreamProcessorNode::set_threshold, "threshold"_a, "dispatch"_a = true)
+      .def("set_channel_mask_all", &StreamProcessorNode::set_channel_mask_all, "mask"_a, "dispatch"_a = true)
+      .def("get_channel_mask_all", &StreamProcessorNode::set_channel_mask_all)
+      .def("capture_pedestal", &StreamProcessorNode::capture_pedestal, "enable"_a, "dispatch"_a = true);
 }
 
-} // namespace python
-} // namespace dtpcontrols
-} // namespace dunedaq
+}  // namespace python
+}  // namespace dtpcontrols
+}  // namespace dunedaq

@@ -22,9 +22,7 @@
 using namespace uhal;
 using namespace dunedaq::dtpcontrols;
 
-int
-main(int argc, char const* argv[])
-{
+int main(int argc, char const* argv[]) {
   // default options
   std::string conn_file = find_connection_file();
   std::string device("flx-0-p2-hf");
@@ -86,7 +84,7 @@ main(int argc, char const* argv[])
   TLOG() << "Connections : " << conn_file;
   TLOG() << "Device      : " << device;
 
-  uhal::ConnectionManager cm(conn_file, { "ipbusflx-2.0" });
+  uhal::ConnectionManager cm(conn_file, {"ipbusflx-2.0"});
   // uhal::HwInterface flx = cm.getDevice(device);
 
   // get the TP node
@@ -131,6 +129,7 @@ main(int argc, char const* argv[])
   for (int i = 0; i < n_links; ++i) {
     pod_ctrl.get_link_processor_node(i).drop_empty(true);
   }
+
 
   // setup each link
   for (int i = 0; i < n_links; ++i) {
