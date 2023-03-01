@@ -6,6 +6,9 @@
  * received with this code.
  */
 
+#include <map>
+#include <string>
+
 #include "dtpcontrols/LinkProcessorNode.hpp"
 
 namespace dunedaq {
@@ -13,7 +16,7 @@ namespace dtpcontrols {
 
 UHAL_REGISTER_DERIVED_NODE(LinkProcessorNode)
 
-LinkProcessorNode::LinkProcessorNode(const uhal::Node& node) : uhal::Node(node),
+LinkProcessorNode::LinkProcessorNode(const uhal::Node& node) : uhal::Node(node), 
                                                                m_n_streams(4) {
 }
 
@@ -25,6 +28,17 @@ const DataRouterNode& LinkProcessorNode::get_data_router_node() const {
 
 const StreamProcessorArrayNode& LinkProcessorNode::get_stream_proc_array_node() const {
   return getNode<StreamProcessorArrayNode>("stream_procs");
+}
+
+const CentralRouterInterfaceNode& LinkProcessorNode::get_central_router_node(uint i) const {
+  if (i < 4) {
+    std::string name("cr_if");
+    name += std::to_string(i);
+    return getNode<CentralRouterInterfaceNode>(name);
+  } else {
+    // replace with ERS exception
+    throw std::out_of_range("Link id out of bounds");
+  }
 }
 
 void LinkProcessorNode::setup_dr(bool enable) const {

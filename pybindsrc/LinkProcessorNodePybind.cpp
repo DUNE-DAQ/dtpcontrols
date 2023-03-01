@@ -34,7 +34,8 @@ void register_link_processor_node(py::module& m) {
       .def("capture_pedestal", &LinkProcessorNode::capture_pedestal)
       
       .def("get_data_router_node", &LinkProcessorNode::get_data_router_node)
-      .def("get_stream_proc_array_node", &LinkProcessorNode::get_stream_proc_array_node);
+      .def("get_stream_proc_array_node", &LinkProcessorNode::get_stream_proc_array_node)
+      .def("get_central_router_node", &LinkProcessorNode::get_central_router_node, "i"_a, py::return_value_policy::reference_internal);
 }
 
 }  // namespace python

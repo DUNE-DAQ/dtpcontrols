@@ -13,7 +13,8 @@ from rich import print as rprint
 from rich.table import Table
 from dtpcontrols import core as controls
 
-from dtpcontrols.toolbox import dumpSubRegs, printRegTable, printDictTable, readStreamProcessorStatus
+# from dtpcontrols.toolbox import dumpSubRegs, printRegTable, printDictTable, readStreamProcessorStatus
+
 from dtpcontrols.toolbox import dump_sub_regs, dict_to_table, print_dict_table, print_reg_table, read_stream_processor_status
 import optionValidators
 
@@ -148,6 +149,50 @@ def link_config(obj, dr_on, dpr_mux, drop_empty):
 
         print('<< Link Processor ', ln.getId())
 
+
+@link.command('cr-if')
+@click.option('--on/--off', 'cr_on', help='Enable central-router interface block', default=None)
+@click.option('--drop-empty/--keep-empty', 'drop_empty', help='Drop empty hit packets', default=None)
+@click.pass_obj
+def cr_if(obj, cr_on, drop_empty):
+
+    for ln in obj.mLinkNodes:
+        print('>> Link Processor', ln.getId())
+        for i in range(4):
+            crifNode = ln.get_central_router_node(i)
+            print('>> Link Processor', crifNode.getId())
+
+            #crifNode = ln.getNode("cr_if"+str(0)) 
+            
+
+            if cr_on is not None:
+                crifNode.enable()
+                crifNode.set_drop_empty()
+                ln.getClient().dispatch()
+                
+            if drop_empty is not None:
+                crifNode.set_drop_empty()
+                ln.getClient().dispatch()
+
+            
+                
+
+            row=[]
+            cr_csr = crifNode.getNode('csr')
+            for sn in cr_csr.getNodes(r"[^\.]*"):
+                regs = dump_sub_regs(cr_csr.getNode(sn))
+                row.append(dict_to_table(regs, title=sn))
+
+            g = Table.grid()
+            for i in sn:
+                g.add_column()
+            g.add_row(*row)
+            rprint(g)
+
+        
+
+
+
 # ------------------------------------------------------------------------------
 @link.command('mask')
 @click.option('-p', '--pipes', callback=optionValidators.validate_proc_ids, default='all')
@@ -241,7 +286,6 @@ def link_watch(obj, dr, dpr, sp):
         strmArrayNode = ln.get_stream_proc_array_node()        
         drNode = ln.get_data_router_node().get_data_reception_node()
         dprNode = ln.get_data_router_node().get_dpr_node()
-
 
         grid = Table.grid()
         for _ in range(dr+dpr):
@@ -367,31 +411,31 @@ def flowmaster(obj, src_sel, out_mode, sink_sel):
                 fmNode.getClient().dispatch()
 
 # -----------------------------------------------------------------------------
-@cli.command('cr-if')
-@click.option('--on/--off', 'cr_on', help='Enable central-router interface block', default=None)
-@click.option('--drop-empty/--keep-empty', 'drop_empty', help='Drop empty hit packets', default=None)
-@click.pass_obj
-def cr_if(obj, cr_on, drop_empty):
+# @cli.command('cr-if')
+# @click.option('--on/--off', 'cr_on', help='Enable central-router interface block', default=None)
+# @click.option('--drop-empty/--keep-empty', 'drop_empty', help='Drop empty hit packets', default=None)
+# @click.pass_obj
+# def cr_if(obj, cr_on, drop_empty):
 
-    crNode = obj.podctrl.get_crif_node()
-    if cr_on is not None:
-        crNode.enable()
-        crNode.set_drop_empty()
+#     crNode = obj.podctrl.get_crif_node()
+#     if cr_on is not None:
+#         crNode.enable()
+#         crNode.set_drop_empty()
         
-    if drop_empty is not None:
-        crNode.set_drop_empty()
+#     if drop_empty is not None:
+#         crNode.set_drop_empty()
 
-    row=[]
-    cr_csr = crNode.getNode('csr')
-    for sn in cr_csr.getNodes(r"[^\.]*"):
-        regs = dump_sub_regs(cr_csr.getNode(sn))
-        row.append(dict_to_table(regs, title=sn))
+#     row=[]
+#     cr_csr = crNode.getNode('csr')
+#     for sn in cr_csr.getNodes(r"[^\.]*"):
+#         regs = dump_sub_regs(cr_csr.getNode(sn))
+#         row.append(dict_to_table(regs, title=sn))
 
-    g = Table.grid()
-    for i in sn:
-        g.add_column()
-    g.add_row(*row)
-    rprint(g)
+#     g = Table.grid()
+#     for i in sn:
+#         g.add_column()
+#     g.add_row(*row)
+#     rprint(g)
 
 # -----------------------------------------------------------------------------
 @cli.command('capture-sink')

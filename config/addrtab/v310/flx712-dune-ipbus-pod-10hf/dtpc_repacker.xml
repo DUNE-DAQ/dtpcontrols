@@ -1,0 +1,10 @@
+<node id="dtpc_repacker" description="data repacker control" fwinfo="endpoint">
+    <node id="csr" address="0x0" fwinfo="endpoint;width=1">
+      <node id="ctrl" address="0x0">
+	<node id="rstbp" mask="0x1"/>
+      </node>
+      <node id="stat" address="0x1">
+    	<node id="bp" mask="0x1"/>
+      </node>
+    </node>
+</node>
